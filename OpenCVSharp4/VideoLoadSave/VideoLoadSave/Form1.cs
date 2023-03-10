@@ -34,7 +34,7 @@ namespace VideoLoadSave
                 VideoPath.Text = dialog.FileName;
 
                 // 동영상 재생
-                var videoThread = new Thread(PlayMethod_OpenCVUI);
+                var videoThread = new Thread(PlayMethod_PictureBox);
                 videoThread.IsBackground = true;
                 videoThread.Start();
             }
