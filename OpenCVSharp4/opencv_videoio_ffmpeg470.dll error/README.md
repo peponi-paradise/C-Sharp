@@ -12,8 +12,7 @@
    ![rightdll](2.png)<br><br>
    - Solution folder\packages\OpenCvSharp4.runtime.win.4.7.0.20230115\runtimes\\`win-x64 or win-x86`\native\opencv_videoio_ffmpeg470_64.dll
    - (컴파일 옵션 64비트/32비트 선택에 따라 runtimes 이하 폴더 탐색)<br><br>
-5. 따로 다운로드가 필요한 경우, 아래 경로에서 다운받으면 된다.
-   []
+5. 따로 다운로드가 필요한 경우, 아래 경로에서 다운받으면 된다.<br>
+   [opencv_videoio_ffmpeg470 & opencv_videoio_ffmpeg470_64 dll download](https://github.com/peponi-paradise/C-Sharp/tree/main/OpenCVSharp4/opencv_videoio_ffmpeg470.dll%20error)
 
 <br><br>
-
