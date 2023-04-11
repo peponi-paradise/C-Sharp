@@ -90,15 +90,15 @@ public partial class TestControl : UserControl
 
 <br>
 
-- 내용을 요약하자면,
+내용을 요약하자면,
 
-> 1. Test class
->> 1. `INotifyPropertyChanged`를 상속받는 객체 생성
->> 2. `INotifyPropertyChanged` 인터페이스 구현 또는 프로퍼티 변경 이벤트를 제공한다.
->> 3. UI와 관련된 내용은 항상 그렇지만, 여기서도 `Cross thread exception`에 유의한다.
+- Test class
+   1. `INotifyPropertyChanged`를 상속받는 객체 생성
+   2. `INotifyPropertyChanged` 인터페이스 구현 또는 프로퍼티 변경 이벤트를 제공한다.
+   3. UI와 관련된 내용은 항상 그렇지만, 여기서도 `Cross thread exception`에 유의한다.
 
-> 2. Control class
->> 1. Bindable 클라이언트에 데이터 바인딩
+- Control class
+   1. Bindable 클라이언트에 데이터 바인딩
 
 위의 내용과 같이 심플하게 구현이 가능하게 된다.
 만약 추가 예제가 필요한 경우, 아래 섹션을 참고하면 된다.
