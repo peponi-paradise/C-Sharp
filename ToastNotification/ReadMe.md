@@ -1,4 +1,22 @@
-﻿using DevExpress.Data;
+## Introduction
+
+<br>
+
+![screenshot](ScreenShot.png)
+
+- 위의 그림과 같이, 윈도우 우측 하단에 뜨는 알림창을 [Toast notification](https://learn.microsoft.com/en-us/previous-versions/windows/apps/hh779727(v=win.10)#sending-toast-notifications-from-desktop-apps)이라 한다.
+- DevExpress에서 제공하는 [Toast Notification Manager](https://docs.devexpress.com/WindowsForms/17020/controls-and-libraries/messages-notifications-and-dialogs/toast-notification-manager)의 경우 Windows 8 이상에서만 지원한다.
+- 이전 버전의 윈도우를 사용하는 경우 [Alert Windows](https://docs.devexpress.com/WindowsForms/5487/controls-and-libraries/messages-notifications-and-dialogs/alert-windows)를 사용해야 한다.
+- `Toast notification`을 이용하려면 `Windows Notification Platform`에 COM object를 노출해야한다. 권한을 획득하지 못한 경우, notification을 호출하더라도 팝업이 나타나지 않는다.
+
+<br>
+
+## Code
+
+<br>
+
+```cs
+using DevExpress.Data;
 using DevExpress.XtraEditors;
 using System;
 using System.Diagnostics;
@@ -28,7 +46,7 @@ namespace ToastNotification
 
             NotificationsManager.ApplicationId = "12b48acf-0e0a-49ef-8041-dceb872ed14d";
             NotificationsManager.ApplicationName = "ToastNotificationTest";
-
+            
             // 알림 추가
             NotificationsManager.Notifications.AddRange(new DevExpress.XtraBars.ToastNotifications.IToastNotificationProperties[] {
             new DevExpress.XtraBars.ToastNotifications.ToastNotification("77b2bb7e-94e3-40b5-ac7a-eec2af0da5da",
@@ -110,9 +128,10 @@ namespace ToastNotification
             NotificationsManager.Notifications[0].Header = "Hello world";
             NotificationsManager.Notifications[0].Body = "This is Big text";
             NotificationsManager.Notifications[0].Body2 = "This is Small text";
-
+            
             // 알림 호출
             NotificationsManager.ShowNotification(NotificationsManager.Notifications[0]);
         }
     }
 }
+```
