@@ -10,6 +10,11 @@
     <Window.Resources>
         <SolidColorBrush x:Key="defaultBackground" Color="Red" />
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New"
+                        Executed="CommandBinding_Executed"
+                        CanExecute="CommandBinding_CanExecute" />
+    </Window.CommandBindings>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -22,6 +27,21 @@
         <Label x:Name="FirstLabel"
                Grid.Column="0"
                Grid.Row="0" Content="Hello World" />
+
+        <StackPanel Grid.Row="1">
+            <Label Name="CurrentInput"
+               Content="{Binding Text, ElementName=FirstTextBox}" />
+            <Label Name="WindowWidth"
+                   Content="{Binding Width}" />
+            <Label Name="WindowHeight"
+                   Content="{Binding Height}" />
+            <Label Name="WindowLocationX"
+                   Content="{Binding Left,UpdateSourceTrigger=PropertyChanged}" />
+            <Label Name="WindowLocationY"
+                   Content="{Binding Top,UpdateSourceTrigger=PropertyChanged}" />
+            <Button Command="ApplicationCommands.New">Command</Button>
+        </StackPanel>
+
         <ListBox x:Name="FirstList" Grid.Column="1" />
         <StackPanel Grid.Column="1"
                     Grid.Row="1">

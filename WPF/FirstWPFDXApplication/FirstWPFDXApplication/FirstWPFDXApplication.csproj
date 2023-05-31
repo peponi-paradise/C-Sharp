@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.1" />
+    <PackageReference Include="DevExpress.Win.Design" Version="22.2.6" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="22.2.6.0" />
+    <PackageReference Include="devexpress.wpf.layoutcontrol" Version="22.2.6" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="22.2.6.0" />
+    
+  </ItemGroup>
+
+</Project>

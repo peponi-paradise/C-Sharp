@@ -23,6 +23,7 @@ namespace FirstWPFApp
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void SimpleButton_Click(object sender, RoutedEventArgs e)
@@ -37,6 +38,16 @@ namespace FirstWPFApp
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("New");
+        }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 }

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="devexpress.wpf.core" Version="22.2.6" />
+    <PackageReference Include="DevExpressMvvm" Version="22.1.3" />
   </ItemGroup>
 
 </Project>
