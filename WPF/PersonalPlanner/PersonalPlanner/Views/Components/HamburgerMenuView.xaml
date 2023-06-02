@@ -21,5 +21,8 @@
         <dxwui:HamburgerMenu.Content>
             <View:DockingView />
         </dxwui:HamburgerMenu.Content>
+        <dxwui:HamburgerMenuNavigationButton Content="HamburgerMenuNavigationButton" />
+        <dxwui:HamburgerMenuNavigationButton Content="HamburgerMenuNavigationButton" />
+        <dxwui:HamburgerMenuNavigationButton Content="HamburgerMenuNavigationButton" />
     </dxwui:HamburgerMenu>
 </UserControl>
