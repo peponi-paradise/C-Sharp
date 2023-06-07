@@ -1,35 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using DevExpress.Mvvm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MVVMStudy.Models;
+using MVVMStudy.ViewModels.Components;
+using MVVMStudy.Views.Components;
+using MVVMStudy.Views.Windows;
+using System;
+using System.Reflection;
+using System.Windows;
 
-namespace DependencyInjection
+namespace MVVMStudy
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App
+    public partial class App : Application
     {
-        public readonly IHost _Host;
+        private readonly IHost _Host;
 
         public App()
         {
+            Messenger.Default = new Messenger(isMultiThreadSafe: true, actionReferenceType: ActionReferenceType.WeakReference);
             _Host = Host.CreateDefaultBuilder().ConfigureServices((context, services) =>
             {
-                context.HostingEnvironment.ApplicationName = "DependencyInjection";
+                context.HostingEnvironment.ApplicationName = $"{Assembly.GetExecutingAssembly().GetName()}";
                 ConfigureServices(services);
             }).Build();
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            //services.AddTransient<IDateTime, DateTimeService>();
-            services.AddTransient<MainViewModel>();
+            // Services
+
+            // Models
+
+            services.AddTransient<DateTimeModel>();
+
+            // ViewModels
+
+            services.AddScoped<DateTimeSenderViewModel>();
+            services.AddScoped<DateTimeViewViewModel>();
+
+            // Views
             services.AddSingleton<MainWindow>();
         }
 
