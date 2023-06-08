@@ -1,4 +1,6 @@
 ﻿using DevExpress.Xpf.Core;
+using MVVMStudy.ViewModels.Windows;
+using Microsoft.Extensions.Hosting;
 
 namespace MVVMStudy.Views.Windows
 {
@@ -7,8 +9,9 @@ namespace MVVMStudy.Views.Windows
     /// </summary>
     public partial class MainWindow : ThemedWindow
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
+            DataContext = viewModel;
             InitializeComponent();
         }
     }

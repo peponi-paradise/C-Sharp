@@ -35,9 +35,9 @@ namespace MVVMStudy.ViewModels.Components
          *
          -------------------------------------------*/
 
-        public DateTimeViewViewModel()
+        public DateTimeViewViewModel(DateTimeModel model)
         {
-            DateTime = new DateTimeModel();
+            DateTime = model;
             Messenger.Default.Register<DateTime>(this, ReceiveDateTime);
         }
 

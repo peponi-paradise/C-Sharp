@@ -6,6 +6,7 @@
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:ViewModel="clr-namespace:MVVMStudy.ViewModels.Components"
     x:Class="MVVMStudy.Views.Components.DateTimeSender"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">

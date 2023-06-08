@@ -8,10 +8,9 @@ namespace MVVMStudy.Views.Components
     /// </summary>
     public partial class DateTimeSender : UserControl
     {
-        public DateTimeSender(DateTimeSenderViewModel viewModel)
+        public DateTimeSender()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
     }
 }

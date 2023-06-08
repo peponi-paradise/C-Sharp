@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootStrapTest", "BootStrapTest\BootStrapTest.csproj", "{B3E87AA0-F685-4E16-AE01-4E4D7D106399}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BootStrap", "BootStrap\BootStrap.csproj", "{EA2026B5-6FE4-4651-9F00-4510EDC0DB79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3E87AA0-F685-4E16-AE01-4E4D7D106399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3E87AA0-F685-4E16-AE01-4E4D7D106399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3E87AA0-F685-4E16-AE01-4E4D7D106399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3E87AA0-F685-4E16-AE01-4E4D7D106399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2026B5-6FE4-4651-9F00-4510EDC0DB79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2026B5-6FE4-4651-9F00-4510EDC0DB79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2026B5-6FE4-4651-9F00-4510EDC0DB79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2026B5-6FE4-4651-9F00-4510EDC0DB79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2BCF3A1-96B9-4BCD-9063-B3BE578308EC}
+	EndGlobalSection
+EndGlobal

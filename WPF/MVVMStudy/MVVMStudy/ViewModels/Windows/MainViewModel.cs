@@ -1,11 +1,10 @@
-﻿using DevExpress.Mvvm;
-using DevExpress.Mvvm.CodeGenerators;
-using MVVMStudy.Models;
+﻿using DevExpress.Mvvm.CodeGenerators;
+using MVVMStudy.ViewModels.Components;
 
-namespace MVVMStudy.ViewModels.Components
+namespace MVVMStudy.ViewModels.Windows
 {
     [GenerateViewModel]
-    public partial class DateTimeSenderViewModel
+    public partial class MainViewModel
     {
         /*-------------------------------------------
          *
@@ -20,7 +19,10 @@ namespace MVVMStudy.ViewModels.Components
          -------------------------------------------*/
 
         [GenerateProperty]
-        public DateTimeModel _DateTime;
+        public DateTimeSenderViewModel _SenderViewModel;
+
+        [GenerateProperty]
+        public DateTimeViewViewModel _ViewViewModel;
 
         /*-------------------------------------------
          *
@@ -34,12 +36,13 @@ namespace MVVMStudy.ViewModels.Components
          *
          -------------------------------------------*/
 
-        public DateTimeSenderViewModel(DateTimeModel model)
+        public MainViewModel(DateTimeSenderViewModel senderViewModel, DateTimeViewViewModel viewViewModel)
         {
-            DateTime = model;
+            _SenderViewModel = senderViewModel;
+            _ViewViewModel = viewViewModel;
         }
 
-        ~DateTimeSenderViewModel()
+        ~MainViewModel()
         {
         }
 
@@ -48,9 +51,6 @@ namespace MVVMStudy.ViewModels.Components
          *      Event functions
          *
          -------------------------------------------*/
-
-        [GenerateCommand]
-        public void SendDateTime() => Messenger.Default.Send(DateTime.DateTime);
 
         /*-------------------------------------------
          *

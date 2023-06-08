@@ -10,7 +10,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Components:DateTimeSender Grid.Row="0" />
-        <Components:DateTimeView Grid.Row="1" />
+        <Components:DateTimeSender Grid.Row="0" DataContext="{Binding SenderViewModel}" />
+        <Components:DateTimeView Grid.Row="1" DataContext="{Binding ViewViewModel}" />
     </Grid>
 </dx:ThemedWindow>

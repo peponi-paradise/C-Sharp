@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MVVMStudy.Models;
 using MVVMStudy.ViewModels.Components;
+using MVVMStudy.ViewModels.Windows;
 using MVVMStudy.Views.Components;
 using MVVMStudy.Views.Windows;
 using System;
@@ -38,8 +39,9 @@ namespace MVVMStudy
 
             // ViewModels
 
-            services.AddScoped<DateTimeSenderViewModel>();
-            services.AddScoped<DateTimeViewViewModel>();
+            services.AddTransient<DateTimeSenderViewModel>();
+            services.AddTransient<DateTimeViewViewModel>();
+            services.AddSingleton<MainViewModel>();
 
             // Views
             services.AddSingleton<MainWindow>();

@@ -28,7 +28,7 @@ namespace DependencyInjection
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            //services.AddTransient<IDateTime, DateTimeService>();
+            services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<MainViewModel>();
             services.AddSingleton<MainWindow>();
         }
