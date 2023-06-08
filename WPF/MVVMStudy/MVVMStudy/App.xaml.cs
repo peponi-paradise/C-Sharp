@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using MVVMStudy.Models;
 using MVVMStudy.ViewModels.Components;
 using MVVMStudy.ViewModels.Windows;
-using MVVMStudy.Views.Components;
 using MVVMStudy.Views.Windows;
 using System;
 using System.Reflection;

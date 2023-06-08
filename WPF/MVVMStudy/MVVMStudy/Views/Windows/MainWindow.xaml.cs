@@ -1,6 +1,5 @@
 ﻿using DevExpress.Xpf.Core;
 using MVVMStudy.ViewModels.Windows;
-using Microsoft.Extensions.Hosting;
 
 namespace MVVMStudy.Views.Windows
 {
