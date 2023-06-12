@@ -12,7 +12,10 @@
     <Folder Include="Views\Dialogs\" />
     <Folder Include="Views\Components\" />
     <Folder Include="Views\Views\" />
-    <Folder Include="Views\Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Define\Define.csproj" />
   </ItemGroup>
 
 </Project>

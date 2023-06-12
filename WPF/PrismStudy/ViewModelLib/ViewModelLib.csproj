@@ -10,7 +10,14 @@
 
   <ItemGroup>
     <Folder Include="Views\" />
-    <Folder Include="Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Define\Define.csproj" />
   </ItemGroup>
 
 </Project>
