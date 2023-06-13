@@ -11,7 +11,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TextData}" Grid.Row="0" />
+        <TextBlock Text="{Binding LoadData}" Grid.Row="1" />
+        <Button Content="Load Data" Command="{Binding LoadCommand}" Grid.Row="2" />
     </Grid>
 </Window>

@@ -1,8 +1,14 @@
-﻿namespace Define.Services;
+﻿using System.Threading.Tasks;
 
-public interface IFileService
+namespace Define.Services;
+
+public interface IFileService<T>
 {
-    public bool LoadData(string path, out object? data);
+    (bool IsSuccess, T? Data) LoadData(string path);
 
-    public bool SaveData(object contents, string path);
+    Task<(bool IsSuccess, T? Data)> LoadDataAsync(string path);
+
+    bool SaveData(string path, T contents);
+
+    Task<bool> SaveDataAsync(string path, T contents);
 }

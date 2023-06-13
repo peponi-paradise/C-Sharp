@@ -1,29 +1,66 @@
-﻿using Define.ViewModel;
+﻿using Define.EventAggregator;
+using Define.ViewModel;
+using ModelLib.Windows;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
+using System;
+using System.Diagnostics;
 
 namespace ViewModelLib.Windows;
 
 public class WindowViewModel : BindableBase, IViewModel
 {
-    private string _TextData = "Hello World!";
+    private MainWindowModel _Model;
+
+    private string _TextData = "";
 
     public string TextData
     {
-        get => _TextData;
-        set
-        {
-            SetProperty(ref _TextData, value);
-        }
+        get => _Model.TextData;
+        set => _Model.TextData = value;
     }
 
-    private string _NameData = "Test Name";
+    private string _LoadData = "";
 
-    public string NameData
+    public string LoadData
     {
-        get => _NameData;
-        set
-        {
-            SetProperty(ref _NameData, value);
-        }
+        get => _LoadData;
+        set => SetProperty(ref _LoadData, value);
+    }
+
+    public DelegateCommand LoadCommand { get; private set; }
+
+    private bool _IsIdle = true;
+
+    public bool IsIdle
+    {
+        get => _IsIdle;
+        set => SetProperty(ref _IsIdle, value);
+    }
+
+    private IEventAggregator _Aggregator;
+
+    public WindowViewModel(MainWindowModel model, IEventAggregator ea)
+    {
+        _Model = model;
+        _Model.PropertyChanged += _Model_PropertyChanged;
+        _Aggregator = ea;
+        _Aggregator.GetEvent<TextLoadDoneEvent>().Subscribe(LoadDone);
+        LoadCommand = new DelegateCommand(Load).ObservesCanExecute(() => IsIdle);
+    }
+
+    private void _Model_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => base.RaisePropertyChanged(e.PropertyName);
+
+    private void Load()
+    {
+        IsIdle = false;
+        _Aggregator.GetEvent<TextLoadCallEvent>().Publish(@$"{AppDomain.CurrentDomain.BaseDirectory}\TextTest.txt");
+    }
+
+    private void LoadDone(string contents)
+    {
+        LoadData = contents;
+        IsIdle = true;
     }
 }

@@ -1,5 +1,8 @@
-﻿using Define.Bootstrap;
+﻿using Common.Services;
+using Define.Bootstrap;
+using Define.Services;
 using GUI.Views.Windows;
+using ModelLib.Windows;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -21,46 +24,20 @@ public class BaseBootstrapper : PrismBootstrapper, IBootstrap
 
     public bool InitDataBase(string? defaultPath)
     {
-        // Do nothing
+        // Do nothing. 꼭 필요한 작업이 있으면 여기서
         throw new System.NotImplementedException();
     }
 
     public bool InitStaticResources()
     {
-        // Do nothing
+        // Do nothing. 꼭 필요한 작업이 있으면 여기서
         throw new System.NotImplementedException();
     }
 
     public new void Run() => base.Run();
 
-    protected override DependencyObject CreateShell()
-    {
-        int a = 4;
-        // Region injection
-        var regionManager = Container.Resolve<IRegionManager>();
-
-        // Create default window
-        return Container.Resolve<MainWindowTypeA>();
-    }
-
-    protected override void RegisterTypes(IContainerRegistry containerRegistry)
-    {
-        // Configure objects (Singleton, Scoped, etc..)
-
-        // Services
-
-        // Models
-
-        // ViewModels
-
-        // GUI
-
-        int a = 2;
-    }
-
     protected override void ConfigureViewModelLocator()
     {
-        int a = 1;
         base.ConfigureViewModelLocator();
 
         // Register base rule of ViewModel. To connecting specific ViewModel, use bottom of this function
@@ -80,9 +57,36 @@ public class BaseBootstrapper : PrismBootstrapper, IBootstrap
         ViewModelLocationProvider.Register<MainWindowTypeA, WindowViewModel>();
     }
 
+    protected override void RegisterTypes(IContainerRegistry containerRegistry)
+    {
+        // Configure objects (Singleton, Scoped, etc..)
+
+        // Services
+
+        containerRegistry.RegisterSingleton<IFileService<string>, TextFileService>();
+        containerRegistry.RegisterSingleton<IFileService<MainWindowModel>, YAMLFileService<MainWindowModel>>();
+
+        // Models
+
+        // ViewModels
+
+        // GUI
+    }
+
     protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
     {
-        int a = 3;
         base.ConfigureModuleCatalog(moduleCatalog);
+    }
+
+    protected override DependencyObject CreateShell()
+    {
+        // Region injection
+        var regionManager = Container.Resolve<IRegionManager>();
+
+        // Manual resolve
+        Container.Resolve<IFileService<string>>();
+
+        // Create default window
+        return Container.Resolve<MainWindowTypeA>();
     }
 }
