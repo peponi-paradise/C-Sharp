@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI.Views.Windows"
+        xmlns:Components="clr-namespace:GUI.Views.Components"
+        xmlns:prism="http://prismlibrary.com/"
         x:Class="GUI.Views.Windows.MainWindowTypeA"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -11,10 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding TextData}" Grid.Row="0" />
-        <TextBlock Text="{Binding LoadData}" Grid.Row="1" />
-        <Button Content="Load Data" Command="{Binding LoadCommand}" Grid.Row="2" />
+        <ContentControl prism:RegionManager.RegionName="ViewRegion" Grid.RowSpan="2" />
     </Grid>
 </Window>

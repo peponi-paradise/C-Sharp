@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Define\Define.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Windows\" />
+  </ItemGroup>
+
 </Project>

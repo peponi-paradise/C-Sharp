@@ -1,8 +1,9 @@
 ﻿using Common.Services;
 using Define.Bootstrap;
 using Define.Services;
+using GUI.Views.Components;
 using GUI.Views.Windows;
-using ModelLib.Windows;
+using ModelLib.Components;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -12,7 +13,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using ViewModelLib.Windows;
+using ViewModelLib.Components;
 
 namespace Bootstrap;
 
@@ -53,8 +54,6 @@ public class BaseBootstrapper : PrismBootstrapper, IBootstrap
         });
 
         // Specific ViewModel
-
-        ViewModelLocationProvider.Register<MainWindowTypeA, WindowViewModel>();
     }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -64,7 +63,7 @@ public class BaseBootstrapper : PrismBootstrapper, IBootstrap
         // Services
 
         containerRegistry.RegisterSingleton<IFileService<string>, TextFileService>();
-        containerRegistry.RegisterSingleton<IFileService<MainWindowModel>, YAMLFileService<MainWindowModel>>();
+        containerRegistry.RegisterSingleton<IFileService<ContentsDataModel>, YAMLFileService<ContentsDataModel>>();
 
         // Models
 
@@ -82,6 +81,7 @@ public class BaseBootstrapper : PrismBootstrapper, IBootstrap
     {
         // Region injection
         var regionManager = Container.Resolve<IRegionManager>();
+        regionManager.RegisterViewWithRegion<ContentsData>("ViewRegion");
 
         // Manual resolve
         Container.Resolve<IFileService<string>>();

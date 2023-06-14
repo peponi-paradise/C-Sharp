@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ContentsDataModel.yaml" />
     <None Remove="Infrastructure.yaml" />
-    <None Remove="MainWindowModel.yaml" />
     <None Remove="TextTest.txt" />
   </ItemGroup>
 
@@ -18,7 +18,7 @@
     <EmbeddedResource Include="Infrastructure.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainWindowModel.yaml">
+    <EmbeddedResource Include="ContentsDataModel.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="TextTest.txt">
