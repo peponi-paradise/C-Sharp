@@ -4,9 +4,6 @@ using Define.Services;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Input;
 
 namespace ModelLib.Components;
 

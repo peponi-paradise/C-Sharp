@@ -1,18 +1,13 @@
-﻿using Define.EventAggregator;
-using Define.Model;
-using Define.ViewModel;
+﻿using Define.ViewModel;
 using ModelLib.Components;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 
 namespace ViewModelLib.Components;
 
 public class ContentsDataViewModel : BindableBase, IViewModel
 {
-    public ContentsDataModel? Model { get; set; }
+    private ContentsDataModel? Model { get; set; }
 
     public string? TextData
     {
@@ -23,13 +18,12 @@ public class ContentsDataViewModel : BindableBase, IViewModel
         }
     }
 
+    private string? _LoadText = "";
+
     public string? LoadText
     {
-        get => Model != null ? Model.LoadText : null;
-        set
-        {
-            if (Model != null) Model.LoadText = value;
-        }
+        get => _LoadText;
+        set => SetProperty(ref _LoadText, value);
     }
 
     public DelegateCommand LoadCommand { get; private set; }
