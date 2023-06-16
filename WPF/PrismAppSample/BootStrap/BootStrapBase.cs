@@ -1,7 +1,7 @@
-﻿using Common.Utility.Parser;
+﻿using BootStrap.BootStrapper;
+using Common.Utility.Parser;
 using Define.BootStrap;
 using System;
-using BootStrap.BootStrapper;
 
 namespace BootStrap;
 

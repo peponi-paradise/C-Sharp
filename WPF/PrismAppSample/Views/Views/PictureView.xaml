@@ -7,6 +7,18 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="PictureView" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="PictureView" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" />
+        <Image Source="{Binding LoadedImage}" Grid.Row="1" Grid.RowSpan="3" />
+        <Button Content="Load" Command="{Binding PictureLoadCommand}" Grid.Column="1" Grid.Row="2" />
     </Grid>
 </UserControl>

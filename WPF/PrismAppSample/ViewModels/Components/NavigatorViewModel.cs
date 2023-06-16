@@ -1,6 +1,5 @@
 ﻿using Prism.Commands;
 using Prism.Regions;
-using System.Threading.Tasks;
 
 namespace ViewModel.Components;
 

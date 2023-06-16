@@ -1,12 +1,28 @@
-﻿using Define.Services;
+﻿using Define.EventAggregator;
+using Model.Components;
+using Prism.Events;
+using Prism.Mvvm;
 
 namespace ViewModel.Components;
 
-public class TextReaderViewModel
+public class TextReaderViewModel : BindableBase
 {
-    private readonly IFileService<string> _FileService;
+    private TextReaderModel Model;
+    private IEventAggregator Aggregator;
 
-    public TextReaderViewModel(IFileService<string> fileService)
+    public string? LoadedText
     {
+        get => Model.LoadedText;
+        set => Model.LoadedText = value;
     }
+
+    public TextReaderViewModel(TextReaderModel model, IEventAggregator ea)
+    {
+        Model = model;
+        Model.PropertyChanged += (s, e) => RaisePropertyChanged(e.PropertyName);    // Redirection of property
+        Aggregator = ea;
+        Aggregator.GetEvent<TextLoadCallEvent>().Subscribe(TextLoadCall);
+    }
+
+    private async void TextLoadCall(string filePath) => await Model.Load(filePath);
 }

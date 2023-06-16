@@ -1,7 +1,6 @@
 ﻿using Common.Services;
 using Define.BootStrap;
 using Define.Services;
-using View.Windows;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -11,8 +10,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using View.Components;
 using View.Views;
+using View.Windows;
 
 namespace BootStrap.BootStrapper;
 
@@ -68,6 +69,7 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
         // Services
 
         containerRegistry.RegisterSingleton<IFileService<string>, TextFileService>();
+        containerRegistry.RegisterSingleton<IFileService<BitmapImage>, ImageFileService>();
 
         // Models
 
@@ -100,6 +102,7 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
 
         // Manual resolve
         Container.Resolve<IFileService<string>>();
+        Container.Resolve<IFileService<BitmapImage>>();
 
         // Create default window
         return Container.Resolve<MainWindow>();

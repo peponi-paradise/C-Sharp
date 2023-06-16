@@ -10,12 +10,20 @@
 
   <ItemGroup>
     <None Remove="Config\Infrastructure.yaml" />
+    <None Remove="TestPicture.jpg" />
+    <None Remove="TextTest.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Config\Infrastructure.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="TestPicture.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextTest.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
