@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:Constants="clr-namespace:Define.Constants;assembly=Define"
         xmlns:local="clr-namespace:View.Windows"
         mc:Ignorable="d"
         Title="MainWindow" Height="960" Width="1280">
@@ -13,8 +14,8 @@
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="15*" />
         </Grid.ColumnDefinitions>
-        <ContentControl Grid.Column="0" prism:RegionManager.RegionName="NavigationRegion" />
+        <ContentControl Grid.Column="0" prism:RegionManager.RegionName="{x:Static Constants:Regions.NavigationRegion}" />
         <GridSplitter Width="10" />
-        <ContentControl Grid.Column="2" prism:RegionManager.RegionName="ViewRegion" />
+        <ContentControl Grid.Column="2" prism:RegionManager.RegionName="{x:Static Constants:Regions.ViewRegion}" />
     </Grid>
 </Window>

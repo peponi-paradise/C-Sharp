@@ -1,5 +1,6 @@
 ﻿using Common.Services;
 using Define.BootStrap;
+using Define.Constants;
 using Define.Services;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -42,7 +43,7 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
         base.ConfigureViewModelLocator();
 
         // ViewModel Assembly check
-        string viewModelAssemblyName = "ViewModel";
+        string viewModelAssemblyName = Assemblies.ViewModel;
         try
         {
             Assembly.Load(viewModelAssemblyName);
@@ -53,7 +54,7 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
             {
                 var viewModelAssemblyFullName = AppDomain.CurrentDomain.GetAssemblies().Where(asm => asm.FullName.Contains(viewModelAssemblyName)).FirstOrDefault().ToString();     // 동일 이름의 어셈블리가 없어야 할 조건 필요..
                 var viewModelNamespaceUpper = viewType.FullName.Split('.')[viewType.FullName.Split('.').Length - 2];    // -2는 클래스 상위 네임스페이스 (Views, Windows 등..) 얻어올 목적
-                var viewModelName = $"{viewModelAssemblyName}.{viewModelNamespaceUpper}.{viewType.Name}ViewModel, {viewModelAssemblyFullName}";
+                var viewModelName = $"{viewModelAssemblyName}.{viewModelNamespaceUpper}.{viewType.Name}{Assemblies.ViewModel}, {viewModelAssemblyFullName}";
                 return Type.GetType(viewModelName);
             });
 
@@ -82,8 +83,8 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
 
         // Navigation
 
-        containerRegistry.RegisterForNavigation<TextView>("ViewRegion");
-        containerRegistry.RegisterForNavigation<PictureView>("ViewRegion");
+        containerRegistry.RegisterForNavigation<TextView>(Regions.ViewRegion);
+        containerRegistry.RegisterForNavigation<PictureView>(Regions.ViewRegion);
     }
 
     protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
@@ -95,10 +96,10 @@ public class BaseBootStrapper : PrismBootstrapper, IBootStrap
     {
         // Region register
         var regionManager = Container.Resolve<IRegionManager>();
-        regionManager.RegisterViewWithRegion<Navigator>("NavigationRegion");
-        regionManager.RegisterViewWithRegion<TextView>("ViewRegion");
-        regionManager.RegisterViewWithRegion<PictureView>("ViewRegion");
-        regionManager.RegisterViewWithRegion<TextReader>("TextViewRegion");
+        regionManager.RegisterViewWithRegion<Navigator>(Regions.NavigationRegion);
+        regionManager.RegisterViewWithRegion<TextView>(Regions.ViewRegion);
+        regionManager.RegisterViewWithRegion<PictureView>(Regions.ViewRegion);
+        regionManager.RegisterViewWithRegion<TextReader>(Regions.TextViewRegion);
 
         // Manual resolve
         Container.Resolve<IFileService<string>>();

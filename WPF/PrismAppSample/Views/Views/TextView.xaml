@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:Constants="clr-namespace:Define.Constants;assembly=Define"
              xmlns:local="clr-namespace:View.Views"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -19,7 +20,7 @@
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
         <TextBlock Text="TextView" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" />
-        <ContentControl prism:RegionManager.RegionName="TextViewRegion" Grid.Row="1" Grid.RowSpan="3" />
+        <ContentControl prism:RegionManager.RegionName="{x:Static Constants:Regions.TextViewRegion}" Grid.Row="1" Grid.RowSpan="3" />
         <Button Content="Load" Command="{Binding TextLoadCommand}" Grid.Column="1" Grid.Row="2" />
     </Grid>
 </UserControl>

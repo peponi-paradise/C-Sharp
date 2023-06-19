@@ -9,7 +9,7 @@ public class BootStrapBase
 {
     private IBootStrap? BootStrapper { get; set; }
 
-    public BootStrapBase() => InitBootstrapper($@"{AppDomain.CurrentDomain.BaseDirectory}\Config\Infrastructure.yaml");
+    public BootStrapBase() => InitBootstrapper($@"{AppDomain.CurrentDomain.BaseDirectory}\Config\{nameof(Infrastructure)}.yaml");
 
     private void InitBootstrapper(string? dataPath)
     {
