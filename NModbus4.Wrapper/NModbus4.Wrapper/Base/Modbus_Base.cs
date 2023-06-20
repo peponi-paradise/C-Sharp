@@ -53,10 +53,10 @@ namespace NModbus4.Wrapper
         private bool ThreadBusy = false;
 
         /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Modbus"]'/>
-        public Modbus(Define_Modbus.ModbusInterface ModbusInterface, Action<(Define_Modbus.ModbusInterface ModbusInterface, bool ConnectStatus)> ConnectCallback = null)
+        public Modbus(Define_Modbus.ModbusInterface modbusInterface, Action<(Define_Modbus.ModbusInterface ModbusInterface, bool ConnectStatus)> connectCallback = null)
         {
-            Interface = ModbusInterface;
-            this.ConnectCallback = ConnectCallback;
+            Interface = modbusInterface;
+            this.ConnectCallback = connectCallback;
         }
 
         ~Modbus()
@@ -230,7 +230,7 @@ namespace NModbus4.Wrapper
                 }
                 else if (e is NotImplementedException)
                 {
-                    if (e.ToString().Contains("Function code") == true || e.ToString().Contains("not supported") == true) ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.SlaveFunctionCodeException);
+                    if (e.ToString().Contains("Function code") || e.ToString().Contains("not supported")) ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.SlaveFunctionCodeException);
                     else ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.SlaveUnimplementedException);
                     ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, "Exception occured on Modbus Device - " + e.ToString());
                     return;

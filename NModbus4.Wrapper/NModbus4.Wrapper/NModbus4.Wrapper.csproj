@@ -41,13 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Define_Modbus.cs" />
-    <Compile Include="Modbus_Base.cs" />
-    <Compile Include="Modbus_MasterFunction.cs" />
-    <Compile Include="Modbus_ReadData.cs" />
-    <Compile Include="Modbus_SlaveFunction.cs" />
-    <Compile Include="Modbus_WriteData.cs" />
+    <Compile Include="Define\Define_Enum.cs" />
+    <Compile Include="Base\Modbus_Base.cs" />
+    <Compile Include="Master\Modbus_MasterFunction.cs" />
+    <Compile Include="Base\Modbus_ReadData.cs" />
+    <Compile Include="Slave\Modbus_SlaveFunction.cs" />
+    <Compile Include="Base\Modbus_WriteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Converter\Converter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClassSummary.xml" />
@@ -55,5 +56,6 @@
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

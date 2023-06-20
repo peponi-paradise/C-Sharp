@@ -140,10 +140,7 @@ namespace NModbus4.Wrapper
         /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
         /// <param name="Data">Any type</param>
         /// <param name="DataType">bool, int, float.</param>
-        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, T Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float)
-        {
-            return Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
-        }
+        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, T Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float) => Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
 
         /// <summary>
         ///  " StartAddress > 0 "<br/>
@@ -154,19 +151,10 @@ namespace NModbus4.Wrapper
         /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
         /// <param name="Data">Any type of list</param>
         /// <param name="DataType">bool, int, float.</param>
-        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, List<T> Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float)
-        {
-            return Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
-        }
+        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, List<T> Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float) => Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
 
-        public Task<bool> WriteDataAsync(Define_Modbus.CommunicationData CommunicationData)
-        {
-            return Task.Run(() => WriteData(CommunicationData));
-        }
+        public Task<bool> WriteDataAsync(Define_Modbus.CommunicationData CommunicationData) => Task.Run(() => WriteData(CommunicationData));
 
-        public Task<bool> WriteDataAsync(List<Define_Modbus.CommunicationData> CommunicationDataList)
-        {
-            return Task.Run(() => WriteData(CommunicationDataList));
-        }
+        public Task<bool> WriteDataAsync(List<Define_Modbus.CommunicationData> CommunicationDataList) => Task.Run(() => WriteData(CommunicationDataList));
     }
 }

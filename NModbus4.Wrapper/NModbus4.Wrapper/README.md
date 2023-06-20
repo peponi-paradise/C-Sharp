@@ -1,6 +1,6 @@
 ﻿<h1 id="title">NModbus4.Wrapper summary</h1>
 
-- This class use C# [NModbus4](https://github.com/NModbus4/NModbus4) dll
+- This wrapper class use C# [NModbus4](https://github.com/NModbus4/NModbus4) dll
 - Public properties, functions, events are on following table
 <br><br><br>
 

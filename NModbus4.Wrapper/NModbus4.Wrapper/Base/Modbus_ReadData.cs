@@ -211,10 +211,7 @@ namespace NModbus4.Wrapper
         /// <param name="DataStorage">Where to write</param>
         /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
         /// <returns>Success of fail with Data</returns>
-        public Task<(bool IsSuccess, T Data)> ReadDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress)
-        {
-            return Task.Run(() => { var rtn = ReadData(DataStorage, StartAddress, out T Data); return (rtn, Data); });
-        }
+        public Task<(bool IsSuccess, T Data)> ReadDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress) => Task.Run(() => { var rtn = ReadData(DataStorage, StartAddress, out T Data); return (rtn, Data); });
 
         /// <summary>
         ///  " StartAddress > 0 "<br/>
@@ -224,19 +221,10 @@ namespace NModbus4.Wrapper
         /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
         /// <param name="ReadCount">Means data count, not array length<br/>Array length will be auto converted</param>
         /// <returns>Success of fail with DataList</returns>
-        public Task<(bool IsSuccess, List<T> Data)> ReadDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, int ReadCount)
-        {
-            return Task.Run(() => { var rtn = ReadData(DataStorage, StartAddress, ReadCount, out List<T> Data); return (rtn, Data); });
-        }
+        public Task<(bool IsSuccess, List<T> Data)> ReadDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, int ReadCount) => Task.Run(() => { var rtn = ReadData(DataStorage, StartAddress, ReadCount, out List<T> Data); return (rtn, Data); });
 
-        public Task<(bool IsSuccess, Define_Modbus.CommunicationData CommunicationData)> ReadDataAsync(Define_Modbus.CommunicationData CommunicationData)
-        {
-            return Task.Run(() => { var rtn = ReadData(ref CommunicationData); return (rtn, CommunicationData); });
-        }
+        public Task<(bool IsSuccess, Define_Modbus.CommunicationData CommunicationData)> ReadDataAsync(Define_Modbus.CommunicationData CommunicationData) => Task.Run(() => { var rtn = ReadData(ref CommunicationData); return (rtn, CommunicationData); });
 
-        public Task<(bool IsSuccess, List<Define_Modbus.CommunicationData> CommunicationDataList)> ReadDataAsync(List<Define_Modbus.CommunicationData> CommunicationDataList)
-        {
-            return Task.Run(() => { var rtn = ReadData(ref CommunicationDataList); return (rtn, CommunicationDataList); });
-        }
+        public Task<(bool IsSuccess, List<Define_Modbus.CommunicationData> CommunicationDataList)> ReadDataAsync(List<Define_Modbus.CommunicationData> CommunicationDataList) => Task.Run(() => { var rtn = ReadData(ref CommunicationDataList); return (rtn, CommunicationDataList); });
     }
 }
