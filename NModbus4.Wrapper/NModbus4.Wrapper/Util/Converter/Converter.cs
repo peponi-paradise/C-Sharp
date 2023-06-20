@@ -8,23 +8,23 @@ namespace NModbus4.Wrapper.Util.Converter
     public static class Converter
     {
         /// <include file='ClassSummary.xml' path='Docs/Doc[@name="ToUshortHexData"]'/>
-        public static List<ushort> ToUshortHexData<T>(T InputValue, Endian ToEndian = Endian.Big)
+        public static List<ushort> ToUshortHexData<T>(T inputValue, Endian toEndian = Endian.Big)
         {
-            bool IsLittleEndian = BitConverter.IsLittleEndian;
+            bool isLittleEndian = BitConverter.IsLittleEndian;
             List<ushort> data = new List<ushort>();
             List<byte> b = new List<byte>();
 
-            if (typeof(T) == typeof(bool)) b = BitConverter.GetBytes((bool)Convert.ChangeType(InputValue, typeof(T))).ToList();
-            else if (typeof(T) == typeof(int)) b = BitConverter.GetBytes((ushort)(int)Convert.ChangeType(InputValue, typeof(T))).ToList();
-            else b = BitConverter.GetBytes((float)Convert.ChangeType(InputValue, typeof(float))).ToList();
+            if (typeof(T) == typeof(bool)) b = BitConverter.GetBytes((bool)Convert.ChangeType(inputValue, typeof(T))).ToList();
+            else if (typeof(T) == typeof(int)) b = BitConverter.GetBytes((ushort)(int)Convert.ChangeType(inputValue, typeof(T))).ToList();
+            else b = BitConverter.GetBytes((float)Convert.ChangeType(inputValue, typeof(float))).ToList();
 
-            var Arr = b.ToArray();
+            var arr = b.ToArray();
 
-            if (IsLittleEndian == true && ToEndian == Endian.Big) Array.Reverse(Arr);
-            else if (IsLittleEndian == false && ToEndian == Endian.Little) Array.Reverse(Arr);
+            if (isLittleEndian && toEndian == Endian.Big) Array.Reverse(arr);
+            else if (isLittleEndian && toEndian == Endian.Little) Array.Reverse(arr);
 
-            if (typeof(T) == typeof(bool)) data.Add(Arr[0]);
-            else for (int index = 0; index < Arr.Length / 2; index++) data.Add(Convert.ToUInt16(Arr[index * 2].ToString("X2") + Arr[index * 2 + 1].ToString("X2"), 16));
+            if (typeof(T) == typeof(bool)) data.Add(arr[0]);
+            else for (int index = 0; index < arr.Length / 2; index++) data.Add(Convert.ToUInt16(arr[index * 2].ToString("X2") + arr[index * 2 + 1].ToString("X2"), 16));
 
             return data;
         }
