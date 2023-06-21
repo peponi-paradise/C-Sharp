@@ -1,4 +1,5 @@
 ﻿using NModbus4.Wrapper.Define;
+using NModbus4.Wrapper.Util.Converter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,185 +13,114 @@ namespace NModbus4.Wrapper
         /// Write all datas in CommunicationData
         /// </summary>
         /// <returns>Success or fail<br/>If there is no data to send, return true</returns>
-        private bool Master_WriteProcess()
+        private bool Master_WriteProcess(List<CommunicationData> communicationDatas)
         {
             bool rtn = true;
-            ThreadBusy = true;
+            List<CommunicationData> sendDatas = communicationDatas.ToList();
             while (true)
             {
-                if (Master_GetWriteCommunicationData(CommunicationData, out var DataStorage, out var StartAddress, out var SendDataArray) == true)
+                if (Master_GetWriteDatas(sendDatas, out var dataStorage, out var startAddress, out var writeDatas))
                 {
-                    if (Master_WriteData(DataStorage, StartAddress, SendDataArray) == false) rtn = false;
+                    if (!Master_WriteData(dataStorage, startAddress, writeDatas)) { rtn = false; break; }
                 }
                 else break;
             }
-            ThreadBusy = false;
             return rtn;
         }
 
-        /// <summary>
-        /// Read data entry point<br/>
-        /// Read all datas in CommunicationData
-        /// </summary>
-        /// <returns>Success or fail<br/>If there is no data to read, return true</returns>
-        private bool Master_ReadProcess()
+        // Write는 데이터형 신경 안쓰고 연속된 데이터 쭉쭉 뽑아내는게 통신 양 줄이는데 유리
+        private bool Master_GetWriteDatas(List<CommunicationData> communicationDatas, out DataStorage dataStorage, out ushort startAddress, out List<ushort> writeDatas)
         {
-            bool rtn = true;
-            ThreadBusy = true;
+            startAddress = ushort.MaxValue;
+            writeDatas = null;
+            dataStorage = DataStorage.HoldingRegister;
+            if (communicationDatas.Count == 0) return false;
+            List<ushort> datas = new List<ushort>();
 
-            List<Define_Modbus.CommunicationData> TempList = new List<Define_Modbus.CommunicationData>();
-            while (true)
+            var dataCopy = communicationDatas.OrderBy(x => x.DataStorage).ThenBy(x => x.StartAddress).ToList();
+
+            for (int index = 0; index < dataCopy.Count; index++)
             {
-                if (Master_GetReadCommunicationData(CommunicationData, out var DataStorage, out var DataType, out var StartAddress, out var ReadCount) == true)
+                if (startAddress == ushort.MaxValue)
                 {
-                    if (DataType == Define_Modbus.DataType.Float)
-                    {
-                        if (Master_ReadData<float>(DataStorage, StartAddress, ReadCount, out var DataList) == true)
-                        {
-                            for (int Index = 0; Index < DataList.Count; Index++) TempList.Add(new Define_Modbus.CommunicationData(DataStorage, (ushort)(StartAddress + Index * 2), DataList[Index], Interface.EndianOption, DataType, Define_Modbus.ReadWriteOption.Read));
-                        }
-                        else { rtn = false; break; }
-                    }
-                    else if (DataType == Define_Modbus.DataType.Int)
-                    {
-                        if (Master_ReadData<int>(DataStorage, StartAddress, ReadCount, out var DataList) == true)
-                        {
-                            for (int Index = 0; Index < DataList.Count; Index++) TempList.Add(new Define_Modbus.CommunicationData(DataStorage, (ushort)(StartAddress + Index), DataList[Index], Interface.EndianOption, DataType, Define_Modbus.ReadWriteOption.Read));
-                        }
-                        else { rtn = false; break; }
-                    }
-                    else
-                    {
-                        if (Master_ReadData<bool>(DataStorage, StartAddress, ReadCount, out var DataList) == true)
-                        {
-                            for (int Index = 0; Index < DataList.Count; Index++) TempList.Add(new Define_Modbus.CommunicationData(DataStorage, (ushort)(StartAddress + Index), DataList[Index], Interface.EndianOption, DataType, Define_Modbus.ReadWriteOption.Read));
-                        }
-                        else { rtn = false; break; }
-                    }
+                    dataStorage = dataCopy[index].DataStorage;
+                    startAddress = dataCopy[index].StartAddress;
                 }
-                else break;
+                else
+                {
+                    if (dataCopy[index].DataStorage != dataStorage ||
+                        dataCopy[index].StartAddress != startAddress + datas.Count) break;  // 스토리지 바뀌거나 어드레스 끊기면 다음번 전송으로 넘김
+                    if (dataCopy[index].DataLength >= 2) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
+                    else if (datas.Count >= ModbusInterface.TransactionLimit) break;
+                }
+
+                foreach (var data in dataCopy[index].GetSendData()) datas.Add(data);
+                communicationDatas.Remove(dataCopy[index]);
             }
 
-            if (TempList.Count > 0)
-            {
-                foreach (var TempData in TempList) CommunicationData.Add(TempData);
-                ModbusReadData?.Invoke(Interface, TempList);
-            }
-
-            ThreadBusy = false;
-            return rtn;
+            writeDatas = datas.ToList();
+            return writeDatas.Count > 0;
         }
 
-        // Write는 정해진 데이터 보냄. 보냄과 동시에 삭제. 데이터형 신경 안쓰고 연속된 데이터 쭉쭉 뽑아내는게 통신 양 줄이는데 유리
-        private bool Master_GetWriteCommunicationData(List<Define_Modbus.CommunicationData> CommunicationDataList, out Define_Modbus.DataStorage DataStorage, out ushort StartAddress, out ushort[] SendDataArray)
+        // Read는 데이터형도 구분해서 봐야함. 통신 데이터 길이가 다름
+        private bool Master_GetReadInformation(List<CommunicationData> communicationDatas, out DataStorage dataStorage, out DataType dataType, out int startAddress, out int readCount)
         {
-            StartAddress = 59999;
-            SendDataArray = null;
-            DataStorage = Define_Modbus.DataStorage.HoldingRegister;
-            if (CommunicationDataList.Count == 0) return false;
-            List<ushort> Datas = new List<ushort>();
+            startAddress = ushort.MaxValue;
+            dataStorage = DataStorage.HoldingRegister;
+            dataType = DataType.Float;
+            readCount = 0;
+            if (communicationDatas.Count == 0) return false;
+            List<ushort> datas = new List<ushort>();
 
-            var CopyMasterCommunicationData = CommunicationDataList.OrderBy(x => x.ReadWriteOption).ThenBy(x => x.DataStorage).ThenBy(x => x.StartAddress).ToList();
+            var dataCopy = communicationDatas.OrderBy(x => x.DataStorage).ThenBy(x => x.DataType).ThenBy(x => x.StartAddress).ToList();
 
-            for (int DataIndex = 0; DataIndex < CopyMasterCommunicationData.Count; DataIndex++)
+            for (int index = 0; index < dataCopy.Count; index++)
             {
-                if (CopyMasterCommunicationData[DataIndex].ReadWriteOption == Define_Modbus.ReadWriteOption.Write)
+                if (startAddress == ushort.MaxValue)
                 {
-                    if (StartAddress == 59999)
-                    {
-                        DataStorage = CopyMasterCommunicationData[DataIndex].DataStorage;
-                        StartAddress = CopyMasterCommunicationData[DataIndex].StartAddress;
-                        foreach (var data in CopyMasterCommunicationData[DataIndex].Data) Datas.Add(data);
-
-                        CommunicationDataList.Remove(CopyMasterCommunicationData[DataIndex]);
-                    }
-                    else
-                    {
-                        if (CopyMasterCommunicationData[DataIndex].DataStorage != DataStorage ||
-                            CopyMasterCommunicationData[DataIndex].StartAddress != StartAddress + Datas.Count) break;
-                        if (CopyMasterCommunicationData[DataIndex].DataLength >= 2) { if (Datas.Count >= Define_Modbus.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
-                        else if (Datas.Count >= Define_Modbus.TransactionLimit) break;
-
-                        foreach (var data in CopyMasterCommunicationData[DataIndex].Data) Datas.Add(data);
-
-                        CommunicationDataList.Remove(CopyMasterCommunicationData[DataIndex]);
-                    }
+                    dataStorage = dataCopy[index].DataStorage;
+                    dataType = dataCopy[index].DataType;
+                    startAddress = dataCopy[index].StartAddress;
                 }
+                else
+                {
+                    if (dataCopy[index].DataStorage != dataStorage ||
+                        dataCopy[index].DataType != dataType ||
+                        dataCopy[index].StartAddress != startAddress + datas.Count) break;
+                    if (dataCopy[index].DataLength >= 2) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
+                    else if (datas.Count >= ModbusInterface.TransactionLimit) break;
+                }
+
+                foreach (var data in dataCopy[index].GetSendData()) datas.Add(data);
+                communicationDatas.Remove(dataCopy[index]);
             }
 
-            SendDataArray = Datas.ToArray();
-            if (SendDataArray.Length != 0) return true; else return false;
-        }
-
-        // Read는 데이터형도 구분해서 봐야함. 삭제 후 복원. 통신 데이터 길이가 다름
-        private bool Master_GetReadCommunicationData(List<Define_Modbus.CommunicationData> CommunicationDataList, out Define_Modbus.DataStorage DataStorage, out Define_Modbus.DataType DataType, out int StartAddress, out int ReadCount)
-        {
-            StartAddress = 59999;
-            DataStorage = Define_Modbus.DataStorage.HoldingRegister;
-            DataType = Define_Modbus.DataType.Float;
-            ReadCount = 0;
-            if (CommunicationDataList.Count == 0) return false;
-            List<ushort> Datas = new List<ushort>();
-
-            var CopyMasterCommunicationData = CommunicationDataList.OrderBy(x => x.ReadWriteOption).ThenBy(x => x.DataStorage).ThenBy(x => x.DataType).ThenBy(x => x.StartAddress).ToList();
-
-            for (int DataIndex = 0; DataIndex < CopyMasterCommunicationData.Count; DataIndex++)
-            {
-                if (CopyMasterCommunicationData[DataIndex].ReadWriteOption == Define_Modbus.ReadWriteOption.Read)
-                {
-                    if (StartAddress == 59999)
-                    {
-                        DataStorage = CopyMasterCommunicationData[DataIndex].DataStorage;
-                        DataType = CopyMasterCommunicationData[DataIndex].DataType;
-                        StartAddress = CopyMasterCommunicationData[DataIndex].StartAddress;
-                        foreach (var data in CopyMasterCommunicationData[DataIndex].Data) Datas.Add(data);
-
-                        CommunicationDataList.Remove(CopyMasterCommunicationData[DataIndex]);
-                    }
-                    else
-                    {
-                        if (CopyMasterCommunicationData[DataIndex].DataStorage != DataStorage ||
-                            CopyMasterCommunicationData[DataIndex].DataType != DataType ||
-                            CopyMasterCommunicationData[DataIndex].StartAddress != StartAddress + Datas.Count) break;
-                        if (CopyMasterCommunicationData[DataIndex].DataLength >= 2) { if (Datas.Count >= Define_Modbus.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
-                        else if (Datas.Count >= Define_Modbus.TransactionLimit) break;
-
-                        foreach (var data in CopyMasterCommunicationData[DataIndex].Data) Datas.Add(data);
-
-                        CommunicationDataList.Remove(CopyMasterCommunicationData[DataIndex]);
-                    }
-                }
-            }
-
-            if (DataType == Define_Modbus.DataType.Float) ReadCount = Datas.Count / 2; else ReadCount = Datas.Count;
-            if (ReadCount != 0) return true; else return false;
+            readCount = dataType == DataType.Float ? readCount / 2 : readCount;
+            return readCount != 0;
         }
 
         /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_WriteData"]'/>
-        private bool Master_WriteData(Define_Modbus.DataStorage DataStorage, ushort StartAddress, ushort[] SendDataArray)
+        private bool Master_WriteData(DataStorage dataStorage, ushort startAddress, List<ushort> sendDatas)
         {
             if (ModbusInstance.Transport == null) return false;
-            var HexString = string.Empty;
+            var hexString = string.Empty;
             try
             {
-                switch (DataStorage)
+                switch (dataStorage)
                 {
-                    case Define_Modbus.DataStorage.Coil:
-                        List<bool> ConvertList = new List<bool>();
-                        foreach (var data in SendDataArray) ConvertList.Add(Convert.ToBoolean(data));
-                        ModbusInstance.WriteMultipleCoils((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), ConvertList.ToArray());
-
-                        foreach (var data in ConvertList) HexString += (data ? 1 : 0).ToString("X2") + ",";
-                        ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Communication, string.Format("Modbus write data - Data storage : {0}, Start address : {1}, Ushort : {2}, Hex : {3}", DataStorage.ToString(), StartAddress, String.Join(", ", SendDataArray), HexString));
+                    case DataStorage.Coil:
+                        List<bool> convertList = new List<bool>();
+                        foreach (var data in sendDatas) convertList.Add(Convert.ToBoolean(data));
+                        ModbusInstance.WriteMultipleCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), convertList.ToArray());  // 보낼 때는 -1 해줘야함
+                        foreach (var data in convertList) hexString += (data ? 1 : 0).ToString("X2") + ",";
                         break;
 
-                    case Define_Modbus.DataStorage.HoldingRegister:
-                        ModbusInstance.WriteMultipleRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), SendDataArray);
-
-                        foreach (var data in SendDataArray) HexString += data.ToString("X2") + ",";
-                        ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Communication, string.Format("Modbus write data - Data storage : {0}, Start address : {1}, Ushort : {2}, Hex : {3}", DataStorage.ToString(), StartAddress, String.Join(", ", SendDataArray), HexString));
+                    case DataStorage.HoldingRegister:
+                        ModbusInstance.WriteMultipleRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), sendDatas);
+                        foreach (var data in sendDatas) hexString += data.ToString("X2") + ",";
                         break;
                 }
+                ModbusLog?.Invoke(Interface, LogLevel.Communication, $"Modbus write data - Data storage : {dataStorage}, Start address : {startAddress}, Ushort : {String.Join(", ", sendDatas)}, Hex : {hexString}");
                 return true;
             }
             catch (Exception e)
@@ -199,47 +129,47 @@ namespace NModbus4.Wrapper
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
                     ConnectCallback?.Invoke((Interface, false));
-                    ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.MasterTransportNullException);
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus Master_WriteData Failed - {0}", e.ToString()));
+                    ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
+                    ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_WriteData Failed - {e}");
                     return false;
                 }
                 ModbusGeneralException?.Invoke(Interface);
-                ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, "Exception occured in Modbus Device - " + e.ToString());
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Exception occured in Modbus Device - {e}");
             }
             return false;
         }
 
         /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_ReadDataSingle"]'/>
-        private bool Master_ReadData<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, out T Data)
+        private bool Master_ReadData<T>(DataStorage dataStorage, int startAddress, out T data)
         {
-            Data = default(T);
+            data = default(T);
             try
             {
-                dynamic ReadData = null;
+                dynamic readData = null;
 
-                switch (DataStorage)
+                switch (dataStorage)
                 {
-                    case Define_Modbus.DataStorage.Coil:
-                        ReadData = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 1)[0] == true ? 1 : 0;
-                        ReadData = new ushort[1] { (ushort)ReadData };
+                    case DataStorage.Coil:
+                        var coilBool = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0] ? 1 : 0;
+                        readData = new ushort[1] { (ushort)coilBool };
                         break;
 
-                    case Define_Modbus.DataStorage.DiscreteInput:
-                        ReadData = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 1)[0] == true ? 1 : 0;
-                        ReadData = new ushort[1] { (ushort)ReadData };
+                    case DataStorage.DiscreteInput:
+                        var inputBool = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0] ? 1 : 0;
+                        readData = new ushort[1] { (ushort)inputBool };
                         break;
 
-                    case Define_Modbus.DataStorage.InputRegister:
-                        if (typeof(T) != typeof(float)) ReadData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 1)[0];
-                        else ReadData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 2);
+                    case DataStorage.InputRegister:
+                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0];
+                        else readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 2);
                         break;
 
-                    case Define_Modbus.DataStorage.HoldingRegister:
-                        if (typeof(T) != typeof(float)) ReadData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 1)[0];
-                        else ReadData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), 2);
+                    case DataStorage.HoldingRegister:
+                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0];
+                        else readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 2);
                         break;
                 }
-                Data = Define_Modbus.FromUShortHexData<T>(ReadData, Interface.EndianOption);
+                data = Converter.FromUShortHexData<T>(readData, Interface.EndianOption);
                 return true;
             }
             catch (Exception e)
@@ -248,66 +178,66 @@ namespace NModbus4.Wrapper
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
                     ConnectCallback?.Invoke((Interface, false));
-                    ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.MasterTransportNullException);
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus Master_ReadData Failed - {0}", e.ToString()));
+                    ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
+                    ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
                     return false;
                 }
                 ModbusGeneralException?.Invoke(Interface);
-                ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus Master_ReadData Failed - {0}", e.ToString()));
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
             }
             return false;
         }
 
         /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_ReadDataMulti"]'/>
-        private bool Master_ReadData<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, int ReadCount, out List<T> Data)
+        private bool Master_ReadData<T>(DataStorage dataStorage, int startAddress, int readCount, out List<T> datas)
         {
-            Data = new List<T>();
+            datas = new List<T>();
             try
             {
-                List<ushort> ReadData = null;
+                List<ushort> readData = null;
 
-                switch (DataStorage)
+                switch (dataStorage)
                 {
-                    case Define_Modbus.DataStorage.Coil:
-                        bool[] CoillArray = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)ReadCount);
-                        ReadData = Array.ConvertAll(CoillArray, x => (x == true) ? (ushort)1 : (ushort)0).ToList();
+                    case DataStorage.Coil:
+                        bool[] coillArray = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        readData = Array.ConvertAll(coillArray, x => x ? (ushort)1 : (ushort)0).ToList();
                         break;
 
-                    case Define_Modbus.DataStorage.DiscreteInput:
-                        bool[] DiscreteArray = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)ReadCount);
-                        ReadData = Array.ConvertAll(DiscreteArray, x => (x == true) ? (ushort)1 : (ushort)0).ToList();
+                    case DataStorage.DiscreteInput:
+                        bool[] discreteArray = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        readData = Array.ConvertAll(discreteArray, x => x ? (ushort)1 : (ushort)0).ToList();
                         break;
 
-                    case Define_Modbus.DataStorage.InputRegister:
-                        ushort[] InputUshortData = null;
-                        if (typeof(T) != typeof(float)) InputUshortData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)ReadCount);
-                        else InputUshortData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)(ReadCount * 2));
-                        ReadData = InputUshortData.ToList();
+                    case DataStorage.InputRegister:
+                        ushort[] inputUshorts = null;
+                        if (typeof(T) != typeof(float)) inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        else inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)(readCount * 2));
+                        readData = inputUshorts.ToList();
                         break;
 
-                    case Define_Modbus.DataStorage.HoldingRegister:
-                        ushort[] HoldingUshortData = null;
-                        if (typeof(T) != typeof(float)) HoldingUshortData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)ReadCount);
-                        else HoldingUshortData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(StartAddress - 1), (ushort)(ReadCount * 2));
-                        ReadData = HoldingUshortData.ToList();
+                    case DataStorage.HoldingRegister:
+                        ushort[] holdingUshorts = null;
+                        if (typeof(T) != typeof(float)) holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        else holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)(readCount * 2));
+                        readData = holdingUshorts.ToList();
                         break;
                 }
 
-                for (int index = 0; index < ReadCount; index++)
+                for (int index = 0; index < readCount; index++)
                 {
                     if (typeof(T) != typeof(float))
                     {
-                        ushort[] InputData = new ushort[1] { ReadData[0] };
-                        var convert = Define_Modbus.FromUShortHexData<T>(InputData, Interface.EndianOption);
-                        Data.Add(convert);
-                        ReadData.RemoveAt(0);
+                        ushort[] inputData = new ushort[1] { readData[0] };
+                        var convert = Converter.FromUShortHexData<T>(inputData, Interface.EndianOption);
+                        datas.Add(convert);
+                        readData.RemoveAt(0);
                     }
                     else
                     {
-                        ushort[] InputData = new ushort[2] { ReadData[0], ReadData[1] };
-                        var convert = Define_Modbus.FromUShortHexData<T>(InputData, Interface.EndianOption);
-                        Data.Add(convert);
-                        ReadData.RemoveRange(0, 2);
+                        ushort[] inputData = new ushort[2] { readData[0], readData[1] };
+                        var convert = Converter.FromUShortHexData<T>(inputData, Interface.EndianOption);
+                        datas.Add(convert);
+                        readData.RemoveRange(0, 2);
                     }
                 }
                 return true;
@@ -318,14 +248,14 @@ namespace NModbus4.Wrapper
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
                     ConnectCallback?.Invoke((Interface, false));
-                    ModbusCommunicationException?.Invoke(Interface, Define_Modbus.CommunicationException.MasterTransportNullException);
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus Master_ReadData Failed - {0}", e.ToString()));
+                    ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
+                    ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
                     return false;
                 }
                 ModbusGeneralException?.Invoke(Interface);
-                ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus Master_ReadData Failed - {0}", e.ToString()));
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
+                return false;
             }
-            return false;
         }
     }
 }

@@ -8,153 +8,130 @@ namespace NModbus4.Wrapper
     public partial class Modbus
     {
         /// <summary>
-        /// " StartAddress > 0 "<br/>
+        /// " startAddress > 0 "<br/>
         /// C# is start from 0 but NModbus4 lib is start from 1
         /// </summary>
-        /// <param name="DataStorage">Where to write</param>
-        /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
-        /// <param name="Data">Any type</param>
-        /// <param name="DataType">bool, int, float.</param>
-        public bool WriteData<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, T Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float)
+        /// <typeparam name="T">bool, int, float.</typeparam>
+        /// <param name="dataStorage">Where to write</param>
+        /// <param name="startAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
+        /// <param name="data">Data to send</param>
+        public bool WriteData<T>(DataStorage dataStorage, int startAddress, T data)
         {
             bool rtn = true;
-            lock (ThreadLocker)
+            try
             {
-                try
-                {
-                    var CommData = new Define_Modbus.CommunicationData(DataStorage, (ushort)StartAddress, Data, Interface.EndianOption, DataType, Define_Modbus.ReadWriteOption.Write);
-                    AddorUpdateCommunicationData(CommData);
-                    if (Interface.WriteUpdateOption == Define_Modbus.UpdateOption.Immediate)
-                    {
-                        //Master
-                        if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess();
-                        else rtn = Slave_ReadWriteProcess(Define_Modbus.ReadWriteOption.Write);
-                    }
-                }
-                catch (Exception e)
-                {
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
-                }
+                var commData = new CommunicationData(dataStorage, (ushort)startAddress, data, Interface.EndianOption);
+                // Master
+                if ((int)Interface.ModbusType < 10) rtn = Master_WriteData(dataStorage, (ushort)startAddress, commData.GetSendData());
+                // Slave
+                else Slave_WriteData(commData);
+            }
+            catch (Exception e)
+            {
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
             }
             return rtn;
         }
 
         /// <summary>
-        /// " StartAddress > 0 "<br/>
+        /// " startAddress > 0 "<br/>
         /// C# is start from 0 but NModbus4 lib is start from 1<br/>
-        /// Input Continuous data for every time calling function
+        /// Input Continuous data
         /// </summary>
-        /// <param name="DataStorage">Where to write</param>
-        /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
-        /// <param name="Data">Any type of list</param>
-        /// <param name="DataType">bool, int, float.</param>
-        public bool WriteData<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, List<T> Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float)
+        /// <typeparam name="T">bool, int, float.</typeparam>
+        /// <param name="dataStorage">Where to write</param>
+        /// <param name="startAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
+        /// <param name="datas">Datas to send</param>
+        public bool WriteData<T>(DataStorage dataStorage, int startAddress, List<T> datas)
         {
             bool rtn = true;
-            lock (ThreadLocker)
+            try
             {
-                try
+                List<CommunicationData> commDatas = new List<CommunicationData>();
+                for (int index = 0; index < datas.Count; index++)
                 {
-                    List<Define_Modbus.CommunicationData> CommDataList = new List<Define_Modbus.CommunicationData>();
-                    for (int index = 0; index < Data.Count; index++)
+                    CommunicationData commData;
+                    if (typeof(T) == typeof(float))
                     {
-                        if (DataType == Define_Modbus.DataType.Float)
-                        {
-                            var CommData = new Define_Modbus.CommunicationData(DataStorage, (ushort)(StartAddress + CommDataList.Count * (int)DataType / 2), Data[index], Interface.EndianOption, DataType);
-                            CommDataList.Add(CommData);
-                        }
-                        else
-                        {
-                            var CommData = new Define_Modbus.CommunicationData(DataStorage, (ushort)(StartAddress + CommDataList.Count), Data[index], Interface.EndianOption, DataType);
-                            CommDataList.Add(CommData);
-                        }
+                        commData = new CommunicationData(dataStorage, (ushort)(startAddress + commDatas.Count * 2), datas[index], Interface.EndianOption);
                     }
-                    foreach (var CommData in CommDataList) AddorUpdateCommunicationData(CommData);
-
-                    if (Interface.WriteUpdateOption == Define_Modbus.UpdateOption.Immediate)
+                    else
                     {
-                        //Master
-                        if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess();
-                        else rtn = Slave_ReadWriteProcess(Define_Modbus.ReadWriteOption.Write);
+                        commData = new CommunicationData(dataStorage, (ushort)(startAddress + commDatas.Count), datas[index], Interface.EndianOption);
                     }
+                    commDatas.Add(commData);
                 }
-                catch (Exception e)
-                {
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
-                }
+                // Master
+                if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess(commDatas);
+                // Slave
+                else foreach (var data in commDatas) Slave_WriteData(data);
+            }
+            catch (Exception e)
+            {
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
             }
             return rtn;
         }
 
-        public bool WriteData(Define_Modbus.CommunicationData CommunicationData)
+        public bool WriteData(CommunicationData communicationData)
         {
             bool rtn = true;
-            lock (ThreadLocker)
+            try
             {
-                try
-                {
-                    AddorUpdateCommunicationData(CommunicationData);
-                    if (Interface.WriteUpdateOption == Define_Modbus.UpdateOption.Immediate)
-                    {
-                        //Master
-                        if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess();
-                        else rtn = Slave_ReadWriteProcess(Define_Modbus.ReadWriteOption.Write);
-                    }
-                }
-                catch (Exception e)
-                {
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
-                }
+                // Master
+                if ((int)Interface.ModbusType < 10) rtn = Master_WriteData(communicationData.DataStorage, communicationData.StartAddress, communicationData.GetSendData());
+                // Slave
+                else Slave_WriteData(communicationData);
+            }
+            catch (Exception e)
+            {
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
             }
             return rtn;
         }
 
-        public bool WriteData(List<Define_Modbus.CommunicationData> CommunicationDataList)
+        public bool WriteData(List<CommunicationData> communicationDatas)
         {
             bool rtn = true;
-            lock (ThreadLocker)
+
+            try
             {
-                try
-                {
-                    foreach (var CommData in CommunicationDataList) AddorUpdateCommunicationData(CommData);
-                    if (Interface.WriteUpdateOption == Define_Modbus.UpdateOption.Immediate)
-                    {
-                        //Master
-                        if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess();
-                        else rtn = Slave_ReadWriteProcess(Define_Modbus.ReadWriteOption.Write);
-                    }
-                }
-                catch (Exception e)
-                {
-                    ModbusLog?.Invoke(Interface, Define_Modbus.LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
-                }
+                // Master
+                if ((int)Interface.ModbusType < 10) rtn = Master_WriteProcess(communicationDatas);
+                // Slave
+                else foreach (var data in communicationDatas) Slave_WriteData(data);
             }
+            catch (Exception e)
+            {
+                ModbusLog?.Invoke(Interface, LogLevel.Exception, string.Format("Modbus WriteData Failed - {0}", e.ToString()));
+            }
+
             return rtn;
         }
 
         /// <summary>
-        ///  " StartAddress > 0 "<br/>
-        /// C# is start from 0 but NModbus4 lib is start from 1, Async function for Immediate master mode
+        /// " startAddress > 0 "<br/>
+        /// C# is start from 0 but NModbus4 lib is start from 1
         /// </summary>
-        /// <param name="DataStorage">Where to write</param>
-        /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
-        /// <param name="Data">Any type</param>
-        /// <param name="DataType">bool, int, float.</param>
-        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, T Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float) => Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
+        /// <typeparam name="T">bool, int, float.</typeparam>
+        /// <param name="dataStorage">Where to write</param>
+        /// <param name="startAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
+        /// <param name="data">Data to send</param>
+        public Task<bool> WriteDataAsync<T>(DataStorage dataStorage, int startAddress, T data) => Task.Run(() => WriteData(dataStorage, startAddress, data));
 
         /// <summary>
-        ///  " StartAddress > 0 "<br/>
-        /// C# is start from 0 but NModbus4 lib is start from 1, Async function for Immediate master mode<br/>
-        /// Input Continuous data for every time calling function
+        /// " startAddress > 0 "<br/>
+        /// C# is start from 0 but NModbus4 lib is start from 1<br/>
+        /// Input Continuous data
         /// </summary>
-        /// <param name="DataStorage">Where to write</param>
-        /// <param name="StartAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
-        /// <param name="Data">Any type of list</param>
-        /// <param name="DataType">bool, int, float.</param>
-        public Task<bool> WriteDataAsync<T>(Define_Modbus.DataStorage DataStorage, int StartAddress, List<T> Data, Define_Modbus.DataType DataType = Define_Modbus.DataType.Float) => Task.Run(() => WriteData(DataStorage, StartAddress, Data, DataType));
+        /// <typeparam name="T">bool, int, float.</typeparam>
+        /// <param name="dataStorage">Where to write</param>
+        /// <param name="startAddress">Start from 1.<br/><br/>- Register address of index 1<br/>Coil : 1<br/>Discrete Input : 10001<br/>Input Register : 30001<br/>Holding Register : 40001</param>
+        /// <param name="datas">Datas to send</param>
+        public Task<bool> WriteDataAsync<T>(DataStorage dataStorage, int startAddress, List<T> datas) => Task.Run(() => WriteData(dataStorage, startAddress, datas));
 
-        public Task<bool> WriteDataAsync(Define_Modbus.CommunicationData CommunicationData) => Task.Run(() => WriteData(CommunicationData));
+        public Task<bool> WriteDataAsync(CommunicationData communicationData) => Task.Run(() => WriteData(communicationData));
 
-        public Task<bool> WriteDataAsync(List<Define_Modbus.CommunicationData> CommunicationDataList) => Task.Run(() => WriteData(CommunicationDataList));
+        public Task<bool> WriteDataAsync(List<CommunicationData> communicationDatas) => Task.Run(() => WriteData(communicationDatas));
     }
 }

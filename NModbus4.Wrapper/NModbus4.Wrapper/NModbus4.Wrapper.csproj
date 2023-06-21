@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Define\Define_CommunicationData.cs" />
     <Compile Include="Define\Define_Enum.cs" />
     <Compile Include="Base\Modbus_Base.cs" />
+    <Compile Include="Define\Define_ModbusInterface.cs" />
     <Compile Include="Master\Modbus_MasterFunction.cs" />
     <Compile Include="Base\Modbus_ReadData.cs" />
     <Compile Include="Slave\Modbus_SlaveFunction.cs" />
