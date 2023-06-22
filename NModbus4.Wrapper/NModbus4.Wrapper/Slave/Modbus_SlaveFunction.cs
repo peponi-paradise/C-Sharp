@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace NModbus4.Wrapper
 {
-    public partial class Modbus
+    public partial class ModbusService
     {
         /// <summary>
         /// Clear all data
@@ -32,7 +32,7 @@ namespace NModbus4.Wrapper
             }
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Slave_WriteData"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_SlaveFunction/Doc[@name="Slave_WriteData"]'/>
         private void Slave_WriteData(CommunicationData commData)
         {
             switch (commData.DataStorage)
@@ -75,8 +75,8 @@ namespace NModbus4.Wrapper
             }
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Slave_ReadDataSingle"]'/>
-        private bool Slave_ReadData<T>(DataStorage dataStorage, int startAddress, out T data)
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_SlaveFunction/Doc[@name="Slave_ReadDataSingle"]'/>
+        private bool Slave_ReadData<T>(DataStorage dataStorage, int address, out T data)
         {
             bool rtn = false;
             data = default;
@@ -87,21 +87,21 @@ namespace NModbus4.Wrapper
                 switch (dataStorage)
                 {
                     case DataStorage.Coil:
-                        readData = new ushort[1] { ModbusInstance.DataStore.CoilDiscretes[startAddress] ? (ushort)1 : (ushort)0 };
+                        readData = new ushort[1] { ModbusInstance.DataStore.CoilDiscretes[address] ? (ushort)1 : (ushort)0 };
                         break;
 
                     case DataStorage.DiscreteInput:
-                        readData = new ushort[1] { ModbusInstance.DataStore.InputDiscretes[startAddress] ? (ushort)1 : (ushort)0 };
+                        readData = new ushort[1] { ModbusInstance.DataStore.InputDiscretes[address] ? (ushort)1 : (ushort)0 };
                         break;
 
                     case DataStorage.InputRegister:
-                        if (typeof(T) != typeof(float)) readData = new ushort[1] { ModbusInstance.DataStore.InputRegisters[startAddress] };
-                        else readData = new ushort[2] { ModbusInstance.DataStore.InputRegisters[startAddress], ModbusInstance.DataStore.InputRegisters[startAddress + 1] };
+                        if (typeof(T) != typeof(float)) readData = new ushort[1] { ModbusInstance.DataStore.InputRegisters[address] };
+                        else readData = new ushort[2] { ModbusInstance.DataStore.InputRegisters[address], ModbusInstance.DataStore.InputRegisters[address + 1] };
                         break;
 
                     case DataStorage.HoldingRegister:
-                        if (typeof(T) != typeof(float)) readData = new ushort[1] { ModbusInstance.DataStore.HoldingRegisters[startAddress] };
-                        else readData = new ushort[2] { ModbusInstance.DataStore.HoldingRegisters[startAddress], ModbusInstance.DataStore.HoldingRegisters[startAddress + 1] };
+                        if (typeof(T) != typeof(float)) readData = new ushort[1] { ModbusInstance.DataStore.HoldingRegisters[address] };
+                        else readData = new ushort[2] { ModbusInstance.DataStore.HoldingRegisters[address], ModbusInstance.DataStore.HoldingRegisters[address + 1] };
                         break;
                 }
                 data = Converter.FromUShortHexData<T>(readData, Interface.EndianOption);
@@ -115,7 +115,7 @@ namespace NModbus4.Wrapper
             return rtn;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Slave_ReadDataMulti"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_SlaveFunction/Doc[@name="Slave_ReadDataMulti"]'/>
         private bool Slave_ReadData<T>(DataStorage dataStorage, int startAddress, int readCount, out List<T> datas)
         {
             bool rtn = false;
@@ -175,7 +175,7 @@ namespace NModbus4.Wrapper
             return rtn;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Slave_RequestReceived"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_SlaveFunction/Doc[@name="Slave_RequestReceived"]'/>
         // Slave data request entry point
         private void Slave_RequestReceived(object sender, ModbusSlaveRequestEventArgs e)
         {
@@ -203,7 +203,7 @@ namespace NModbus4.Wrapper
                 foreach (var data in contains) hexString += (data ? 1 : 0).ToString("X2") + ",";
                 dataLogString = String.Join(", ", contains);
             }
-            ModbusLog?.Invoke(Interface, LogLevel.Communication, $"Data readed - Type : {e.ModbusDataType}, Start Address : {e.StartAddress + 1}, Ushort : {dataLogString}, Hex : {hexString}");
+            ModbusLog?.Invoke(Interface, LogLevel.Communication, $"Data readed - Type : {e.ModbusDataType}, Start Address : {e.StartAddress}, Ushort : {dataLogString}, Hex : {hexString}");
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace NModbus4.Wrapper
 
                 ModbusDataReceived?.Invoke(Interface, DataStorage.Coil, addresses, Array.ConvertAll(contains.ToArray(), x => x ? (ushort)1 : (ushort)0).ToList());
             }
-            ModbusLog?.Invoke(Interface, LogLevel.Communication, $"Data written - Type : {e.ModbusDataType}, Start Address : {e.StartAddress + 1}, Ushort : {dataLogString}, Hex : {hexString}");
+            ModbusLog?.Invoke(Interface, LogLevel.Communication, $"Data written - Type : {e.ModbusDataType}, Start Address : {e.StartAddress}, Ushort : {dataLogString}, Hex : {hexString}");
         }
     }
 }

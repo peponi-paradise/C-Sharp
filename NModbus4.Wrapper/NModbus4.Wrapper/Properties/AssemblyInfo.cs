@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
 // 이러한 특성 값을 변경하세요.
 [assembly: AssemblyTitle("NModbus4.Wrapper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("NModbus4 wrapper")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("https://peponi-paradise.tistory.com/")]
 [assembly: AssemblyProduct("NModbus4.Wrapper")]
-[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyCopyright("Copyright © Peponi 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

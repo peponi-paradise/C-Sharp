@@ -11,46 +11,46 @@ using System.Threading;
 
 namespace NModbus4.Wrapper
 {
-    /// <include file='ClassSummary.xml' path='Docs/Modbus/Doc[@name="Modbus"]'/>
-    public partial class Modbus
+    /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="Modbus"]'/>
+    public partial class ModbusService
     {
         /// <summary>
         /// Connection status changed notice
         /// </summary>
-        private Action<(ModbusInterface ModbusInterface, bool ConnectStatus)> ConnectCallback;
+        private readonly Action<ModbusInterface, bool> ConnectCallback;
 
         public delegate void ModbusGeneralExceptionHandler(ModbusInterface modbusInterface);
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="ModbusGeneralException"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="ModbusGeneralException"]'/>
         public event ModbusGeneralExceptionHandler ModbusGeneralException;
 
         public delegate void ModbusCommunicationExceptionHandler(ModbusInterface modbusInterface, CommunicationException exception);
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="ModbusCommunicationException"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="ModbusCommunicationException"]'/>
         public event ModbusCommunicationExceptionHandler ModbusCommunicationException;
 
         public delegate void ModbusLogHandler(ModbusInterface modbusInterface, LogLevel logLevel, string message);
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="ModbusLog"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="ModbusLog"]'/>
         public event ModbusLogHandler ModbusLog;
 
         public delegate void ModbusDataReceivedHandler(ModbusInterface modbusInterface, DataStorage dataStorage, List<int> addresses, List<ushort> values);
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="ModbusDataReceived"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="ModbusDataReceived"]'/>
         public event ModbusDataReceivedHandler ModbusDataReceived;
 
         public ModbusInterface Interface;
         private dynamic ModbusInstance;
         private Thread SlaveThread;
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Modbus"]'/>
-        public Modbus(ModbusInterface modbusInterface, Action<(ModbusInterface ModbusInterface, bool ConnectStatus)> connectCallback = null)
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_Base/Doc[@name="Modbus"]'/>
+        public ModbusService(ModbusInterface modbusInterface, Action<ModbusInterface, bool> connectCallback = null)
         {
             Interface = modbusInterface;
             this.ConnectCallback = connectCallback;
         }
 
-        ~Modbus()
+        ~ModbusService()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace NModbus4.Wrapper
         }
 
         /// <summary>
-        /// Disconnect function이 없어 direct dispose
+        /// Disconnect function이 없어 Disconnect 대신 direct dispose
         /// </summary>
         /// <returns></returns>
         public bool Dispose()
@@ -134,21 +134,23 @@ namespace NModbus4.Wrapper
                 ModbusInstance.Transport.WaitToRetryMilliseconds = 200;
                 ModbusInstance.Transport.SlaveBusyUsesRetryCount = false;
 
-                ConnectCallback?.Invoke((Interface, true));
+                ConnectCallback?.Invoke(Interface, true);
             }
             catch (Exception e)
             {
                 // Create argument, no port, socket connect fail
                 if (e is ArgumentException || e is IOException || e is SocketException)
                 {
-                    ConnectCallback?.Invoke((Interface, false));
+                    ConnectCallback?.Invoke(Interface, false);
                 }
                 ModbusLog?.Invoke(Interface, LogLevel.Exception, "Exception occured in Modbus Device - " + e.ToString());
                 ModbusGeneralException?.Invoke(Interface);
             }
         }
 
-        //Thread에서 돌려야 함(Listen이 무한 블로킹 : Listen 호출 이후 들어오는 요청 자동 응답). Exception 나면 Listen 풀리고 쓰레드 종료됨. Thread 생성하고 다시 Listen 걸어주거나 다시 시작해야함.
+        /// <summary>
+        /// Thread에서 돌려야 함(Listen이 무한 블로킹 : Listen 호출 이후 들어오는 요청 자동 응답). Exception 나면 Listen 풀리고 쓰레드 종료됨. Thread 생성하고 다시 Listen 걸어주거나 다시 시작해야함.
+        /// </summary>
         private void CreateSlave()
         {
             try
@@ -194,7 +196,7 @@ namespace NModbus4.Wrapper
                         ModbusInstance = udpSlave;
                         break;
                 }
-                ConnectCallback?.Invoke((Interface, true));
+                ConnectCallback?.Invoke(Interface, true);
                 ModbusInstance.Listen();
             }
             catch (Exception e)
@@ -202,7 +204,7 @@ namespace NModbus4.Wrapper
                 // Create argument, no port fail
                 if (e is ArgumentException || e is IOException)
                 {
-                    ConnectCallback?.Invoke((Interface, false));
+                    ConnectCallback?.Invoke(Interface, false);
                 }
                 else if (e is NotImplementedException)
                 {

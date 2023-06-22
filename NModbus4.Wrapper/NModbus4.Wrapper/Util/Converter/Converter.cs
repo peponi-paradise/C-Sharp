@@ -7,7 +7,7 @@ namespace NModbus4.Wrapper.Util.Converter
 {
     public static class Converter
     {
-        /// <include file='ClassSummary.xml' path='Docs/Converter/Doc[@name="ToUshortHexData"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Converter/Doc[@name="ToUshortHexData"]'/>
         public static List<ushort> ToUshortHexData<T>(T inputValue, Endian toEndian = Endian.Big)
         {
             bool isLittleEndian = BitConverter.IsLittleEndian;
@@ -29,7 +29,7 @@ namespace NModbus4.Wrapper.Util.Converter
             return data;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Converter/Doc[@name="FromUShortHexData"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Converter/Doc[@name="FromUShortHexData"]'/>
         public static T FromUShortHexData<T>(ushort[] inputValues, Endian FromEndian = Endian.Big)
         {
             if (inputValues.Length == 1 && (inputValues[0] == 0 || inputValues[0] == 1)) return (T)Convert.ChangeType(inputValues[0], typeof(T)); //for bool

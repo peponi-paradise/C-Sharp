@@ -18,7 +18,7 @@
 
     public class ModbusInterface
     {
-        /// <include file='ClassSummary.xml' path='Docs/Define_ModbusInterface/Doc[@name="TransactionLimit"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_ModbusInterface/Doc[@name="TransactionLimit"]'/>
         public const int TransactionLimit = 123;
 
         public string Name;

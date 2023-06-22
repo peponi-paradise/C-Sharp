@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Docs>
+	<Define_Enum>
+		<Doc name="DataStorage.Coil">
+			<summary>
+				<remarks>
+					<para>
+						Read/Write coil. 1bit for address<br />Register Address : 1~9999
+					</para>
+					<para>
+						- function codes
+					</para>
+					<para>
+						1. Read coils : 1<br />2. Write single coil : 5<br />	3. Write multiple coils : 15
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="DataStorage.DiscreteInput">
+			<summary>
+				<remarks>
+					<para>
+						Read only coil. 1bit for address<br />Register Address : 10001~19999
+					</para>
+					<para>
+						- function codes
+					</para>
+					<para>
+						1. Read coils : 2
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="DataStorage.InputRegister">
+			<summary>
+				<remarks>
+					<para>
+						Read only register. 2bytes for address<br />Register Address : 30001~39999
+					</para>
+					<para>- function codes</para>
+					<para>1. Read registers : 4</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="DataStorage.HoldingRegister">
+			<summary>
+				<remarks>
+					<para>
+						Read/Write register (Common use). 2bytes for address<br />Register Address : 40001~49999
+					</para>
+					<para>- function codes</para>
+					<para>
+						1. Read registers : 3<br />	2. Write single register : 6<br />3. Write multiple registers : 16
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="Endian">
+			<summary>
+				<para>Endian setting for communication</para>
+				<para>
+					Endian : Big Endian<br />Bool : A<br />Int16 : AB<br />Float : ABCD
+				</para>
+				<para>
+					Endian : Little Endian<br />Bool : A<br />Int16 : BA<br />Float : DCBA
+				</para>
+			</summary>
+		</Doc>
+	</Define_Enum>
+
+	<Define_ModbusInterface>
+		<Doc name="TransactionLimit">
+			<summary>
+				<para>
+					By the Modbus specification, limits for one request are:<br /><br />
+					- Register (Input, Holding)<br />
+					1. Read : 125<br />
+					2. Write : 123<br />
+					- Input (Coil, Discrete)<br />
+					1. Read : 2000<br />
+					2. Write : 1968
+				</para>
+				<para>
+					For common communication for this class, Transaction limit is up to 123
+				</para>
+			</summary>
+		</Doc>
+	</Define_ModbusInterface>
+
+	<Define_CommunicationData>
+		<Doc name="CommunicationData">
+			<summary>
+				" startAddress >= 0 "
+			</summary>
+			<param name="dataStorage">Where to read / write</param>
+			<param name="startAddress">" startAddress >= 0 "</param>
+			<param name="value">bool, int, float.</param>
+			<param name="remoteEndian">Remote's endian</param>
+		</Doc>
+		<Doc name="StartAddress">
+			<summary>
+				C# is start from 0 but NModbus4 lib storage is start from 1<br />Manually add 1
+			</summary>
+		</Doc>
+	</Define_CommunicationData>
+
+	<Converter>
+		<Doc name="ToUshortHexData">
+			<summary>
+				<remarks>
+					<para>For sending data by endian setting</para>
+					<para>Usually following EndianOption of ModbusInterface</para>
+					<para>
+						1. <see cref="DataType" /><br />2. <see cref="Endian" /><br />3. <see cref="ModbusInterface(string,ModbusType,int,SerialPortInformation,Endian)" /><br />4. <see cref="ModbusInterface(string,ModbusType,int,EthernetInformation,Endian)" />
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="FromUShortHexData">
+			<summary>
+				<remarks>
+					<para>For receiving data by endian setting</para>
+					<para>Usually following EndianOption of ModbusInterface</para>
+					<para>
+						1. <see cref="DataType" /><br />2. <see cref="Endian" /><br />3. <see cref="ModbusInterface(string,ModbusType,int,SerialPortInformation,Endian)" /><br />4. <see cref="ModbusInterface(string,ModbusType,int,EthernetInformation,Endian)" />
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+	</Converter>
+
+	<Modbus_Base>
+		<Doc name="Modbus">
+			<summary>
+				Important information : Slave connect 이후 쓰레드 잠기기 때문에 Disconnect 시 꼭꼭 Dispose 해줘야함. 안그러면 같은 포트 다시 생성하는데 오래걸림
+				<para>대부분의 오류는 exception으로 들어옴</para>
+				<remarks>
+					<para>
+						- Important functions / events
+					</para>
+					<para>
+						1. Common<br />
+						- <see cref="Connect()" /> : Connect to remote master / slave<br />
+						- <see cref="Dispose()" /> : Disconnect connection / release thread<br />
+						- <see cref="ReadData{T}(DataStorage,int,out T)" />, <see cref="WriteData{T}(DataStorage,int,T)" /> : Read / Write functions<br />
+						- <see cref="ConnectCallback" /> : Connection status changed notice<br />
+						- <see cref="ModbusGeneralException" />, <see cref="ModbusCommunicationException" /> : Notice error<br />
+						- <see cref="ModbusLog" /> : Log event
+					</para>
+					<para>
+						2. Master<br />
+						-
+					</para>
+					<para>
+						3. Slave<br />
+						- <see cref="ClearDataStore()" /> : Clear all data<br />
+						- <see cref="ModbusDataReceived" /> : Notice DataStore written. Could catch data change direct
+					</para>
+					<para>
+						- NModbus4 lib problem<br />1. Data write 이후 리턴올때까지 blocking 발생. Client 성능에 따라 Master 생성한 thread에서 freezing 가능성 있음.<br />2. Could not use DataStore index 0.<br />" DataStore address >= 0 "<br />" Communication address index 0 == DataStore index 1 "
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="ModbusGeneralException">
+			<summary>
+				일반 exception 대처용<br />ex) Communication channel create fail
+			</summary>
+		</Doc>
+		<Doc name="ModbusCommunicationException">
+			<summary>
+				<para>Usually need to recreate class for communication</para>
+				<para>
+					See also<br />1. <see cref="CommunicationException" />
+				</para>
+			</summary>
+		</Doc>
+		<Doc name="ModbusLog">
+			<summary>
+				Modbus log
+				<remarks>
+					<para>
+						LogLevel : Communication or Exception<br />Message : Log string
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+		<Doc name="ModbusDataReceived">
+			<summary>
+				<para>DataStore written from remote master</para>
+			</summary>
+		</Doc>
+	</Modbus_Base>
+
+	<Modbus_MasterFunction>
+		<Doc name="Master_WriteData">
+			<summary>
+				<para>Send data to client</para>
+				<para>
+					Access via WriteData, WriteDataAsync<br /><br />
+					1. <see cref="WriteData{T}(DataStorage,int,T)" /><br />
+					2. <see cref="WriteDataAsync{T}(DataStorage,int,T)" />
+				</para>
+				<para>Case of DataStorage, see following</para>
+				<para>
+					1. <see cref="DataStorage" />
+				</para>
+			</summary>
+			<param name="dataStorage">
+				<para>Where to write</para>
+				<para>
+					1. <see cref="DataStorage.Coil" /><br />2. <see cref="DataStorage.HoldingRegister" />
+				</para>
+			</param>
+			<param name="startAddress">startAddress >= 0</param>
+			<param name="sendDatas">Data converted to ushort</param>
+			<returns>Success or fail</returns>
+		</Doc>
+		<Doc name="Master_ReadDataSingle">
+			<summary>
+				<para>For getting single data</para>
+				<para>Access via ReadData, ReadDataAsync</para>
+				<para>
+					1. <see cref="ReadData{T}(DataStorage, int, out T)" /><br />2. <see cref="ReadDataAsync{T}(DataStorage, int)" />
+				</para>
+			</summary>
+			<typeparam name="T">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</typeparam>
+			<param name="dataStorage"></param>
+			<param name="address">address >= 0</param>
+			<param name="data">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</param>
+			<returns>Success or Fail</returns>
+		</Doc>
+		<Doc name="Master_ReadDataMulti">
+			<summary>
+				<para>For getting multiple data</para>
+				<para>Access via ReadData, ReadDataAsync</para>
+				<para>
+					1. <see cref="ReadData{T}(DataStorage, int,int, out List{T})" /><br />2. <see cref="ReadDataAsync{T}(DataStorage, int,int)" />
+				</para>
+			</summary>
+			<typeparam name="T">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</typeparam>
+			<param name="dataStorage"></param>
+			<param name="startAddress">startAddress >= 0</param>
+			<param name="readCount">
+				<para>
+					Read data count even if type of float.<br />Array length will be auto converted
+				</para>
+			</param>
+			<param name="datas">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</param>
+			<returns>Success or Fail</returns>
+		</Doc>
+	</Modbus_MasterFunction>
+
+	<Modbus_SlaveFunction>
+		<Doc name="Slave_WriteData">
+			<summary>
+				<para>
+					Write to DataStore
+				</para>
+				<para>Access via WriteData, WriteDataAsync</para>
+				<para>
+					1. <see cref="WriteData{T}(DataStorage,int,T)" /><br />
+					2. <see cref="WriteDataAsync{T}(DataStorage,int,T)" />
+				</para>
+			</summary>
+			<param name="commData">Communication data</param>
+		</Doc>
+		<Doc name="Slave_ReadDataSingle">
+			<summary>
+				<para>For getting single data</para>
+				<para>Access via ReadData, ReadDataAsync</para>
+				<para>
+					1. <see cref="ReadData{T}(DataStorage, int, out T)" /><br />2. <see cref="ReadDataAsync{T}(DataStorage, int)" />
+				</para>
+			</summary>
+			<typeparam name="T">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</typeparam>
+			<param name="dataStorage"></param>
+			<param name="address">address >= 0</param>
+			<param name="data">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</param>
+			<returns>Success or Fail</returns>
+		</Doc>
+		<Doc name="Slave_ReadDataMulti">
+			<summary>
+				<para>For getting multiple data</para>
+				<para>Access via ReadData, ReadDataAsync</para>
+				<para>
+					1. <see cref="ReadData{T}(DataStorage, int,int, out List{T})" /><br />2. <see cref="ReadDataAsync{T}(DataStorage, int,int)" />
+				</para>
+			</summary>
+			<typeparam name="T">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</typeparam>
+			<param name="dataStorage"></param>
+			<param name="startAddress">startAddress >= 0</param>
+			<param name="readCount">
+				<para>
+					Read data count even if type of float.<br />Array length will be auto converted
+				</para>
+			</param>
+			<param name="datas">
+				<para>bool, int, float</para>
+				<para>
+					1. <see cref="DataType" />
+				</para>
+			</param>
+			<returns>Success or Fail</returns>
+		</Doc>
+		<Doc name="Slave_RequestReceived">
+			<summary>
+				<remarks>
+					<para>Slave data request entry point.</para>
+					<para>After, called events to following functions</para>
+					<para>
+						1. <see cref="Slave_DataStoreReadFrom(object,DataStoreEventArgs)" /><br />2. <see cref="Slave_DataStoreWrittenTo(object,DataStoreEventArgs)" />
+					</para>
+				</remarks>
+			</summary>
+		</Doc>
+	</Modbus_SlaveFunction>
+</Docs>

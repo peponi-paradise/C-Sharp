@@ -41,24 +41,24 @@
     }
 
     /// <summary>
-    /// Where to write
+    /// Where to read / write
     /// </summary>
     public enum DataStorage
     {
-        /// <include file='ClassSummary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.Coil"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.Coil"]'/>
         Coil = 0,
 
-        /// <include file='ClassSummary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.DiscreteInput"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.DiscreteInput"]'/>
         DiscreteInput = 1,
 
-        /// <include file='ClassSummary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.InputRegister"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.InputRegister"]'/>
         InputRegister = 2,
 
-        /// <include file='ClassSummary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.HoldingRegister"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_Enum/Doc[@name="DataStorage.HoldingRegister"]'/>
         HoldingRegister = 3
     }
 
-    /// <include file='ClassSummary.xml' path='Docs/Define_Enum/Doc[@name="Endian"]'/>
+    /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Define_Enum/Doc[@name="Endian"]'/>
     public enum Endian
     {
         /// <summary>

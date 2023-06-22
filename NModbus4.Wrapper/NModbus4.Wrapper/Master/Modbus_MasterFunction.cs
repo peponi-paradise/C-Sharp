@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NModbus4.Wrapper
 {
-    public partial class Modbus
+    public partial class ModbusService
     {
         /// <summary>
         /// Write data entry point<br/>
@@ -21,7 +21,7 @@ namespace NModbus4.Wrapper
             {
                 if (Master_GetWriteDatas(sendDatas, out var dataStorage, out var startAddress, out var writeDatas))
                 {
-                    if (!Master_WriteData(dataStorage, startAddress, writeDatas)) { rtn = false; break; }
+                    if (!Master_WriteData(dataStorage, (ushort)(startAddress - 1), writeDatas)) { rtn = false; break; }      // Subtract 1 manually when built in input type
                 }
                 else break;
             }
@@ -50,7 +50,7 @@ namespace NModbus4.Wrapper
                 {
                     if (dataCopy[index].DataStorage != dataStorage ||
                         dataCopy[index].StartAddress != startAddress + datas.Count) break;  // 스토리지 바뀌거나 어드레스 끊기면 다음번 전송으로 넘김
-                    if (dataCopy[index].DataLength >= 2) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
+                    if (dataCopy[index].DataType >= DataType.Int) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
                     else if (datas.Count >= ModbusInterface.TransactionLimit) break;
                 }
 
@@ -87,7 +87,7 @@ namespace NModbus4.Wrapper
                     if (dataCopy[index].DataStorage != dataStorage ||
                         dataCopy[index].DataType != dataType ||
                         dataCopy[index].StartAddress != startAddress + datas.Count) break;
-                    if (dataCopy[index].DataLength >= 2) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
+                    if (dataCopy[index].DataType >= DataType.Int) { if (datas.Count >= ModbusInterface.TransactionLimit - 1) break; }     //float data 대비, -1 해줌
                     else if (datas.Count >= ModbusInterface.TransactionLimit) break;
                 }
 
@@ -99,7 +99,7 @@ namespace NModbus4.Wrapper
             return readCount != 0;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_WriteData"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_MasterFunction/Doc[@name="Master_WriteData"]'/>
         private bool Master_WriteData(DataStorage dataStorage, ushort startAddress, List<ushort> sendDatas)
         {
             if (ModbusInstance.Transport == null) return false;
@@ -111,12 +111,12 @@ namespace NModbus4.Wrapper
                     case DataStorage.Coil:
                         List<bool> convertList = new List<bool>();
                         foreach (var data in sendDatas) convertList.Add(Convert.ToBoolean(data));
-                        ModbusInstance.WriteMultipleCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), convertList.ToArray());  // 보낼 때는 -1 해줘야함
+                        ModbusInstance.WriteMultipleCoils((byte)Interface.SlaveNumber, startAddress, convertList.ToArray());
                         foreach (var data in convertList) hexString += (data ? 1 : 0).ToString("X2") + ",";
                         break;
 
                     case DataStorage.HoldingRegister:
-                        ModbusInstance.WriteMultipleRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), sendDatas);
+                        ModbusInstance.WriteMultipleRegisters((byte)Interface.SlaveNumber, startAddress, sendDatas.ToArray());
                         foreach (var data in sendDatas) hexString += data.ToString("X2") + ",";
                         break;
                 }
@@ -128,7 +128,7 @@ namespace NModbus4.Wrapper
                 //전송 후 자동으로 응답 대기 하는데, 그 사이에 연결 끊으면 Null exception으로 빠짐. 이미 끊겨있는 연결에 대해 통신 시도하면 Invalid exception으로 빠짐
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
-                    ConnectCallback?.Invoke((Interface, false));
+                    ConnectCallback?.Invoke(Interface, false);
                     ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
                     ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_WriteData Failed - {e}");
                     return false;
@@ -139,10 +139,10 @@ namespace NModbus4.Wrapper
             return false;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_ReadDataSingle"]'/>
-        private bool Master_ReadData<T>(DataStorage dataStorage, int startAddress, out T data)
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_MasterFunction/Doc[@name="Master_ReadDataSingle"]'/>
+        private bool Master_ReadData<T>(DataStorage dataStorage, int address, out T data)
         {
-            data = default(T);
+            data = default;
             try
             {
                 dynamic readData = null;
@@ -150,23 +150,23 @@ namespace NModbus4.Wrapper
                 switch (dataStorage)
                 {
                     case DataStorage.Coil:
-                        var coilBool = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0] ? 1 : 0;
+                        var coilBool = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)address, 1)[0] ? 1 : 0;
                         readData = new ushort[1] { (ushort)coilBool };
                         break;
 
                     case DataStorage.DiscreteInput:
-                        var inputBool = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0] ? 1 : 0;
+                        var inputBool = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)address, 1)[0] ? 1 : 0;
                         readData = new ushort[1] { (ushort)inputBool };
                         break;
 
                     case DataStorage.InputRegister:
-                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0];
-                        else readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 2);
+                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)address, 1)[0];
+                        else readData = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)address, 2);
                         break;
 
                     case DataStorage.HoldingRegister:
-                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 1)[0];
-                        else readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), 2);
+                        if (typeof(T) != typeof(float)) readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)address, 1)[0];
+                        else readData = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)address, 2);
                         break;
                 }
                 data = Converter.FromUShortHexData<T>(readData, Interface.EndianOption);
@@ -177,7 +177,7 @@ namespace NModbus4.Wrapper
                 //전송 후 자동으로 응답 대기 하는데, 그 사이에 연결 끊으면 Null exception으로 빠짐. 이미 끊겨있는 연결에 대해 통신 시도하면 Invalid exception으로 빠짐
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
-                    ConnectCallback?.Invoke((Interface, false));
+                    ConnectCallback?.Invoke(Interface, false);
                     ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
                     ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
                     return false;
@@ -188,7 +188,7 @@ namespace NModbus4.Wrapper
             return false;
         }
 
-        /// <include file='ClassSummary.xml' path='Docs/Doc[@name="Master_ReadDataMulti"]'/>
+        /// <include file='NModbus4.Wrapper.Summary.xml' path='Docs/Modbus_MasterFunction/Doc[@name="Master_ReadDataMulti"]'/>
         private bool Master_ReadData<T>(DataStorage dataStorage, int startAddress, int readCount, out List<T> datas)
         {
             datas = new List<T>();
@@ -199,26 +199,26 @@ namespace NModbus4.Wrapper
                 switch (dataStorage)
                 {
                     case DataStorage.Coil:
-                        bool[] coillArray = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        bool[] coillArray = ModbusInstance.ReadCoils((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)readCount);
                         readData = Array.ConvertAll(coillArray, x => x ? (ushort)1 : (ushort)0).ToList();
                         break;
 
                     case DataStorage.DiscreteInput:
-                        bool[] discreteArray = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
+                        bool[] discreteArray = ModbusInstance.ReadInputs((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)readCount);
                         readData = Array.ConvertAll(discreteArray, x => x ? (ushort)1 : (ushort)0).ToList();
                         break;
 
                     case DataStorage.InputRegister:
                         ushort[] inputUshorts = null;
-                        if (typeof(T) != typeof(float)) inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
-                        else inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)(readCount * 2));
+                        if (typeof(T) != typeof(float)) inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)readCount);
+                        else inputUshorts = ModbusInstance.ReadInputRegisters((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)(readCount * 2));
                         readData = inputUshorts.ToList();
                         break;
 
                     case DataStorage.HoldingRegister:
                         ushort[] holdingUshorts = null;
-                        if (typeof(T) != typeof(float)) holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)readCount);
-                        else holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)(startAddress - 1), (ushort)(readCount * 2));
+                        if (typeof(T) != typeof(float)) holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)readCount);
+                        else holdingUshorts = ModbusInstance.ReadHoldingRegisters((byte)Interface.SlaveNumber, (ushort)startAddress, (ushort)(readCount * 2));
                         readData = holdingUshorts.ToList();
                         break;
                 }
@@ -247,7 +247,7 @@ namespace NModbus4.Wrapper
                 //전송 후 자동으로 응답 대기 하는데, 그 사이에 연결 끊으면 Null exception으로 빠짐. 이미 끊겨있는 연결에 대해 통신 시도하면 Invalid exception으로 빠짐
                 if (e is NullReferenceException || e is InvalidOperationException)
                 {
-                    ConnectCallback?.Invoke((Interface, false));
+                    ConnectCallback?.Invoke(Interface, false);
                     ModbusCommunicationException?.Invoke(Interface, CommunicationException.MasterTransportNullException);
                     ModbusLog?.Invoke(Interface, LogLevel.Exception, $"Modbus Master_ReadData Failed - {e}");
                     return false;
