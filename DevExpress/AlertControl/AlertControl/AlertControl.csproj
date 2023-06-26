@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\AlertWindow.css" />
+    <None Remove="Assets\AlertWindow.html" />
+    <None Remove="Assets\Delete.svg" />
+    <None Remove="Assets\PinButton.svg" />
+    <None Remove="Assets\ShortDate.svg" />
+    <None Remove="Assets\UnpinButton.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Delete.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\AlertWindow.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\AlertWindow.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\PinButton.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\ShortDate.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UnpinButton.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Images" Version="22.2.6" />
+    <PackageReference Include="DevExpress.Win" Version="22.2.6" />
+  </ItemGroup>
+
+</Project>
