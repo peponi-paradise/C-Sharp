@@ -67,6 +67,10 @@ int castingInt = (int)castingDouble;    // castingInt = 1
 double castingDouble2 = 1.5;
 int castingInt2 = (int)Math.Round(castingDouble2);    // castingInt2 = 2
 
+float testShort = 4294967290;  // 9C40, 40000
+uint testInt = ((uint)testShort);       // 9C40, 40000
+
+Console.WriteLine(castingInt);
 Console.WriteLine(castingInt2);
 
 double X = 1.0;
@@ -77,3 +81,7 @@ decimal W = (decimal)X + Y;
 
 Console.WriteLine(Z);
 Console.WriteLine(W);
+
+//const int X = 500;
+//float Y = X;
+//byte Z = X;     // CS0031: '500' 상수 값을 'byte`(으)로 변환할 수 없습니다.
