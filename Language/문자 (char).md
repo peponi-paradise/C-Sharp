@@ -31,9 +31,10 @@
         char A = '\x050';   // P
         char A = '\x50';    // P
         ```
-    - `int` 리터럴
+    - `숫자 형식` 리터럴
         ```cs
         char A = (char)80;  // P
+        char A = (char)80.6 // P
         ```
 - `UTF-16` 테이블은 [ASCII 테이블](https://ko.wikipedia.org/wiki/ASCII) 위에 확장되어있다. 자주 사용하는 영문 및 숫자, 특수문자의 경우 ASCII 테이블을 참조하면 된다.
 - 한글 코드의 경우 `AC00` (가) ~ `D7FF` (값 없음) 까지 할당되어있다. 
@@ -50,7 +51,7 @@
     - `char`가 피연산자인 경우, 산술 또는 비트 연산자는 `int` 형식으로 연산이 수행된다.
         - 결과를 `char`로 확인하고 싶은 경우, `char`로 캐스팅을 수행한다.
     ```cs
-    char A = 'A';
+    char A = 'A';               // 41
     char B = '\uAC01';          // AC01 = 나
 
     B = (char)(B - (char)1);    // AC00 = 가
@@ -63,4 +64,32 @@
 
 <br>
 
-- 
+- 모든 숫자 형식은 `char` 형식으로 명시적 변환이 가능하다.
+- `char` 형식은 다음 숫자 형식으로 변환할 수 있다.
+    |변환 방법|대상 형식|
+    |---|---|
+    |암시적 변환|정수 형식 : `ushort`, `int`, `uint`, `long`, `ulong`<br>실수 형식 : `float`, `double`, `decimal`|
+    |명시적 변환|정수 형식 : `sbyte`, `byte`, `short`|
+
+    ```cs
+    char C = 'P';           // 80
+
+    int A = C;              // 80
+    double B = C;           // 80
+    short S = (short)C;     // 80
+
+    C = '\uAC00';           // 가, 44032
+
+    A = C;                  // 44032
+    B = C;                  // 44032
+    S = (short)C;           // -21504
+    ```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [char(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/char)
+- [C# - Language - 숫자 형식 변환](https://peponi-paradise.tistory.com/entry/C-Language-%EC%88%AB%EC%9E%90-%ED%98%95%EC%8B%9D-%EB%B3%80%ED%99%98)

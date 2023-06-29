@@ -89,9 +89,17 @@ int convertInt = Convert.ToInt32(XX);
 
 char AA = 'A';
 char BB = '\uAC01';
-BB = (char)(BB - (char)1);
+BB = (char)(BB - (char)2);
 
 BB = (char)(AA + BB);
+
+double XXXX = BB;
+
+char C = '\uAC00';       // 80
+
+int AC = C;
+double BC = C;
+short SC = (short)C;
 
 bool boolean = Convert.ToBoolean("TrUe");
 var bt = Convert.ToBoolean(-4.156);
