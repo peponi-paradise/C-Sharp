@@ -82,3 +82,16 @@ Console.WriteLine(W);
 //const int X = 500;
 //float Y = X;
 //byte Z = X;     // CS0031: '500' 상수 값을 'byte`(으)로 변환할 수 없습니다.
+
+bool XX = false;
+string convertString = XX.ToString();
+int convertInt = Convert.ToInt32(XX);
+
+char AA = 'A';
+char BB = '\uAC01';
+BB = (char)(BB - (char)1);
+
+BB = (char)(AA + BB);
+
+bool boolean = Convert.ToBoolean("TrUe");
+var bt = Convert.ToBoolean(-4.156);
