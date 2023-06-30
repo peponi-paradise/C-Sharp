@@ -101,5 +101,36 @@ int AC = C;
 double BC = C;
 short SC = (short)C;
 
+test BBBA = default;
+int testEnum = 0;
+test parsed = (test)Enum.Parse(typeof(test), testEnum.ToString());
+Console.WriteLine(BBBA.ToString());
+
+int sadasd = 10;
+StatusCode code = (StatusCode)13;  // 13
+code = Enum.Parse<StatusCode>("Warning");      // 키가 정의되어 있지 않은 경우 예외가 발생한다. 여기서는 방법만 소개한다.
+bool isSuccess = Enum.TryParse<StatusCode>("Warning", out StatusCode code2);
+bool isDefined = Enum.IsDefined(typeof(StatusCode), "Hello");
+Console.WriteLine($"{code}, {(int)code}");
+code = StatusCode.Run;
+code = StatusCode.Error;
+
 bool boolean = Convert.ToBoolean("TrUe");
 var bt = Convert.ToBoolean(-4.156);
+
+internal enum test
+{
+    a = 1,
+    b = 2,
+    c = 3,
+}
+
+[Flags]
+internal enum StatusCode
+{
+    None = 0,       // 0
+    Idle = 0b1,         // 1
+    Run = 2,        // 2
+    Warning = 4,   // 4
+    Error = 0b_1000        // 8
+}
