@@ -185,4 +185,3 @@ bool isDefined = Enum.IsDefined(typeof(StatusCode), "Hello");   // false
 <br>
 
 - [열거형(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/enum)
-- 
