@@ -2,7 +2,7 @@
 
 <br>
 
-- `struct` (구조체) 는 객체 및 메서드를 캡슐화 할 수 있는 [값 형식](https://peponi-paradise.tistory.com/entry/C-Language-%EA%B0%92-%ED%98%95%EC%8B%9D)이다. `struct` 키워드로 정의한다.
+- `struct` (구조체) 는 객체 및 메서드를 캡슐화 할 수 있는 [값 형식](https://peponi-paradise.tistory.com/entry/C-Language-%EA%B0%92-%ED%98%95%EC%8B%9D)이다.<br>`struct` 키워드로 정의하며, .NET 기본 값 형식 (`int`, `bool`...) 등이 구조체로 구성되어있다.
 - `값 형식`이므로 할당, 메서드 인수 전달 및 리턴 시 인스턴스가 복사된다.
     - `struct`는 인스턴스가 하나의 값을 의미하므로, 내부 데이터를 변경할 수 없는 형식으로 정의하는 것이 좋다.
 - `값 형식`이기 때문에, 작은 크기의 읽기용 데이터 구조를 만드는 데 주로 사용한다. (데이터 자체보다 데이터의 거동이 중요한 경우, 참조 형식인 [클래스](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/class)가 더 적합하다)
@@ -28,4 +28,145 @@
     }
     ```
 
+- `struct` 일부 또는 전체를 변경할 수 없게 하는 경우 `readonly` 키워드를 붙여 사용한다.
+    ```cs
+    // struct 일부
+
+    public struct CartesianCoordinate
+    {
+        public float X { get; set; }
+        public readonly float Y { get; }
+
+        public float Y2 { get; init; }   // C# 9.0. Y와 동일한 기능이다. (생성자를 제외한 곳에서 값 수정 불가)
+
+        public CartesianCoordinate(float X, float Y)
+        {
+            this.X = X;
+            this.Y = Y;
+        }
+    }
+
+    // struct 전체
+
+    public readonly struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+    }
+    ```
+
+- `struct`가 [Heap](https://en.wikipedia.org/wiki/Memory_management#HEAP) 상에 존재하는 것을 방지하기 위해, 아래와 같이 `ref` 키워드를 사용할 수 있다.
+    ```cs
+    public ref struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+    }
+    ```
+
+- `struct`에 [record](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/record) 키워드를 추가하여 `record`의 특성을 부여할 수 있다. (C# 10)
+    ```cs
+    public record struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+    }
+    ```
+
+<br>
+
+## struct 초기화
+
+<br>
+
+- `struct`는 다음과 같이 초기화 할 수 있다
+    ```cs
+    public record struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+
+        public CartesianCoordinate(float X, float Y)
+        {
+            this.X = X;
+            this.Y = Y;
+        }
+    }
+
+    var coordinate = new CartesianCoordinate() { X = 10, Y = 20 };
+    var coordinate2 = new CartesianCoordinate(10, 20);
+    ```
+
+- C# 10 버전부터는 파라미터가 없는 생성자 및 필드 이니셜라이저를 정의할 수 있다.
+    ```cs
+    public record struct CartesianCoordinate
+    {
+        public float X { get; init; } = 10;
+        public float Y { get; init; } = 20;
+
+        public CartesianCoordinate()
+        {
+            X = 10;
+            Y = 20;
+        }
+    }
+    ```
+
+- C# 10 버전부터 `with` 식이 도입되어 구조체의 일부를 수정한 인스턴스 복사가 가능하다.
+    ```cs
+    public record struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+    }
+
+    var coordinate = new CartesianCoordinate();
+    Console.WriteLine($"{coordinate.X}, {coordinate.Y}");   // 0, 0
     
+    var coordinate1 = coordinate with { X = 1 };
+    Console.WriteLine($"{coordinate1.X}, {coordinate1.Y}"); // 1, 0
+    ```
+
+- C# 11 버전부터는 초기화되지 않은 필드에 대해 컴파일러가 초기화 코드를 추가해준다.
+    ```cs
+    public struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+
+        public CartesianCoordinate(float x)
+        {
+            X = x;
+            // Y = y;   컴파일러가 추가
+        }
+    }
+    ```
+
+- (***주의***) [default](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/default) 키워드를 이용한 초기화 시, 기본 생성자가 무시되며 각 멤버의 초기값으로 초기화된다.
+    ```cs
+    public record struct CartesianCoordinate
+    {
+        public float X { get; init; }
+        public float Y { get; init; }
+
+        public CartesianCoordinate()
+        {
+            X = 10;
+            Y = 20;
+        }
+    }
+
+    var coordinate = new CartesianCoordinate();
+    Console.WriteLine($"{coordinate.X}, {coordinate.Y}");   // 10, 20
+
+    var coordinate2 = default(CartesianCoordinate);
+    Console.WriteLine($"{coordinate2.X}, {coordinate2.Y}"); // 0, 0
+    ```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [구조체 형식(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/struct)

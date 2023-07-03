@@ -118,6 +118,17 @@ code = StatusCode.Error;
 bool boolean = Convert.ToBoolean("TrUe");
 var bt = Convert.ToBoolean(-4.156);
 
+testStruct st = new testStruct(10, "ads");
+st.a = 1;
+Console.WriteLine($"{st.a}, {st.b}");
+
+var coordinate = new CartesianCoordinate();
+Console.WriteLine($"{coordinate.X}, {coordinate.Y}");
+var coordinate1 = coordinate with { X = 5 };
+Console.WriteLine($"{coordinate1.X}, {coordinate1.Y}");
+var coordinate2 = default(CartesianCoordinate);
+Console.WriteLine($"{coordinate2.X}, {coordinate2.Y}");
+
 internal enum test
 {
     a = 1,
@@ -133,4 +144,27 @@ internal enum StatusCode
     Run = 2,        // 2
     Warning = 4,   // 4
     Error = 0b_1000        // 8
+}
+
+internal struct testStruct
+{
+    public int a;
+    public readonly string b;
+
+    public testStruct(int a, string b)
+    {
+        this.a = a; this.b = b;
+    }
+}
+
+public record struct CartesianCoordinate
+{
+    public float X { get; init; }
+    public float Y { get; init; }
+
+    public CartesianCoordinate(float X, float Y)
+    {
+        this.X = X;
+        this.Y = Y;
+    }
 }
