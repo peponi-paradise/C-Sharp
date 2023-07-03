@@ -129,6 +129,12 @@ Console.WriteLine($"{coordinate1.X}, {coordinate1.Y}");
 var coordinate2 = default(CartesianCoordinate);
 Console.WriteLine($"{coordinate2.X}, {coordinate2.Y}");
 
+int? A = 1;
+int B = (int)A;
+
+A = null;
+B = (int)A;
+
 internal enum test
 {
     a = 1,
