@@ -194,9 +194,19 @@ Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck2));     // True
 Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck3));     // True
 Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck4));     // False
 
+MyClass classTest = new MyClass(10);
+var AAAA = classTest;
+var BBBB = classTest;
+
+Console.WriteLine($"{AAAA.X}, {BBBB.X}");
+
+classTest.X = 20;
+
+Console.WriteLine($"{AAAA.X}, {BBBB.X}");
+
 internal class MyClass
 {
-    public int X { get; init; }
+    public int X { get; set; }
 
     public MyClass(int x) => X = x;
 
