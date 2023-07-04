@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel;
+using System.Numerics;
+using System.Reflection;
 using System.Text;
 
 // 값 형식 예제
@@ -198,11 +200,29 @@ MyClass classTest = new MyClass(10);
 var AAAA = classTest;
 var BBBB = classTest;
 
-Console.WriteLine($"{AAAA.X}, {BBBB.X}");
+Console.WriteLine($"{AAAA.X}, {BBBB.X}");       // 10, 10
 
 classTest.X = 20;
 
-Console.WriteLine($"{AAAA.X}, {BBBB.X}");
+Console.WriteLine($"{AAAA.X}, {BBBB.X}");       // 20, 20
+
+// Without dynamic
+
+object providerObj = container.GetDataProvider();
+Type hostType = providerObj.GetType();
+object dataObj = hostType.InvokeMember(
+    "GetData",
+    BindingFlags.InvokeMethod,
+    null,
+    providerObj,
+    null
+);
+int data = Convert.ToInt32(dataObj);
+
+// With dynamic
+
+dynamic host = container.GetDataProvider();
+int data = host.GetData();
 
 internal class MyClass
 {
