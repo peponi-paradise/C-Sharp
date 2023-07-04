@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 // 값 형식 예제
 
@@ -133,7 +134,82 @@ int? A = 1;
 int B = (int)A;
 
 A = null;
-B = (int)A;
+
+object AAA = 1;
+object BBB = "A";
+object CCC = new MyClass(10);
+Console.WriteLine(CCC.Equals(new MyClass(10)));   // True
+Console.WriteLine(CCC.Equals(10));   // False
+
+object DDD = CCC;
+Console.WriteLine(Object.ReferenceEquals(CCC, DDD));
+
+// String literal
+
+string string1 = "Sample string";
+string string2 = @"Sample Path : C:\Temp\SampleText.txt";
+string string3 = "Sample Path : C:\\Temp\\SampleText.txt";
+
+// From char
+
+char[] chars = { 'A', 'B', 'C' };
+string string4 = new string(chars);
+
+// Repeated string
+
+string string5 = new string('A', 5);
+
+// From byte
+
+byte[] bytes = { 0x41, 0x42, 0x43 };    // { A, B, C }
+string string6 = Encoding.Default.GetString(bytes);
+
+// Raw string literal
+
+string string7 = """This is "Raw string literal".""";
+string jsonString = """
+    {
+        "SampleValue": 1
+    }
+    """;
+Console.WriteLine(string7);
+Console.WriteLine(jsonString);
+
+string stringCheck1 = null;
+string stringCheck2 = string.Empty;
+string stringCheck3 = " ";
+string stringCheck4 = "ABC";
+
+// 1. string.IsNullOrEmpty(string)
+
+Console.WriteLine(string.IsNullOrEmpty(stringCheck1));          // True
+Console.WriteLine(string.IsNullOrEmpty(stringCheck2));          // True
+Console.WriteLine(string.IsNullOrEmpty(stringCheck3));          // False
+Console.WriteLine(string.IsNullOrEmpty(stringCheck4));          // False
+
+// 2. string.IsNullOrWhiteSpace(string)
+
+Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck1));     // True
+Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck2));     // True
+Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck3));     // True
+Console.WriteLine(string.IsNullOrWhiteSpace(stringCheck4));     // False
+
+internal class MyClass
+{
+    public int X { get; init; }
+
+    public MyClass(int x) => X = x;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null) return false;
+        return obj is MyClass && X == ((MyClass)obj).X;
+    }
+
+    public override string ToString() => X.ToString();
+
+    public override int GetHashCode() => X.GetHashCode();
+}
 
 internal enum test
 {
