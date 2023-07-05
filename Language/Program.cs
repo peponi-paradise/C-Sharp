@@ -125,12 +125,12 @@ testStruct st = new testStruct(10, "ads");
 st.a = 1;
 Console.WriteLine($"{st.a}, {st.b}");
 
-var coordinate = new CartesianCoordinate();
-Console.WriteLine($"{coordinate.X}, {coordinate.Y}");
-var coordinate1 = coordinate with { X = 5 };
-Console.WriteLine($"{coordinate1.X}, {coordinate1.Y}");
-var coordinate2 = default(CartesianCoordinate);
-Console.WriteLine($"{coordinate2.X}, {coordinate2.Y}");
+//var coordinate = new CartesianCoordinate();
+//Console.WriteLine($"{coordinate.X}, {coordinate.Y}");
+//var coordinate1 = coordinate with { X = 5 };
+//Console.WriteLine($"{coordinate1.X}, {coordinate1.Y}");
+//var coordinate2 = default(CartesianCoordinate);
+//Console.WriteLine($"{coordinate2.X}, {coordinate2.Y}");
 
 int? A = 1;
 int B = (int)A;
@@ -206,23 +206,111 @@ classTest.X = 20;
 
 Console.WriteLine($"{AAAA.X}, {BBBB.X}");       // 20, 20
 
-// Without dynamic
+//// Without dynamic
 
-object providerObj = container.GetDataProvider();
-Type hostType = providerObj.GetType();
-object dataObj = hostType.InvokeMember(
-    "GetData",
-    BindingFlags.InvokeMethod,
-    null,
-    providerObj,
-    null
-);
-int data = Convert.ToInt32(dataObj);
+//object providerObj = container.GetDataProvider();
+//Type hostType = providerObj.GetType();
+//object dataObj = hostType.InvokeMember(
+//    "GetData",
+//    BindingFlags.InvokeMethod,
+//    null,
+//    providerObj,
+//    null
+//);
+//int data = Convert.ToInt32(dataObj);
 
-// With dynamic
+//// With dynamic
 
-dynamic host = container.GetDataProvider();
-int data = host.GetData();
+//dynamic host = container.GetDataProvider();
+//int data = host.GetData();
+
+CartesianCoordinate coordinate = new(1, 2);
+
+// record 출력
+
+Console.WriteLine(coordinate.X);    // 1
+Console.WriteLine(coordinate.Y);    // 2
+Console.WriteLine(coordinate);      // CartesianCoordinate { X = 1, Y = 2 }
+
+var (X11, Y11) = coordinate;
+
+Console.WriteLine($"{X11},{Y11}");
+
+//CartesianCoordinate coordinate1 = coordinate with { X = 3 };
+//Console.WriteLine(coordinate1);
+
+//coordinate1 = coordinate with { };
+
+//Console.WriteLine(coordinate == coordinate1);   // True
+//Console.WriteLine(object.ReferenceEquals(coordinate, coordinate1));     // False
+
+var phoneNumbers = new string[2];
+Person person1 = new("Nancy", "Davolio", phoneNumbers);
+Person person2 = new("Nancy", "Davolio", phoneNumbers);
+Console.WriteLine(person1 == person2); // output: True
+
+Console.WriteLine(person1.PhoneNumbers[0]);
+Console.WriteLine(person2.PhoneNumbers[0]);
+person1.PhoneNumbers[0] = "555-1234";
+Console.WriteLine(person1 == person2); // output: True
+Console.WriteLine(person1.PhoneNumbers[0]);
+Console.WriteLine(person2.PhoneNumbers[0]);
+
+Console.WriteLine(ReferenceEquals(person1, person2)); // output: False
+
+CargoList cargo = new("My Container", new List<string>() { "Stone", "Fish" });
+
+Console.WriteLine(cargo);               // CargoList { ContainerName = My Container, Items = System.Collections.Generic.List`1[System.String] }
+Console.WriteLine(cargo.Items[0]);     // Stone
+
+cargo.Items[0] = "TV";
+
+Console.WriteLine(cargo.Items[0]);      // TV
+
+public record Person(string FirstName, string LastName, string[] PhoneNumbers);
+
+public record CargoList(string ContainerName, List<string> Items);
+
+public class CartesianCoordinate
+{
+    public double X { get; init; }
+    public double Y { get; init; }
+
+    public CartesianCoordinate(double x, double y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public void Deconstruct(out double x, out double y)
+    {
+        x = X;
+        y = Y;
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append(nameof(CartesianCoordinate));
+        stringBuilder.Append(" { ");
+
+        if (PrintMembers(stringBuilder))
+        {
+            stringBuilder.Append(" ");
+        }
+
+        stringBuilder.Append("}");
+
+        return stringBuilder.ToString();
+    }
+
+    protected virtual bool PrintMembers(StringBuilder stringBuilder)
+    {
+        stringBuilder.Append($"X = {X}, ");
+        stringBuilder.Append($"Y = {Y}");
+        return true;
+    }
+}
 
 internal class MyClass
 {
@@ -269,14 +357,14 @@ internal struct testStruct
     }
 }
 
-public record struct CartesianCoordinate
-{
-    public float X { get; init; }
-    public float Y { get; init; }
+//public record struct CartesianCoordinate
+//{
+//    public float X { get; init; }
+//    public float Y { get; init; }
 
-    public CartesianCoordinate(float X, float Y)
-    {
-        this.X = X;
-        this.Y = Y;
-    }
-}
+//    public CartesianCoordinate(float X, float Y)
+//    {
+//        this.X = X;
+//        this.Y = Y;
+//    }
+//}
