@@ -295,6 +295,7 @@ abstractTest.Message = abstractTest.ConsoleRead() ?? "Read failed";
 abstractTest.ConsoleWrite(abstractTest.Message);
 
 PartialClass partialClass = new PartialClass { A = 1, B = 2, C = 3 };
+
 Console.WriteLine(partialClass.Sum());
 Console.WriteLine(partialClass);
 
