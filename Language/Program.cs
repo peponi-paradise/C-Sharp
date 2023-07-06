@@ -267,6 +267,37 @@ cargo.Items[0] = "TV";
 
 Console.WriteLine(cargo.Items[0]);      // TV
 
+Log.WriteLog("Log message");
+
+StockItem item = new StockItem
+{
+    Name = "Company",
+    Code = "AAA-001",
+    Price = 50,
+};
+
+Log.WriteLog(item.Name + " " + item.Code + " " + item.Price);
+
+DerivedClass derived = new();
+Console.WriteLine(derived.DataA);
+//Console.WriteLine(derived.DataB);   // CS0122
+//Console.WriteLine(derived.DataC);   // CS0122
+
+List<IDataService> list = new List<IDataService>();
+list.Add(new CSVData());
+list.Add(new YAMLData());
+foreach (var file in list) file.SaveData();
+Console.WriteLine(list[0]);
+Console.WriteLine(list[1]);
+
+AbstractDerived abstractTest = new();
+abstractTest.Message = abstractTest.ConsoleRead() ?? "Read failed";
+abstractTest.ConsoleWrite(abstractTest.Message);
+
+PartialClass partialClass = new PartialClass { A = 1, B = 2, C = 3 };
+Console.WriteLine(partialClass.Sum());
+Console.WriteLine(partialClass);
+
 public record Person(string FirstName, string LastName, string[] PhoneNumbers);
 
 public record CargoList(string ContainerName, List<string> Items);
@@ -368,3 +399,140 @@ internal struct testStruct
 //        this.Y = Y;
 //    }
 //}
+
+public static class Log
+{
+    public static void WriteLog(string message) => System.IO.File.AppendAllText(@"C:\Log\LogFile.txt", $"{DateTime.Now} - {message}");
+}
+
+public class Item
+{
+    public string Name;
+    public double Price;
+}
+
+public sealed class StockItem : Item
+{
+    public string Code;
+}
+
+//public class StockDetails : StockItem
+//{
+//    public string Description;
+//    public bool NeedToBuy;
+//}
+
+public class BaseClass
+{
+    public int DataA { get; set; }
+    protected int DataB { get; set; }
+    private int DataC { get; set; }
+}
+
+public class DerivedClass : BaseClass
+{
+    public int GetBaseClassSum()
+    {
+        int sum = 0;
+        sum += DataA;
+        sum += DataB;
+        //sum += DataC;     // CS0122: 보호 수준 때문에 'BaseClass.DataC'에 액세스할 수 없습니다.
+        return sum;
+    }
+}
+
+public class BaseClass2
+{ }
+
+public class CSV
+{ }
+
+public class YAML
+{ }
+
+public interface IDataService
+{
+    public T LoadData<T>(string path);
+
+    public void SaveData();
+}
+
+public class CSVData : IDataService
+{
+    private CSV Data;
+
+    public CSVData()
+    {
+        Data = new();
+        Data = LoadData<CSV>("CSVData.csv");
+    }
+
+    public T LoadData<T>(string path)
+    {
+        T data = default;
+        // data loading...
+        return data;
+    }
+
+    public void SaveData()
+    {
+        // data saving...
+    }
+}
+
+public class YAMLData : IDataService
+{
+    private YAML Data;
+
+    public YAMLData()
+    {
+        Data = new();
+        Data = LoadData<YAML>("YAMLData.yaml");
+    }
+
+    public T LoadData<T>(string path)
+    {
+        T data = default;
+        // data loading...
+        return data;
+    }
+
+    public void SaveData()
+    {
+        // data saving...
+    }
+}
+
+public abstract class AbstractBase
+{
+    public string Message { get; set; } = string.Empty;
+
+    public abstract void ConsoleWrite(string message);
+
+    public virtual string? ConsoleRead() => Console.ReadLine();
+}
+
+public class AbstractDerived : AbstractBase
+{
+    public override void ConsoleWrite(string message) => Console.WriteLine(message);    // 반드시 override 해야한다.
+
+    public override string? ConsoleRead() => base.ConsoleRead();     // 추상 클래스의 정의를 이용
+}
+
+public partial class PartialClass
+{
+    // Fields
+
+    public int A { get; set; }
+    public int B { get; set; }
+    public int C { get; set; }
+}
+
+public partial class PartialClass
+{
+    // Methods
+
+    public int Sum() => A + B + C;
+
+    public override string ToString() => $"A = {A}, B = {B}, C = {C}";
+}
