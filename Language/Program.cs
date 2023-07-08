@@ -299,6 +299,8 @@ PartialClass partialClass = new PartialClass { A = 1, B = 2, C = 3 };
 Console.WriteLine(partialClass.Sum());
 Console.WriteLine(partialClass);
 
+PrintClass.PrintConsole("AAA");
+
 public record Person(string FirstName, string LastName, string[] PhoneNumbers);
 
 public record CargoList(string ContainerName, List<string> Items);
@@ -536,4 +538,31 @@ public partial class PartialClass
     public int Sum() => A + B + C;
 
     public override string ToString() => $"A = {A}, B = {B}, C = {C}";
+}
+
+internal interface IPrintable
+{
+    static abstract void PrintConsole(string message);
+}
+
+internal class PrintClass : IPrintable
+{
+    public static void PrintConsole(string message) => Console.WriteLine(message);
+}
+
+internal interface IBase
+{
+    void Print(string message);
+}
+
+internal interface IDerived : IBase
+{
+    void PrintDerived(string message);
+}
+
+internal class InterfaceDerived : IDerived
+{
+    public void Print(string message) => Console.WriteLine("IBase.Print");
+
+    public void PrintDerived(string message) => Console.WriteLine("IDerived.Print");
 }
