@@ -224,17 +224,17 @@ Console.WriteLine($"{AAAA.X}, {BBBB.X}");       // 20, 20
 //dynamic host = container.GetDataProvider();
 //int data = host.GetData();
 
-CartesianCoordinate coordinate = new(1, 2);
+//CartesianCoordinate coordinate = new(1, 2);
 
-// record 출력
+//// record 출력
 
-Console.WriteLine(coordinate.X);    // 1
-Console.WriteLine(coordinate.Y);    // 2
-Console.WriteLine(coordinate);      // CartesianCoordinate { X = 1, Y = 2 }
+//Console.WriteLine(coordinate.X);    // 1
+//Console.WriteLine(coordinate.Y);    // 2
+//Console.WriteLine(coordinate);      // CartesianCoordinate { X = 1, Y = 2 }
 
-var (X11, Y11) = coordinate;
+//var (X11, Y11) = coordinate;
 
-Console.WriteLine($"{X11},{Y11}");
+//Console.WriteLine($"{X11},{Y11}");
 
 //CartesianCoordinate coordinate1 = coordinate with { X = 3 };
 //Console.WriteLine(coordinate1);
@@ -269,6 +269,17 @@ Console.WriteLine(cargo.Items[0]);      // TV
 
 Log.WriteLog("Log message");
 
+var itemsa = new List<CartesianCoordinate>();
+
+var coordinateData = from itema in itemsa
+                     where itema.Series.Contains("2D")
+                     select new { itema.X, itema.Y };
+foreach (var data in coordinateData)
+{
+    Console.WriteLine(string.Join(',', data.X));
+    Console.WriteLine(string.Join(',', data.Y));
+}
+
 StockItem item = new StockItem
 {
     Name = "Company",
@@ -301,50 +312,92 @@ Console.WriteLine(partialClass);
 
 PrintClass.PrintConsole("AAA");
 
+var varTest = "ABC";
+//varTest = null;
+Console.WriteLine(varTest);
+string Combine(string str1, string str2) => str1 + str2;
+
+// delegate 인스턴스화
+
+StringCombineDelegate del = new StringCombineDelegate(Combine);
+
+// delegate 호출
+
+Console.WriteLine(del.Invoke("A", "B"));
+Console.WriteLine(del("A", "B"));
+
+void Combines(string str1, string str2, ConsoleWriteDelegate del) => del(str1 + str2);
+void ConsoleWrite(string message) => Console.WriteLine(message);
+
+// delegate 인스턴스화
+
+ConsoleWriteDelegate sdel = new ConsoleWriteDelegate(ConsoleWrite);
+
+// delegate 호출
+
+Combines("A", "B", sdel);     // AB
+
+Sender sender = new();
+Receiver receiver = new(sender);
+sender.Action();
+
+public delegate string StringCombineDelegate(string str1, string str2);
+
+public delegate void ConsoleWriteDelegate(string message);
+
+public class ANT
+{
+    public int A = 0;
+    public double B = 0;
+}
+
 public record Person(string FirstName, string LastName, string[] PhoneNumbers);
 
 public record CargoList(string ContainerName, List<string> Items);
 
-public class CartesianCoordinate
-{
-    public double X { get; init; }
-    public double Y { get; init; }
+public record CartesianCoordinate(string Series, List<double> X, List<double> Y);
 
-    public CartesianCoordinate(double x, double y)
-    {
-        X = x;
-        Y = y;
-    }
+//public class CartesianCoordinate
+//{
+//    public string Series { get; init; }
+//    public double X { get; init; }
+//    public double Y { get; init; }
 
-    public void Deconstruct(out double x, out double y)
-    {
-        x = X;
-        y = Y;
-    }
+//    public CartesianCoordinate(double x, double y)
+//    {
+//        X = x;
+//        Y = y;
+//    }
 
-    public override string ToString()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append(nameof(CartesianCoordinate));
-        stringBuilder.Append(" { ");
+//    public void Deconstruct(out double x, out double y)
+//    {
+//        x = X;
+//        y = Y;
+//    }
 
-        if (PrintMembers(stringBuilder))
-        {
-            stringBuilder.Append(" ");
-        }
+//    public override string ToString()
+//    {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.Append(nameof(CartesianCoordinate));
+//        stringBuilder.Append(" { ");
 
-        stringBuilder.Append("}");
+//        if (PrintMembers(stringBuilder))
+//        {
+//            stringBuilder.Append(" ");
+//        }
 
-        return stringBuilder.ToString();
-    }
+//        stringBuilder.Append("}");
 
-    protected virtual bool PrintMembers(StringBuilder stringBuilder)
-    {
-        stringBuilder.Append($"X = {X}, ");
-        stringBuilder.Append($"Y = {Y}");
-        return true;
-    }
-}
+//        return stringBuilder.ToString();
+//    }
+
+//    protected virtual bool PrintMembers(StringBuilder stringBuilder)
+//    {
+//        stringBuilder.Append($"X = {X}, ");
+//        stringBuilder.Append($"Y = {Y}");
+//        return true;
+//    }
+//}
 
 internal class MyClass
 {
@@ -565,4 +618,31 @@ internal class InterfaceDerived : IDerived
     public void Print(string message) => Console.WriteLine("IBase.Print");
 
     public void PrintDerived(string message) => Console.WriteLine("IDerived.Print");
+}
+
+public class MessageEventArgs : EventArgs
+{
+    public string Message { get; set; }
+
+    public MessageEventArgs(string message) => Message = message;
+}
+
+// Publishing class
+
+public class Sender
+{
+    public delegate void MessageEventHandler(object sender, MessageEventArgs args);
+
+    public event MessageEventHandler RaiseMessageEvent;
+
+    public void Action() => RaiseMessageEvent?.Invoke(this, new MessageEventArgs("Send message"));
+}
+
+// Receiving class
+
+public class Receiver
+{
+    public Receiver(Sender sender) => sender.RaiseMessageEvent += MessageReceived;
+
+    private void MessageReceived(object sender, MessageEventArgs e) => Console.WriteLine($"Receiver received : {e.Message}");
 }
