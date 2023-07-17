@@ -20,13 +20,13 @@
 - 이동 평균에 이용되는 방법은 주로 `Simple moving average`와 `Exponential moving average`가 있다. (여기서는 Simple moving average만 서술한다)
 - `Simple moving average`의 계산 방법 및 결과에 대해서는 아래 이미지와 같이 표현할 수 있다.
 
-[이미지]
+![이미지](./MovingAverage.png)
 <br>
 
 - 위 그림과 같이, 일정 크기를 가진 `u`가 `U` 안에서 움직이며 계속해서 평균값을 산출한다.
 - 이를 식으로 표현하면 아래와 같다.
 
-[이미지]
+![이미지2](./SMA.png)
 
 <br><br>
 
