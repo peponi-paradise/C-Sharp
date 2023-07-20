@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using Library.Core;
 using Library.Core.Messenger;
 
@@ -10,7 +9,7 @@ public class SerialPortService
     public SerialPortInformation SerialPortInformation { get; set; }
     public bool IsOpen { get; set; }
 
-    System.IO.Ports.SerialPort Port;
+    private System.IO.Ports.SerialPort Port;
 
     public SerialPortService()
     {
@@ -19,7 +18,7 @@ public class SerialPortService
         WeakReferenceMessenger.Default.Register<RequestSerialPortInformation>(this, (o, e) => e.Reply(SerialPortInformation));
         WeakReferenceMessenger.Default.Register<RequestSerialPortStatus>(this, (o, e) => e.Reply(IsOpen));
         Port = new System.IO.Ports.SerialPort();
-        SerialPortInformation = new SerialPortInformation() { COMPort = "COM1", BaudRate = 115200, Parity = System.IO.Ports.Parity.None, DataBits = 7, StopBits = System.IO.Ports.StopBits.One, Handshake = System.IO.Ports.Handshake.None };
+        SerialPortInformation = new SerialPortInformation() { COMPort = "COM1", BaudRate = 115200, Parity = System.IO.Ports.Parity.None, DataBits = 8, StopBits = System.IO.Ports.StopBits.One, Handshake = System.IO.Ports.Handshake.None };
         InitPort();
     }
 

@@ -4,10 +4,10 @@ namespace Library.Core;
 
 public struct SerialPortInformation
 {
-    public string COMPort;
-    public int BaudRate;
-    public Parity Parity;
-    public int DataBits;
-    public StopBits StopBits;
-    public Handshake Handshake;
+    public string COMPort { get; set; }
+    public int BaudRate { get; set; }
+    public Parity Parity { get; set; }
+    public int DataBits { get; set; }
+    public StopBits StopBits { get; set; }
+    public Handshake Handshake { get; set; }
 }

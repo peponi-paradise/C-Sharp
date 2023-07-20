@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using Library.Core;
 using Library.Core.Messenger;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using System.Timers;
 
 namespace Library.Services.SerialPort;
@@ -12,18 +11,20 @@ namespace Library.Services.SerialPort;
 public partial class SerialPortViewModel : ObservableObject
 {
     [ObservableProperty]
-    SerialPortInformation serialPortInformation;
+    private SerialPortInformation serialPortInformation;
 
     public ObservableCollection<string> CommunicationData => Model.CommunicationData;
+    public ObservableCollection<string> SendingData { get; init; }
 
     [ObservableProperty]
-    bool isOpen;
+    private bool isOpen;
 
     private SerialPortModel Model { get; init; }
     private Timer StatusTimer { get; init; }
 
     public SerialPortViewModel(SerialPortModel model)
     {
+        SendingData = new ObservableCollection<string>();
         Model = model;
         Model.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
         SerialPortInformation = WeakReferenceMessenger.Default.Send(new RequestSerialPortInformation()).Response;
@@ -47,6 +48,10 @@ public partial class SerialPortViewModel : ObservableObject
         if (WeakReferenceMessenger.Default.Send(new RequestSerialPortSend() { Message = message }).Response == false)
         {
             // error 처리
+        }
+        else
+        {
+            SendingData.Add(message);
         }
     }
 }

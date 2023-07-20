@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Library.Core;
 using Library.Core.Messenger;
 using System.Collections.ObjectModel;
 

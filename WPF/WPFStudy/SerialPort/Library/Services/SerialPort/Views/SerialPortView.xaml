@@ -4,17 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Library.Services.SerialPort"
-             xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid" x:Class="Library.Services.SerialPort.SerialPortView"
+             xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+             x:Class="Library.Services.SerialPort.SerialPortView"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding CommunicationData}" />
-        <dxprg:PropertyGridControl Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" PropertyDefinitionsSource="{Binding SerialPortInformation}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Content="Received" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <ListBox Grid.Row="1" ItemsSource="{Binding CommunicationData}" />
+            <Label Grid.Column="1" Content="Sent" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SendingData}" />
+        </Grid>
+        <dxprg:PropertyGridControl Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectedObject="{Binding SerialPortInformation}" />
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -28,7 +42,7 @@
             <Button Grid.Row="1" Command="{Binding OpenCommand}" Content="OPEN" />
             <Label Grid.Row="3" Content="Sending Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <TextBox Grid.Row="4" x:Name="SendMessage" />
-            <Button Grid.Row="5" Command="{Binding SendCommand}" CommandParameter="{}" Content="SEND" />
+            <Button Grid.Row="5" Command="{Binding SendCommand}" CommandParameter="{Binding Text,ElementName=SendMessage}" Content="SEND" />
         </Grid>
     </Grid>
 </UserControl>
