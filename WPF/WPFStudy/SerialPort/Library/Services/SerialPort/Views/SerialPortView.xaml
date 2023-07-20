@@ -29,7 +29,7 @@
             <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SendingData}" />
         </Grid>
         <StackPanel Grid.Column="1">
-            <dxprg:PropertyGridControl Name="Property" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectedObject="{Binding SerialPortInformation}" />
+            <dxprg:PropertyGridControl Name="Property" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectedObject="{Binding SerialPortInformation}" ExpandCategoriesWhenSelectedObjectChanged="True" />
             <Button Command="{Binding UpdateSerialInformationCommand}" CommandParameter="{Binding SelectedObject, ElementName=Property}" Content="UPDATE" />
         </StackPanel>
         <Grid Grid.Column="2">
