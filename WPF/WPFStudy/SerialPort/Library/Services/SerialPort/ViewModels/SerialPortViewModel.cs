@@ -27,7 +27,7 @@ public partial class SerialPortViewModel : ObservableObject
         SendingData = new ObservableCollection<string>();
         Model = model;
         Model.PropertyChanged += (s, e) => OnPropertyChanged(e.PropertyName);
-        SerialPortInformation = WeakReferenceMessenger.Default.Send(new RequestSerialPortInformation()).Response;
+        SerialPortInformation = WeakReferenceMessenger.Default.Send(new RequestGetSerialPortInformation()).Response;
         StatusTimer = new Timer();
         StatusTimer.Interval = 1000;
         StatusTimer.Elapsed += StatusTimer_Elapsed;
@@ -41,6 +41,9 @@ public partial class SerialPortViewModel : ObservableObject
 
     [RelayCommand]
     public void Close() => WeakReferenceMessenger.Default.Send(new RequestSerialPortClose());
+
+    [RelayCommand]
+    public void UpdateSerialInformation(SerialPortInformation serialPortInformation) => WeakReferenceMessenger.Default.Send(new RequestSetSerialPortInformation() { SerialPortInformation = serialPortInformation });
 
     [RelayCommand]
     public void Send(string message)

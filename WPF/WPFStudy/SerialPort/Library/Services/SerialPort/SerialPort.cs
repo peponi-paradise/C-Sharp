@@ -15,7 +15,8 @@ public class SerialPortService
     {
         WeakReferenceMessenger.Default.Register<RequestSerialPortOpen>(this, (o, e) => Open());
         WeakReferenceMessenger.Default.Register<RequestSerialPortClose>(this, (o, e) => Close());
-        WeakReferenceMessenger.Default.Register<RequestSerialPortInformation>(this, (o, e) => e.Reply(SerialPortInformation));
+        WeakReferenceMessenger.Default.Register<RequestGetSerialPortInformation>(this, (o, e) => e.Reply(SerialPortInformation));
+        WeakReferenceMessenger.Default.Register<RequestSetSerialPortInformation>(this, (o, e) => UpdateSerialPortInformation(e.SerialPortInformation));
         WeakReferenceMessenger.Default.Register<RequestSerialPortStatus>(this, (o, e) => e.Reply(IsOpen));
         Port = new System.IO.Ports.SerialPort();
         SerialPortInformation = new SerialPortInformation() { COMPort = "COM1", BaudRate = 115200, Parity = System.IO.Ports.Parity.None, DataBits = 8, StopBits = System.IO.Ports.StopBits.One, Handshake = System.IO.Ports.Handshake.None };

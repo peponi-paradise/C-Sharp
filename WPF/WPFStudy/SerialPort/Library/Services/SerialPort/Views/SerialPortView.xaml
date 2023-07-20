@@ -28,21 +28,26 @@
             <Label Grid.Column="1" Content="Sent" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
             <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SendingData}" />
         </Grid>
-        <dxprg:PropertyGridControl Grid.Column="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectedObject="{Binding SerialPortInformation}" />
+        <StackPanel Grid.Column="1">
+            <dxprg:PropertyGridControl Name="Property" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectedObject="{Binding SerialPortInformation}" />
+            <Button Command="{Binding UpdateSerialInformationCommand}" CommandParameter="{Binding SelectedObject, ElementName=Property}" Content="UPDATE" />
+        </StackPanel>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Content="{Binding IsOpen}" />
+            <Label Content="{Binding IsOpen}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Button Grid.Row="1" Command="{Binding OpenCommand}" Content="OPEN" />
-            <Label Grid.Row="3" Content="Sending Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBox Grid.Row="4" x:Name="SendMessage" />
-            <Button Grid.Row="5" Command="{Binding SendCommand}" CommandParameter="{Binding Text,ElementName=SendMessage}" Content="SEND" />
+            <Button Grid.Row="2" Command="{Binding CloseCommand}" Content="CLOSE" />
+            <Label Grid.Row="4" Content="Sending Text" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBox Grid.Row="5" x:Name="SendMessage" />
+            <Button Grid.Row="6" Command="{Binding SendCommand}" CommandParameter="{Binding Text,ElementName=SendMessage}" Content="SEND" />
         </Grid>
     </Grid>
 </UserControl>
