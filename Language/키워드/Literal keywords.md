@@ -55,7 +55,7 @@ A
 Console.WriteLine($"Default of int : {default(int)}");
 Console.WriteLine($"Default of double : {default(double)}");
 Console.WriteLine($"Default of bool : {default(bool)}");
-Console.WriteLine($"Default of int : {default(string)}");
+Console.WriteLine($"Default of string : {default(string)}");
 
 /* output:
 Default of int : 0
