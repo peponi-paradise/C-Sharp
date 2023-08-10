@@ -136,8 +136,8 @@
         - Protected internal
         - Protected
         - Private protected
-        - File
         - Private
+        - File
     - And also, members are located in following modifier order : 
         - new
         - abstract
