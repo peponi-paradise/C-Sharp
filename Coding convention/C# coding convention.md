@@ -2,7 +2,7 @@
 
 <br>
 
-- This document is coding convention about C#
+- This document is C# coding conventions for effective and maintainable software code.
 
 <br>
 
@@ -16,7 +16,6 @@
 |---|---|---|
 |PascalCase|int PascalCase|First letter of every word is in capital|
 |CamelCase|int camelCase|First letter of word is in small and after that each word starts with capital|
-|Capital|int CAPITAL|All letters are in capital|
 
 <br>
 
@@ -41,9 +40,8 @@
         - ex
             ```
             Network (Directory name)
-            |
-            - Connection.cs
-            - Messaging.cs
+            |- Connection.cs
+            |- Messaging.cs
             ```
 
 <br>
@@ -100,8 +98,8 @@
 
 - Additional rules are following descriptions.
     - Try to avoid `Hungarian notation` : This is old-fashioned strategy. Modern IDEs could display types immediately
-    - Try to avoid abbreviation : If it is well-known word, consider to use but present it as Capital.
-        - ex : `TCP`, `HTTP`, `UDP`...
+    - Try to avoid abbreviation : It will be allowed if it is well-known word. Consider to present it as PascalCase.
+        - ex : `Tcp`, `Http`, `Udp`...
         - ex : Use `MultiThreadExtension` than `MTE`
     - _Don't use_ redundant meanings in names : Using them is meaningless.
         - ex
@@ -121,12 +119,12 @@
 
 <br>
 
-- Namespace `using` declarations go at the top of every file.
+1. Namespace `using` declarations go at the top of every file.
     - `using` import order is alphabetical.
-- Class member ordering : 
+2. Class member ordering : 
     - Group class members in the following order (Top to bottom, left to right) : 
         - Enum, interface, nested class, delegate and event
-        - Const, static and readonly field
+        - Const, static and readonly field and static property
         - Field, property (Backing field is on upper line of property)
         - Constructor, finalizer
         - Method
@@ -157,12 +155,12 @@
 
 <br>
 
-- Align code consistently to improve readability.
-- Limit line length to enhance code readability on docs.
+1. Align code consistently to improve readability.
+2. Limit line length to enhance code readability on docs.
     - Consider environment of code reader.
-- Write only one statement / declaration per line.
-- Open and close brace with new line.
-- Break long statements into multiple lines to improve clarity.
+3. Write only one statement / declaration per line.
+4. Open and close brace with new line.
+5. Break long statements into multiple lines to improve clarity.
     - ex
         ```cs
         // From
@@ -183,11 +181,11 @@
             ...
         );
         ```
-- Always input access modifiers to improve clarity.
+6. Always input access modifiers to improve clarity.
     - ex : Use `private int` instead of `int`
-- Use C# keywords instead of BCL types
+7. Use C# keywords instead of BCL types
     - ex : Use `int`, `string`, `float` instead of `Int32`, `String`, `Single`, etc
-- Multiple attributes should be separated by new lines.
+8. Multiple attributes should be separated by new lines.
     - ex
         ```cs
         [WriteLog]
@@ -195,7 +193,7 @@
         [RelayCommand]
         private void TestMethod()
         ```
-- Try to avoid `magic` string, number ... : Use `const`, `nameof()` for reusable code, IntelliSense information, and so on.
+9. Try to avoid `magic` string, number ... : Use `const`, `nameof()` for reusable code, IntelliSense information, and so on.
     - ex
         ```cs
         // NG
@@ -225,7 +223,7 @@
             break;
         }
         ```
-- Try to organize variables into group types : Some variables have common purpose
+10. Try to organize variables into group types : Some variables have common purpose
     - ex
         ```cs
         // From
@@ -261,7 +259,7 @@
             public SerialPort Port;
         }
         ```
-- Don't be afraid to using dot operator to namespace : Dot operator `.` is useful for dividing and configuring SW section.
+11. Don't be afraid to using dot operator to namespace : Dot operator `.` is useful for dividing and configuring SW section.
     - ex
         ```cs
         // NG
@@ -276,10 +274,10 @@
         namespace Communication.Messaging { }
         ```
     - But in general, namespaces should be no more than 3 levels deep.
-- Judiciously use expression body syntax in lambdas and properties.
+12. Judiciously use expression body syntax in lambdas and properties.
     - Especially, don't use on method definition.
     - Try to avoid using it except simple single logic.
-- When calling a delegate, use Invoke() and use the null conditional operator.
+13. When calling a delegate, use Invoke() and use the null conditional operator.
     - ex : SomeDelegate?.Invoke(). 
         This clearly marks the call at the callsite as ‘a delegate that is being called’. The null check is concise and robust against threading race conditions.
 
@@ -289,12 +287,12 @@
 
 <br>
 
-- Place the comment on a separate line, not at the end of a line of code.
-- Begin comment text with an uppercase letter.
-- End comment text with a period.
-- Insert one space between the comment delimiter `//` and the comment text.
-- Avoid long comment in the code file : Load comment after write comment document.
-- Encourage to use `Task list` of Visual studio for TODO comments.
+1. Place the comment on a separate line, not at the end of a line of code.
+2. Begin comment text with an uppercase letter.
+3. End comment text with a period.
+4. Insert one space between the comment delimiter `//` and the comment text.
+5. Avoid long comment in the code file : Load comment after write comment document.
+6. Encourage to use `Task list` comments of Visual studio for visibility.
 
 <br>
 
