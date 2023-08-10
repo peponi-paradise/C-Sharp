@@ -103,7 +103,7 @@
     - Try to avoid abbreviation : If it is well-known word, consider to use but present it as Capital.
         - ex : `TCP`, `HTTP`, `UDP`...
         - ex : Use `MultiThreadExtension` than `MTE`
-    - Do not use redundant meanings in names : Using them is meaningless.
+    - _Don't use_ redundant meanings in names : Using them is meaningless.
         - ex
             ```cs
             enum MyTypesEnum { }
@@ -238,6 +238,7 @@
             public int DataBits { get; set; }
             public StopBits StopBits { get; set; }
             public Handshake Handshake { get; set; }
+
             public SerialPort Port;
         }
         ```
@@ -253,6 +254,7 @@
             public StopBits StopBits { get; set; }
             public Handshake Handshake { get; set; }
         }
+
         class MySerialPort
         {
             public SerialPortInformation SerialPortInformation;
