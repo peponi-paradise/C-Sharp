@@ -7,8 +7,8 @@
     - 값 형식은 변수의 복사본을 전달한다.
 - 매개 변수를 선언할 때 사용 가능한 키워드는 아래와 같다.
     - [params](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/params) : 인수의 수가 가변인 것을 지정한다.
-    - [in](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/in-parameter-modifier) : 매개 변수를 참조로 전달, 호출된 메서드에서는 읽기 가능
-    - [ref](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/ref) : 매개 변수를 참조로 전달, 호출된 메서드에서는 읽기 / 쓰기 가능
+    - [in](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/in-parameter-modifier) : 매개 변수를 참조로 전달, 호출된 메서드에서 읽기 가능
+    - [ref](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/ref) : 매개 변수를 참조로 전달, 호출된 메서드에서 읽기 / 쓰기 가능
     - [out](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/out-parameter-modifier) : 매개 변수를 참조로 전달, 호출된 메서드에서 쓰기 가능
 
 <br>
@@ -45,7 +45,7 @@ static void Main()
 
 /* output:
 10
-0
+1
 */
 ```
 
@@ -67,25 +67,12 @@ static void Main()
 <br>
 
 ```cs
-private class Test
+class Test
 {
     public int X;
 }
 
-private static void Main()
-{
-    Test t = new() { X = 1 };
-
-    Foo(t);
-
-    Console.WriteLine($"After Foo : {t.X}");
-
-    Bar(t);
-
-    Console.WriteLine($"After Bar : {t.X}");
-}
-
-private static void Foo(Test test)
+static void Foo(Test test)
 {
     Console.WriteLine($"Foo start : {test.X}");
 
@@ -96,7 +83,7 @@ private static void Foo(Test test)
     Console.WriteLine($"Foo - X changed : {test.X}");
 }
 
-private static void Bar(Test test)
+static void Bar(Test test)
 {
     Console.WriteLine($"Bar start : {test.X}");
 
@@ -105,6 +92,19 @@ private static void Bar(Test test)
     test = new() { X = 50 };
 
     Console.WriteLine($"Bar - test changed : {test.X}");
+}
+
+static void Main()
+{
+    Test t = new() { X = 1 };
+
+    Foo(t);
+
+    Console.WriteLine($"After Foo : {t.X}");
+
+    Bar(t);
+
+    Console.WriteLine($"After Bar : {t.X}");
 }
 
 /* output:
@@ -120,25 +120,12 @@ After Bar : 100
 ```cs
 // ref 키워드를 사용한 예시
 
-private class Test
+class Test
 {
     public int X;
 }
 
-private static void Main()
-{
-    Test t = new() { X = 1 };
-
-    Foo(ref t);
-
-    Console.WriteLine($"After Foo : {t.X}");
-
-    Bar(ref t);
-
-    Console.WriteLine($"After Bar : {t.X}");
-}
-
-private static void Foo(ref Test test)
+static void Foo(ref Test test)
 {
     Console.WriteLine($"Foo start : {test.X}");
 
@@ -149,7 +136,7 @@ private static void Foo(ref Test test)
     Console.WriteLine($"Foo - X changed : {test.X}");
 }
 
-private static void Bar(ref Test test)
+static void Bar(ref Test test)
 {
     Console.WriteLine($"Bar start : {test.X}");
 
@@ -158,6 +145,19 @@ private static void Bar(ref Test test)
     test = new() { X = 50 };
 
     Console.WriteLine($"Bar - test changed : {test.X}");
+}
+
+static void Main()
+{
+    Test t = new() { X = 1 };
+
+    Foo(ref t);
+
+    Console.WriteLine($"After Foo : {t.X}");
+
+    Bar(ref t);
+
+    Console.WriteLine($"After Bar : {t.X}");
 }
 
 /* output:
@@ -193,7 +193,29 @@ struct Test
     public int X;
 }
 
-private static void Main()
+static void Foo(Test test)
+{
+    Console.WriteLine($"Foo start : {test.X}");
+
+    // Change Member
+
+    test.X = 100;
+
+    Console.WriteLine($"Foo - X changed : {test.X}");
+}
+
+static void Bar(Test test)
+{
+    Console.WriteLine($"Bar start : {test.X}");
+
+    // Change reference
+
+    test = new() { X = 50 };
+
+    Console.WriteLine($"Bar - test changed : {test.X}");
+}
+
+static void Main()
 {
     Test t = new() { X = 1 };
 
@@ -205,29 +227,6 @@ private static void Main()
 
     Console.WriteLine($"After Bar : {t.X}");
 }
-
-private static void Foo(Test test)
-{
-    Console.WriteLine($"Foo start : {test.X}");
-
-    // Change Member
-
-    test.X = 100;
-
-    Console.WriteLine($"Foo - X changed : {test.X}");
-}
-
-private static void Bar(Test test)
-{
-    Console.WriteLine($"Bar start : {test.X}");
-
-    // Change reference
-
-    test = new() { X = 50 };
-
-    Console.WriteLine($"Bar - test changed : {test.X}");
-}
-
 
 /* output:
 Foo start : 1
@@ -247,20 +246,7 @@ struct Test
     public int X;
 }
 
-private static void Main()
-{
-    Test t = new() { X = 1 };
-
-    Foo(ref t);
-
-    Console.WriteLine($"After Foo : {t.X}");
-
-    Bar(ref t);
-
-    Console.WriteLine($"After Bar : {t.X}");
-}
-
-private static void Foo(ref Test test)
+static void Foo(ref Test test)
 {
     Console.WriteLine($"Foo start : {test.X}");
 
@@ -271,7 +257,7 @@ private static void Foo(ref Test test)
     Console.WriteLine($"Foo - X changed : {test.X}");
 }
 
-private static void Bar(ref Test test)
+static void Bar(ref Test test)
 {
     Console.WriteLine($"Bar start : {test.X}");
 
@@ -280,6 +266,19 @@ private static void Bar(ref Test test)
     test = new() { X = 50 };
 
     Console.WriteLine($"Bar - test changed : {test.X}");
+}
+
+static void Main()
+{
+    Test t = new() { X = 1 };
+
+    Foo(ref t);
+
+    Console.WriteLine($"After Foo : {t.X}");
+
+    Bar(ref t);
+
+    Console.WriteLine($"After Bar : {t.X}");
 }
 
 /* output:
