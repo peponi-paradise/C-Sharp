@@ -29,14 +29,14 @@ BinaryInv
 </tr>
 <tr>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/TestImage.jpg"
+<img src="../../Blog-Image/C%23/OpenCVSharp/TestImage.jpg"
 alt="Original image"/>
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Binary.jpg" alt="Binary">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Binary.jpg" alt="Binary">
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/BinaryInv.jpg" alt="BinaryInv">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/BinaryInv.jpg" alt="BinaryInv">
 </td>
 </tr>
 
@@ -53,13 +53,13 @@ Trunc
 </tr>
 <tr>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Tozero.jpg" alt="Tozero">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Tozero.jpg" alt="Tozero">
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/TozeroInv.jpg" alt="TozeroInv">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/TozeroInv.jpg" alt="TozeroInv">
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Trunc.jpg" alt="Trunc">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Trunc.jpg" alt="Trunc">
 </td>
 </tr>
 
@@ -76,13 +76,13 @@ Triangle
 </tr>
 <tr>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Mask.jpg" alt="Mask">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Mask.jpg" alt="Mask">
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Otsu.jpg" alt="Otsu">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Otsu.jpg" alt="Otsu">
 </td>
 <td>
-<img src="../../Blog-Image/C#/OpenCVSharp/Image Thresholding/Triangle.jpg" alt="Triangle">
+<img src="../../Blog-Image/C%23/OpenCVSharp/Image Thresholding/Triangle.jpg" alt="Triangle">
 </td>
 </tr>
 </table>
