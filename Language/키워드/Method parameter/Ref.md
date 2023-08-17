@@ -142,24 +142,18 @@ private class Foo
 private class Bar
 {
     private Foo[] _foos = { new() { X = 1 },
-                            new() { X = 2 },
-                            new() { X = 3 } };
+                    new() { X = 2 },
+                    new() { X = 3 } };
 
-    public ref Foo GetFoo(int index)
+    // ref return
+    public ref Foo this[int index]
     {
-        return ref _foos[index];
+        get => ref _foos[index];
     }
 
     public override string ToString()
     {
-        string merged = string.Empty;
-
-        foreach (var foo in _foos)
-        {
-            merged += $"{foo.X}, ";
-        }
-
-        return merged;
+        return string.Join(", ", _foos.Select(item => item.X));
     }
 }
 
@@ -169,15 +163,15 @@ private static void Main()
 
     Console.WriteLine(bar.ToString());
 
-    ref var foo = ref bar.GetFoo(1);
+    ref var foo = ref bar[1];
     foo.X = 100;
 
     Console.WriteLine(bar.ToString());
 }
 
 /* output:
-1, 2, 3,
-1, 100, 3,
+1, 2, 3
+1, 100, 3
 */
 ```
 

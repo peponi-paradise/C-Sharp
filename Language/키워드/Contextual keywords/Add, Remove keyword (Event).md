@@ -81,3 +81,13 @@ Foo event raised
 Bar receives Foo event : PostEvent
 */
 ```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [C# - Language - Event](https://peponi-paradise.tistory.com/entry/C-Language-Event)
+- [add(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/add)
+- [remove(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/remove)
