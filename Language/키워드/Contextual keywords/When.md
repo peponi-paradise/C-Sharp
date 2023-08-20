@@ -42,6 +42,72 @@ Exception has been occurred - System.NotImplementedException: My exception
 ```cs
 // switch 문
 
+public static class IntHelper
+{
+    public static void PositiveCompare(int a, int b)
+    {
+        switch ((a, b))
+        {
+            case ( > 0, > 0) when a > b:
+                Console.WriteLine($"{a} is bigger than {b}");
+                break;
 
+            case ( > 0, > 0) when a < b:
+                Console.WriteLine($"{b} is bigger than {a}");
+                break;
 
+            case ( > 0, > 0) when a == b:
+                Console.WriteLine($"{a} is same as {b}");
+                break;
+
+            default:
+                Console.WriteLine("Wrong compare case");
+                break;
+        }
+    }
+}
+
+private static void Main()
+{
+    IntHelper.PositiveCompare(1, 2);
+}
+
+/* output:
+2 is bigger than 1
+*/
 ```
+
+```cs
+// switch 식
+
+public static class IntHelper
+{
+    public static int PositiveCompare(int a, int b)
+    {
+        return (a, b) switch
+        {
+            ( > 0, > 0) when a > b => a,
+            ( > 0, > 0) when a < b => b,
+            ( > 0, > 0) when a == b => a,
+            _ => throw new ArgumentException("Input value must be greater than 0")
+        };
+    }
+}
+
+private static void Main()
+{
+    Console.WriteLine(IntHelper.PositiveCompare(3, 7));
+}
+
+/* output:
+7
+*/
+```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [when(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/when)
