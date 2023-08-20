@@ -49,6 +49,23 @@ internal class Program
 
 <br>
 
+## value
+
+<br>
+
+- `value`는 `setter`의 액세스 메서드를 정의할 때 값을 나타내는 키워드이다.
+- 메서드의 입력 매개 변수와 비슷하며, `속성` 또는 `인덱서`에 할당하려는 값을 참조한다.
+
+```cs
+public int CenterX
+{
+    get => X[1];
+    set => X[1] = value;
+}
+```
+
+<br>
+
 ## set
 
 <br>
@@ -143,6 +160,11 @@ internal class Program
 
 <br>
 
-## value
+## 참조 자료
 
 <br>
+
+- [get(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/get)
+- [value(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/value)
+- [set(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/set)
+- [init(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/init)

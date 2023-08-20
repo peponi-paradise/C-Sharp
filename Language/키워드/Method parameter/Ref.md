@@ -164,7 +164,7 @@ private static void Main()
     Console.WriteLine(bar.ToString());
 
     ref var foo = ref bar[1];
-    foo.X = 100;
+    foo = new Foo() { X = 100 };
 
     Console.WriteLine(bar.ToString());
 }
