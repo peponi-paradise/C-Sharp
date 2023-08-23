@@ -7,7 +7,7 @@
 - 공식 문서의 overview에는 다음과 같이 소개되어 있다.
     > Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data.
     >> It’s like JSON, except it’s smaller and faster, and it generates native language bindings. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.<br>
-      Protocol buffers are a combination of the definition language (created in `.proto` files), the code that the proto compiler generates to interface with data, language-specific runtime libraries, and the serialization format for data that is written to a file (or sent across a network connection).
+    Protocol buffers are a combination of the definition language (created in `.proto` files), the code that the proto compiler generates to interface with data, language-specific runtime libraries, and the serialization format for data that is written to a file (or sent across a network connection).
 
 <br>
 
@@ -144,3 +144,11 @@ private static void Main(string[] args)
 { "TransactionID": 1, "Message": "Hello, World!" }
 */
 ```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [Protocol Buffer Basics: C#](https://protobuf.dev/getting-started/csharptutorial/)
