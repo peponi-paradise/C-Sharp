@@ -148,8 +148,8 @@ message Other
     }
     ```
     - optional
-        1. 필드에 값이 할당된 경우 일반 필드와 같이 사용한다. wire로 serialize 될 수 있다.
-        2. 필드에 값이 할당되지 않은 경우 기본값을 반환하며 wire로 serialize 될 수 없다.
+        1. 필드에 값이 할당된 경우 : 일반 필드와 같이 사용한다. wire로 serialize 될 수 있다.
+        2. 필드에 값이 할당되지 않은 경우 : 기본값을 반환하며 wire로 serialize 될 수 없다.
     - repeated
         - repeated 레이블이 지정된 필드는 enumerator type으로 동작한다.
         - [IList<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.ilist-1?view=net-7.0)를 구현하여 LINQ 쿼리 사용 및 배열, 리스트로 변환이 가능하다.

@@ -2,7 +2,7 @@
 
 <br>
 
-- [Protobuf](https://protobuf.dev/overview/)는 [Interface description language](https://en.wikipedia.org/wiki/Interface_description_language)로, 구조화된 데이터를 직렬화 하는 언어 중립적인 형식이다.
+- [Protobuf](https://protobuf.dev/overview/)는 [Interface description language](https://en.wikipedia.org/wiki/Interface_description_language)로, 구조화된 데이터를 직렬화하는 언어 중립적인 형식이다.
 - Google의 [gRPC](https://ko.wikipedia.org/wiki/GRPC) 서비스에서 통신 메시지 형식으로 사용된다.
 - 공식 문서의 overview에는 다음과 같이 소개되어 있다.
     > Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data.
