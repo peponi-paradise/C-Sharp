@@ -192,12 +192,60 @@ Console.WriteLine(A);
 <br>
 
 - 할당 연산자 `+=` 또는 `-=`는 연산과 동시에 할당이 가능해지는 축약형 표현을 제공한다.
-- 다음 두 식은 동일한 결과를 나타낸다.
+- 다음 두 식은 동일한 연산을 수행한다.
+    (byte 연산 시 `int`로 변환되어 `X = X + Y;`는 실제로는 수행할 수 없는 코드이다.)
 
 ```cs
-X += Y;
+byte X = 255;
+byte Y = 1;
+
 X = X + Y;
+X += Y;
 ```
 
-- 위 예제를 조금 더 자세하게 표현하면 `X = (T)(X + Y);`가 된다.
-- 앞의 이진 연산에서 우리는 
+- 연산은 동일하지만 캐스팅이 다르게 되는데, 위의 예제를 조금 더 자세히 풀어보면 아래와 같다.
+
+```cs
+byte X = 255;
+byte Y = 1;
+
+X = (int)X + (int)Y;
+X = (byte)((int)X + (int)Y);
+```
+
+- 이런 캐스팅의 특성으로 인해 의도치 않은 계산의 결과가 일어날 수 있다.
+
+```cs
+byte X = 255;
+byte Y = 1;
+
+var Z = X + Y;
+
+Console.WriteLine(Z);
+Console.WriteLine(Z.GetType());
+
+X += Y;
+
+Console.WriteLine(X);
+Console.WriteLine(X.GetType());
+
+/* output:
+256
+System.Int32
+0
+System.Byte
+*/
+```
+
+- 새로운 값 `Z`는 `int` 형식이므로 256을 출력한다.
+- 반면, `byte` 형식의 최대값은 255 (FF) 이기 때문에 `X`의 값은 0이 된다.
+- 코드 양을 줄이기 위해 축약형 표현을 사용하는 경우가 많은데, 연산을 하는 경우에는 주의가 필요하다.
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [산술 연산자(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/arithmetic-operators)
+- [C# - Language - 정수 형식](https://peponi-paradise.tistory.com/entry/C-Language-%EC%A0%95%EC%88%98-%ED%98%95%EC%8B%9D)
