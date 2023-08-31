@@ -1,6 +1,6 @@
-<h1 id="title">Integration - Simpson 1/3 rule</h1>
+<h1 id="title">Integration - Simpson 3/8 rule</h1>
 
-<h2 id="intro">Introduction</h2>
+## Introduction
 
 <br>
 
@@ -12,7 +12,7 @@
 3. 앞선 글과는 달리, 연속된 데이터 `(X1, X2, X3...), (Y1, Y2, Y3...)`를 곡선 함수로 근사하고 적분하는 것을 `Simpson rule`이라고 한다.
     - 1/3 rule은 이차함수로 근사한다.
     - 3/8 rule은 삼차함수로 근사한다.
-4. 아래 코드는 1/3 rule에 대한 코드이다.
+4. 아래 코드는 3/8 rule에 대한 코드이다.
 
 <br>
 
@@ -21,41 +21,29 @@
 <br>
 
 ```csharp
-// 23.08.31 수정 : 
-// 1. List형 integration 음수 값을 가져도 적분이 가능하도록
-// 2. 함수형 integration 메서드 추가
-
 using Peponi.Math.Extensions;
 
 namespace Peponi.Math.Integration;
 
-public static class Simpson1over3
+public static class Simpson3over8
 {
     /// <summary>
-    /// 심슨 1/3오더는 곡선구간이고 각 구간이 짧을 수록 정확, 반드시 구간의 수가 짝수여야 함 <br/>
-    /// 각 구간의 길이는 일정해야 함
+    /// 심슨 3/8은 잘 쓰이지 않음.
     /// </summary>
     public static double Integrate(List<double> xs, List<double> ys)
     {
         if (xs.Count != ys.Count) throw new ArgumentException($"Input value count mismatched. xs : {xs.Count}, ys : {ys.Count}");
-        else if (xs.Count < 3) throw new ArgumentException("Required at least 3 points");
-        else if (!xs.Count.IsOdd()) throw new ArgumentException("Input array's count should be odd");
+        else if ((xs.Count - 1) % 3 != 0) throw new ArgumentException("\"Array length - 1\" must be multiple of 3");
         else if (!xs.IsIntervalUniform()) throw new ArgumentException("X axis array's interval should be uniform");
 
-        double sumOdd = 0;
-        double sumEven = 0;
-        double intervalH = (xs.Max() - xs.Min()) / (xs.Count - 1) / 3;
+        double intervalH = (xs.Max() - xs.Min()) / (xs.Count - 1) * 3 / 8;
 
-        for (int i = 1; i < ys.Count - 1; i++)
+        double yTotal = 0;
+        for (int i = 0; i < ys.Count - 2; i += 3)
         {
-            if (i.IsEven()) sumEven += ys[i];
-            else sumOdd += ys[i];
+            yTotal += ys[i] + 3 * ys[i + 1] + 3 * ys[i + 2] + ys[i + 3];
         }
 
-        sumOdd = 4 * sumOdd;
-        sumEven = 2 * sumEven;
-
-        double yTotal = ys[0] + ys[ys.Count - 1] + sumOdd + sumEven;
         double result = intervalH * yTotal;
 
         return result;
@@ -65,38 +53,23 @@ public static class Simpson1over3
     {
         if (lowLimit > upperLimit) throw new ArgumentException($"Low limit ({lowLimit}) could not bigger than upper limit ({upperLimit})");
         else if (fx == null) throw new ArgumentNullException("fx is null");
-        else if (intervalCount.IsOdd()) throw new ArgumentException("Interval count should be even");
+        else if ((intervalCount) % 3 != 0) throw new ArgumentException("Interval count must be multiple of 3");
 
         double deltaX = (upperLimit - lowLimit) / intervalCount;
-        double sumOdd = 0;
-        double sumEven = 0;
+        double yTotal = 0;
 
-        for (int i = 1; i < intervalCount; i++)
+        for (int i = 0; i < intervalCount - 2; i += 3)
         {
-            if (i.IsEven()) sumEven += fx(lowLimit + deltaX * i);
-            else sumOdd += fx(lowLimit + deltaX * i);
+            yTotal += fx(lowLimit + deltaX * i) + 3 * fx(lowLimit + deltaX * (i + 1)) + 3 * fx(lowLimit + deltaX * (i + 2)) + fx(lowLimit + deltaX * (i + 3));
         }
 
-        sumOdd = 4 * sumOdd;
-        sumEven = 2 * sumEven;
-
-        double yTotal = fx(lowLimit) + fx(upperLimit) + sumOdd + sumEven;
-
-        return yTotal * deltaX / 3;
+        return yTotal * deltaX * 3 / 8;
     }
 }
 ```
 
 ```cs
 namespace Peponi.Math.Extensions;
-
-public static class IntegerExtension
-{
-    public static bool IsOdd(this int value)
-    {
-        return value % 2 == 1;
-    }
-}
 
 public static class CollectionExtension
 {
@@ -120,7 +93,6 @@ public static class CollectionExtension
 
 <br>
 
-- [Peponi Library - Simpson1over3](https://github.com/peponi-paradise/Peponi/blob/Development/Peponi/Peponi.Math/Integrations/Simpson1over3.cs)
-- [Peponi Library - Integer extension](https://github.com/peponi-paradise/Peponi/blob/Development/Peponi/Peponi.Math/Extensions/Integer.cs)
+- [Peponi Library - Simpson3over8](https://github.com/peponi-paradise/Peponi/blob/Development/Peponi/Peponi.Math/Integrations/Simpson3over8.cs)
 - [Peponi Library - Collection extension](https://github.com/peponi-paradise/Peponi/blob/Development/Peponi/Peponi.Math/Extensions/Collection.cs)
 - [Simpson's rule](https://en.wikipedia.org/wiki/Simpson%27s_rule)
