@@ -147,7 +147,7 @@ Console.WriteLine(Convert.ToString(D, 2));
     ```
 - 결과 형식의 범위를 벗어나는 하위 비트는 삭제되고, 상위 비트는 다음과 같이 결정된다.
     1. Signed type : 왼쪽 피연산자의 최상위 비트 값이 비어있는 상위 비트를 채운다.
-        - 왼쪽 피연산자가 음수가 아닌 경우 0, 음수인 경우 1로 설정된다.
+        (왼쪽 피연산자가 음수가 아닌 경우 0, 음수인 경우 1로 설정된다.)
         ```cs
         int A = 16;
         int B = A >> 3;
@@ -168,3 +168,120 @@ Console.WriteLine(Convert.ToString(D, 2));
         11111111111111111111111111111110
         */
         ```
+    2. Unsigned type : 오른쪽 시프트는 논리적 시프트를 수행하며 비어있는 상위 비트는 0으로 채워진다.
+        ```cs
+        uint A = 0b_1000_0000_0000_0000_0000_0000_0000_0000;
+        uint B = A >> 3;
+
+        Console.WriteLine(Convert.ToString(A, 2));
+        Console.WriteLine(Convert.ToString(B, 2).PadLeft(sizeof(int) * 8, '0'));
+
+        /* output:
+        10000000000000000000000000000000
+        00010000000000000000000000000000
+        */
+        ```
+
+<br>
+
+### Unsigned right shift (>>>, C# 11)
+
+<br>
+
+- `>>>` 연산자는 왼쪽 피연산자를 오른쪽 피연산자로 지정된 시프트 수만큼 오른쪽으로 이동시킨다.
+- `>>` 연산자와의 차이점은 `>>>` 연산자는 항상 논리적 시프트를 수행한다.
+    ```cs
+    int A = 16;
+    int B = A >>> 3;
+
+    Console.WriteLine(Convert.ToString(A, 2).PadLeft(sizeof(int) * 8, '0'));
+    Console.WriteLine(Convert.ToString(B, 2).PadLeft(sizeof(int) * 8, '0'));
+
+    int C = -16;
+    int D = C >>> 3;
+
+    Console.WriteLine(Convert.ToString(C, 2).PadLeft(sizeof(int) * 8, '0'));
+    Console.WriteLine(Convert.ToString(D, 2).PadLeft(sizeof(int) * 8, '0'));
+    
+    /* output:
+    00000000000000000000000000010000
+    00000000000000000000000000000010
+    11111111111111111111111111110000
+    00011111111111111111111111111110
+    */
+    ```
+
+<br>
+
+### 시프트 수
+
+<br>
+
+- 시프트 연산자의 오른쪽에 지정하는 시프트 수는 왼쪽 피연산자의 형식에 따라 달라진다.
+    1. 왼쪽 피연산자의 형식이 `int` 또는 `uint` : 오른쪽 피연산자의 `하위 5bit`으로 정의된다.
+        `오른쪽 피연산자 & 0b_0001_1111`
+        ```cs
+        int A = 0b_0001;
+        int shift = 0b_1010_0011;
+        int shifted = A << shift;
+        
+        Console.WriteLine(Convert.ToString(shifted, 2));
+
+        /* output:
+        1000
+        */
+        ```
+
+    2. 왼쪽 피연산자의 형식이 `long` 또는 `ulong` : 오른쪽 피연산자의 `하위 6bit`으로 정의된다.
+        `오른쪽 피연산자 & 0b_0011_1111`
+        ```cs
+        long A = 0b_0001;
+        int shift = 0b_1010_0000;
+        int shift2 = 0b_1010_0011;
+        long shifted = A << shift;
+        long shifted2 = A << shift2;
+        
+        Console.WriteLine(Convert.ToString(shifted, 2));
+        Console.WriteLine(Convert.ToString(shifted2, 2));
+
+        /* output:
+        100000000000000000000000000000000
+        100000000000000000000000000000000000
+        */
+        ```
+
+<br>
+
+## 열거형 논리 연산자
+
+<br>
+
+- 열거형 형식에 대해 `~`, `&`, `|`, `^` 연산자가 지원되며, 지정 값에 대해 비트 논리 연산이 수행된다.
+- 일반적으로 `[Flags]` 특성으로 정의된 열거형 형식에 사용한다.    
+    ```cs
+    [Flags]
+    enum StatusCode
+    {
+        None = 0b_0,       // 0
+        Idle = 0b_1,       // 1
+        Run = 0b_10,       // 2
+        Warning = 0b_100,  // 4
+        Error = 0b_1000    // 8
+    }
+
+    StatusCode code = StatusCode.Idle | StatusCode.Warning | StatusCode.Error;  // 13
+
+    Console.WriteLine(code);    // Idle, Warning, Error
+    ```
+- 자세한 내용은 [C# - Language - 열거형 (enum)](https://peponi-paradise.tistory.com/entry/C-Language-%EC%97%B4%EA%B1%B0%ED%98%95-enum#enum%20%EB%B9%84%ED%8A%B8%20%ED%94%8C%EB%9E%98%EA%B7%B8-1)을 참조한다.
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [비트 및 시프트 연산자(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators)
+- [C# - Language - 숫자 형식 변환](https://peponi-paradise.tistory.com/entry/C-Language-%EC%88%AB%EC%9E%90-%ED%98%95%EC%8B%9D-%EB%B3%80%ED%99%98)
+- [C# - Language - 열거형 (enum)](https://peponi-paradise.tistory.com/entry/C-Language-%EC%97%B4%EA%B1%B0%ED%98%95-enum#enum%20%EB%B9%84%ED%8A%B8%20%ED%94%8C%EB%9E%98%EA%B7%B8-1)
+- [C# - Language - Logical operators (!, &, |, ^, &&, ||)](https://peponi-paradise.tistory.com/entry/C-Language-Logical-operators)

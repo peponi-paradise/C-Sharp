@@ -10,7 +10,7 @@
     - Conditional AND : `&&`
         - 왼쪽 피연산자가 `true`일 때만 오른쪽 피연산자를 평가
     - Conditional OR : `||`
-        - 왼쪽 피연산자가 `true`일 때만 오른쪽 피연산자를 평가
+        - 왼쪽 피연산자가 `false`일 때만 오른쪽 피연산자를 평가
 
 <br>
 
@@ -282,7 +282,7 @@ True
 
 <br>
 
-- 할당 연산자 `&=`,`|=`,`^=` 는 연산과 동시에 할당이 가능해지는 복합 할당 식을 가능하게 한다.
+- 할당 연산자 `&=`, `|=`, `^=` 는 연산과 동시에 할당이 가능해지는 복합 할당 식을 가능하게 한다.
 - 다음 두 식은 동일한 연산을 수행한다.
     ```cs
     bool X = true;
@@ -319,3 +319,4 @@ True
 
 - [부울 논리 연산자 - AND, OR, NOT, XOR](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/boolean-logical-operators)
 - [C# - Language - 논리형 (Boolean)](https://peponi-paradise.tistory.com/entry/C-Language-%EB%85%BC%EB%A6%AC%ED%98%95-Boolean)
+- [C# - Language - Bitwise and shift operators](https://peponi-paradise.tistory.com/entry/C-Language-Bitwise-and-shift-operators)
