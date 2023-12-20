@@ -32,4 +32,40 @@ True
 
 - `struct` 형식의 경우 기본적으로 `==` 연산자를 지원하지 않는다.
   - 같음 연산자를 사용하려면 형식에 해당 연산자를 오버로드해야 한다.
+  ```cs
+  public struct StructTest
+  {
+      public int X;
 
+      public static bool operator ==(StructTest left,StructTest right)
+      {
+          return left.X == right.X;
+      }
+      public static bool operator !=(StructTest left, StructTest right)
+      {
+          return left.X != right.X;
+      }
+  }
+  ```
+  ```cs
+  StructTest a = new StructTest();
+  StructTest b = new StructTest();
+  a.X = 10;
+  b.X = 20;
+
+  Console.WriteLine(a == b);
+  Console.WriteLine(a != b);
+
+  /* output:
+  False
+  True
+  */
+  ```
+
+<br>
+
+## 참조 형식
+
+<br>
+
+- 
