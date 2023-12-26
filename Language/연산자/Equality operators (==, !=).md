@@ -76,16 +76,14 @@ True
 
     public TestClass(int x) => X = x;
   }
+  ```
+  ```cs
+  var a = new TestClass(5);
+  var b = new TestClass(5);
+  var c = b;
 
-  public static void Main()
-  {
-    var a = new TestClass(5);
-    var b = new TestClass(5);
-    var c = b;
-
-    Console.WriteLine(a == b);
-    Console.WriteLine(b == c);
-  }
+  Console.WriteLine(a == b);
+  Console.WriteLine(b == c);
 
   /* output:
   False
@@ -94,6 +92,41 @@ True
   ```
   - `class`의 경우 `struct`와 마찬가지로 같음 연산자를 오버로드할 수 있다.
     - 같음 연산자를 오버로드 한 후 참조 주소를 비교하려는 경우, [Object.ReferenceEquals()](https://learn.microsoft.com/ko-kr/dotnet/api/system.object.referenceequals?view=net-8.0) 메서드를 사용하여 비교할 수 있다.
+      ```cs
+      public class TestClass
+      {
+          public int X;
+
+          public TestClass(int x) => X = x;
+
+          public static bool operator ==(TestClass left, TestClass right)
+          {
+              return left.X == right.X;
+          }
+
+          public static bool operator !=(TestClass left, TestClass right)
+          {
+              return left.X != right.X;
+          }
+      }
+      ```
+      ```cs
+      var a = new TestClass(5);
+      var b = new TestClass(5);
+      var c = b;
+
+      Console.WriteLine(a == b);
+      Console.WriteLine(b == c);
+      Console.WriteLine(object.ReferenceEquals(a, b));
+      Console.WriteLine(object.ReferenceEquals(b, c));
+
+      /* output:
+      True
+      True
+      False
+      True
+      */
+      ```
 
 - `record` 형식의 경우 기본적으로 값 비교를 지원하여 값 및 참조 형식의 비교가 가능하다.
   - `값 형식`의 경우 값을 비교한다.
@@ -101,21 +134,19 @@ True
   ```cs
   public record Coordinate(int X, int Y);
   public record CoordinateCollection(int ID, List<Coordinate> Coordinates);
+  ```
+  ```cs
+  var a = new Coordinate(1, 2);
+  var b = new Coordinate(2, 3);
+  var c = new Coordinate(2, 3);
 
-  public static void Main()
-  {
-    var a = new Coordinate(1, 2);
-    var b = new Coordinate(2, 3);
-    var c = new Coordinate(2, 3);
+  Console.WriteLine(a == b);
+  Console.WriteLine(b == c);
 
-    Console.WriteLine(a == b);
-    Console.WriteLine(b == c);
+  var d = new CoordinateCollection(1, new() { new(1,2) });
+  var e = new CoordinateCollection(1, new() { new(1,2) });
 
-    var d = new CoordinateCollection(1, new() { new(1,2) });
-    var e = new CoordinateCollection(1, new() { new(1,2) });
-
-    Console.WriteLine(d == e);
-  }
+  Console.WriteLine(d == e);
 
   /* output:
   False
@@ -124,7 +155,31 @@ True
   */
   ```
   - `record` 형식의 경우 같음 연산자를 오버로드 할 수 없다.
-    - 같음 연산자의 동작을 변경하는 경우 [IEquatable<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.iequatable-1?view=net-8.0)를 구현해야 한다.
+    - 같음 연산자의 동작을 변경하는 경우 [IEquatable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.iequatable-1?view=net-8.0)를 구현해야 한다.
+      ```cs
+      public record Coordinate(int X, int Y) : IEquatable<Coordinate>
+      {
+          public virtual bool Equals(Coordinate? other)
+          {
+              return other is not null && (X == other.X || Y == other.Y);
+          }
+      }
+      ```
+      ```cs
+      var a = new Coordinate(1, 3);
+      var b = new Coordinate(2, 1);
+      var c = new Coordinate(2, 3);
+
+      Console.WriteLine(a == b);
+      Console.WriteLine(b == c);
+      Console.WriteLine(a == c);
+
+      /* output:
+      False
+      True
+      True
+      */
+      ```
 
 - `string`의 경우 참조 형식이지만 값 형식처럼 비교할 수 있다.
   - 두 문자열이 같은 길이 및 문자를 가질 때 동일하다.
