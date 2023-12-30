@@ -32,35 +32,35 @@ True
 
 - `struct` 형식의 경우 기본적으로 같음 연산자를 지원하지 않는다.
   - 같음 연산자를 사용하려면 형식에 해당 연산자를 오버로드해야 한다.
-  ```cs
-  public struct StructTest
-  {
-      public int X;
+    ```cs
+    public struct StructTest
+    {
+        public int X;
 
-      public static bool operator ==(StructTest left,StructTest right)
-      {
-          return left.X == right.X;
-      }
-      public static bool operator !=(StructTest left, StructTest right)
-      {
-          return left.X != right.X;
-      }
-  }
-  ```
-  ```cs
-  StructTest a = new StructTest();
-  StructTest b = new StructTest();
-  a.X = 10;
-  b.X = 20;
+        public static bool operator ==(StructTest left,StructTest right)
+        {
+            return left.X == right.X;
+        }
+        public static bool operator !=(StructTest left, StructTest right)
+        {
+            return left.X != right.X;
+        }
+    }
+    ```
+    ```cs
+    StructTest a = new StructTest();
+    StructTest b = new StructTest();
+    a.X = 10;
+    b.X = 20;
 
-  Console.WriteLine(a == b);
-  Console.WriteLine(a != b);
+    Console.WriteLine(a == b);
+    Console.WriteLine(a != b);
 
-  /* output:
-  False
-  True
-  */
-  ```
+    /* output:
+    False
+    True
+    */
+    ```
 
 <br>
 
@@ -131,29 +131,29 @@ True
 - `record` 형식의 경우 기본적으로 값 비교를 지원하여 값 및 참조 형식의 비교가 가능하다.
   - `값 형식`의 경우 값을 비교한다.
   - `참조 형식`의 경우 참조 주소를 비교한다.
-  ```cs
-  public record Coordinate(int X, int Y);
-  public record CoordinateCollection(int ID, List<Coordinate> Coordinates);
-  ```
-  ```cs
-  var a = new Coordinate(1, 2);
-  var b = new Coordinate(2, 3);
-  var c = new Coordinate(2, 3);
+    ```cs
+    public record Coordinate(int X, int Y);
+    public record CoordinateCollection(int ID, List<Coordinate> Coordinates);
+    ```
+    ```cs
+    var a = new Coordinate(1, 2);
+    var b = new Coordinate(2, 3);
+    var c = new Coordinate(2, 3);
 
-  Console.WriteLine(a == b);
-  Console.WriteLine(b == c);
+    Console.WriteLine(a == b);
+    Console.WriteLine(b == c);
 
-  var d = new CoordinateCollection(1, new() { new(1,2) });
-  var e = new CoordinateCollection(1, new() { new(1,2) });
+    var d = new CoordinateCollection(1, new() { new(1,2) });
+    var e = new CoordinateCollection(1, new() { new(1,2) });
 
-  Console.WriteLine(d == e);
+    Console.WriteLine(d == e);
 
-  /* output:
-  False
-  True
-  False
-  */
-  ```
+    /* output:
+    False
+    True
+    False
+    */
+    ```
   - `record` 형식의 경우 같음 연산자를 오버로드 할 수 없다.
     - 같음 연산자의 동작을 변경하는 경우 [IEquatable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.iequatable-1?view=net-8.0)를 구현해야 한다.
       ```cs
@@ -183,18 +183,18 @@ True
 
 - `string`의 경우 참조 형식이지만 값 형식처럼 비교할 수 있다.
   - 두 문자열이 같은 길이 및 문자를 가질 때 동일하다.
-  ```cs
-  string a = "ABCde";
-  string b = "abcDE";
+    ```cs
+    string a = "ABCde";
+    string b = "abcDE";
 
-  Console.WriteLine(a == b);
-  Console.WriteLine(a.ToLower() == b.ToLower());
+    Console.WriteLine(a == b);
+    Console.WriteLine(a.ToLower() == b.ToLower());
 
-  /* output:
-  False
-  True
-  */
-  ```
+    /* output:
+    False
+    True
+    */
+    ```
 
 - `delegate`의 경우 호출 길이가 같고 동일한 호출 순서를 가질 때 동일하다.
   ```cs
@@ -226,4 +226,4 @@ True
 - [값 형식](https://peponi-paradise.tistory.com/entry/C-Language-%EA%B0%92-%ED%98%95%EC%8B%9D)
 - [참조 형식](https://peponi-paradise.tistory.com/entry/C-Language-%EC%B0%B8%EC%A1%B0-%ED%98%95%EC%8B%9D)
 - [Object.ReferenceEquals()](https://learn.microsoft.com/ko-kr/dotnet/api/system.object.referenceequals?view=net-8.0)
-- [IEquatable<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.iequatable-1?view=net-8.0)
+- [IEquatable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.iequatable-1?view=net-8.0)
