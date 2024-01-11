@@ -13,13 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Colors\Blue.xaml" />
-    <Page Remove="Colors\Purple.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Colors\Blue.xaml" />
-    <Resource Include="Colors\Purple.xaml" />
     <Resource Include="Fonts\Pretendard.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

@@ -12,9 +12,9 @@ internal static class Program
 
     private static void Main(string[] args)
     {
-        double k = 1.0 / (5.0 * 11.725677948856951 + 1.0);
-        double k4 = k * k * k * k;
-        Console.WriteLine((k4 * 11.725677948856951) + (0.1 * 0.9999999208979617 * 0.9999999208979617 * Math.Pow(5.0 * 11.725677948856951, 1.0 / 3.0)));
+        ViewingConditions vc = ViewingConditions.Default;
+        Console.WriteLine(180.0 / Math.PI);
+
         Console.WriteLine("Hello, World!");
 
         Console.WriteLine("111,67,192");
