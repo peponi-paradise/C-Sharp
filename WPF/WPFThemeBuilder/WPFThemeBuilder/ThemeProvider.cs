@@ -51,7 +51,7 @@ public static class ThemeProvider
     public static void ApplyColors(Color primary, ColorMode colorMode = ColorMode.Both)
     {
         _isWindowsColor = false;
-        _palettes[Primary] = new TonalPalette(primary, 36);
+        _palettes[Primary] = new TonalPalette(primary);
         var hue = _palettes[Primary].Hue;
         _palettes[Secondary] = new TonalPalette(hue, 16);
         _palettes[Tertiary] = new TonalPalette(hue + 60, 24);
@@ -79,9 +79,9 @@ public static class ThemeProvider
     public static void ApplyColors(Color primary, Color secondary, Color tertiary, ColorMode colorMode = ColorMode.Both)
     {
         _isWindowsColor = false;
-        _palettes[Primary] = new TonalPalette(primary, 36);
-        _palettes[Secondary] = new TonalPalette(secondary, 36);
-        _palettes[Tertiary] = new TonalPalette(tertiary, 36);
+        _palettes[Primary] = new TonalPalette(primary);
+        _palettes[Secondary] = new TonalPalette(secondary);
+        _palettes[Tertiary] = new TonalPalette(tertiary);
         var hue = _palettes[Primary].Hue;
         _palettes[Neutral] = new TonalPalette(hue, 4);
         _palettes[NeutralVariant] = new TonalPalette(hue, 8);
@@ -158,7 +158,7 @@ public static class ThemeProvider
     internal static void InitializeColor(ResourceDictionary appResource)
     {
         _appResource = appResource;
-        _palettes[Primary] = new TonalPalette(Color.FromRgb(0, 133, 255), 36);
+        _palettes[Primary] = new TonalPalette(Color.FromRgb(0, 133, 255));
         var hue = _palettes[Primary].Hue;
         _palettes[Secondary] = new TonalPalette(hue, 16);
         _palettes[Tertiary] = new TonalPalette(hue + 60, 24);
@@ -173,6 +173,13 @@ public static class ThemeProvider
         {
             var currentColor = GetAccentColor();
             ResetColor(currentColor);
+            Debug.WriteLine(currentColor);
+            Debug.WriteLine(_palettes[Primary].Hue);
+            Debug.WriteLine(_palettes[Secondary].Hue);
+            Debug.WriteLine(_palettes[Primary].Chroma);
+            Debug.WriteLine(_palettes[Secondary].Chroma);
+            Debug.WriteLine(_palettes[Primary][40]);
+            Debug.WriteLine(_palettes[Secondary][40]);
         }
 
         if (isLight) SetBright();
@@ -180,7 +187,7 @@ public static class ThemeProvider
 
         static void ResetColor(Color primary)
         {
-            _palettes[Primary] = new TonalPalette(primary, 36);
+            _palettes[Primary] = new TonalPalette(primary);
             var hue = _palettes[Primary].Hue;
             _palettes[Secondary] = new TonalPalette(hue, 16);
             _palettes[Tertiary] = new TonalPalette(hue + 60, 24);
@@ -400,11 +407,6 @@ public static class ThemeProvider
         var userColorSet = GetImmersiveUserColorSetPreference(false, false);
         var colorType = GetImmersiveColorTypeFromName(Marshal.StringToHGlobalUni("ImmersiveStartSelectionBackground"));
         var colorSetEx = GetImmersiveColorFromColorSetEx((uint)userColorSet, colorType, false, 0);
-        return ConvertDWordColorToRGB(colorSetEx);
-    }
-
-    private static Color ConvertDWordColorToRGB(uint colorSetEx)
-    {
         byte redColor = (byte)((0x000000FF & colorSetEx) >> 0);
         byte greenColor = (byte)((0x0000FF00 & colorSetEx) >> 8);
         byte blueColor = (byte)((0x00FF0000 & colorSetEx) >> 16);

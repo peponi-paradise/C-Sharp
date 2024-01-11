@@ -12,14 +12,15 @@ internal static class Program
 
     private static void Main(string[] args)
     {
-        ViewingConditions vc = ViewingConditions.Default;
-        Console.WriteLine(180.0 / Math.PI);
+        ViewingConditions c = ViewingConditions.Default;
+        Console.WriteLine(c.Nc);
+        Console.WriteLine(c.Ncb);
+        Console.WriteLine(c.Z);
+        Console.WriteLine(1 / 20.0 * 1.0169191804458755);
 
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine("75,75,75");
 
-        Console.WriteLine("111,67,192");
-
-        FromRGB(Color.FromArgb(111, 67, 192));
+        FromRGB(Color.FromArgb(0x009ABB));
 
         Console.WriteLine($"Primary : {Color.FromArgb((int)Primary[40])}");
         Console.WriteLine($"Secondary : {Color.FromArgb((int)Secondary[40])}");

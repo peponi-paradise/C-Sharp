@@ -6,7 +6,7 @@ namespace WPFThemeBuilder;
 
 public static class HCT
 {
-    public static double GetHue(Color color)
+    public static (double Hue, double Chroma) GetHueAndChroma(Color color)
     {
         double redL = color.R.ToLinear();
         double greenL = color.G.ToLinear();
@@ -36,10 +36,20 @@ public static class HCT
 
         // hue
         double atanDegrees = Math.Atan2(b, a) * 57.29577951308232;
-        return
-            atanDegrees < 0
-                ? atanDegrees + 360.0
-                : atanDegrees >= 360 ? atanDegrees - 360.0 : atanDegrees;
+        double hue = atanDegrees < 0 ? atanDegrees + 360.0 : atanDegrees >= 360 ? atanDegrees - 360.0 : atanDegrees;
+
+        // chroma
+        double ac = (40.0 * rA + 20.0 * gA + bA) * 0.050845959022293774;
+        double j = 100.0 * Math.Pow(ac / 29.980997194447333, 1.3173270022537198);
+        double huePrime = (hue < 20.14) ? hue + 360 : hue;
+        double eHue = 0.25 * (Math.Cos(Math.PI / 180 * huePrime + 2.0) + 3.8);
+        double p1 = 3911.227617099523 * eHue;
+        double u = (20.0 * rA + 20.0 * gA + 21.0 * bA) / 20.0;
+        double t = p1 * Math.Sqrt(a * a + b * b) / (u + 0.305);
+        double alpha = Math.Pow(1.64 - Math.Pow(0.29, 0.18418651851244416), 0.73) * Math.Pow(t, 0.9);
+        double chroma = alpha * Math.Sqrt(j / 100.0);
+
+        return (hue, chroma);
     }
 
     public static uint ToARGB(double hue, double chroma, double tone)

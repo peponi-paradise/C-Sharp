@@ -6,7 +6,7 @@ namespace WPFThemeBuilder;
 public class TonalPalette
 {
     public readonly double Hue;
-    private readonly double _chroma;
+    public readonly double Chroma;
 
     private readonly Dictionary<uint, uint> _cache = new();
 
@@ -14,16 +14,17 @@ public class TonalPalette
     {
     }
 
+    public TonalPalette(Color color)
+    {
+        var data = HCT.GetHueAndChroma(color);
+        Hue = data.Hue;
+        Chroma = data.Chroma > 48 ? 48 : data.Chroma;
+    }
+
     public TonalPalette(double hue, double chroma)
     {
         Hue = hue;
-        _chroma = chroma;
-    }
-
-    public TonalPalette(Color color, double chroma)
-    {
-        Hue = HCT.GetHue(color);
-        _chroma = chroma;
+        Chroma = chroma;
     }
 
     /// <summary>Creates an ARGB color with HCT hue and chroma of this TonalPalette instance, and the provided HCT tone.</summary>
@@ -32,7 +33,7 @@ public class TonalPalette
     public uint Tone(uint tone)
         => _cache.TryGetValue(tone, out uint value)
             ? value
-            : _cache[tone] = HCT.ToARGB(Hue, _chroma, tone);
+            : _cache[tone] = HCT.ToARGB(Hue, Chroma, tone);
 
     /// <summary>Creates an ARGB color with HCT hue and chroma of this TonalPalette instance, and the provided HCT tone.</summary>
     /// <param name="tone">HCT tone, measured from 0 to 100.</param>
