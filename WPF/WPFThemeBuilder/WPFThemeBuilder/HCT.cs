@@ -63,7 +63,7 @@ public static class HCT
         if (hue < 0) hue += 360;
         hue = hue * Math.PI / 180;
 
-        tone = tone > 8 ? Math.Pow((tone + 16) / 116, 3) * 100 : tone / 90329.62962962963;
+        tone = tone > 8 ? Math.Pow((tone + 16) / 116, 3) * 100 : tone / 9.032962962962963;
 
         uint exactAnswer = Calc(hue, chroma, tone);
         if (exactAnswer != 0)
@@ -77,7 +77,7 @@ public static class HCT
         {
             var j = Math.Sqrt(tone) * 11;
             double eHue = 0.25 * (Math.Cos(hue + 2.0) + 3.8);
-            double p1 = eHue * 708.4096865863237;
+            double p1 = eHue * 3911.227617099521;
             double hSin = Math.Sin(hue);
             double hCos = Math.Cos(hue);
 
