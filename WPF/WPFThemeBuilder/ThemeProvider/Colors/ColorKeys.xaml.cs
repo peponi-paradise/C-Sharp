@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
-namespace WPFThemeBuilder.Colors;
+namespace Peponi.WPF.ThemeProvider.Colors;
 
 public partial class ColorKeys : ResourceDictionary
 {
     public ColorKeys()
     {
         InitializeComponent();
-        ThemeProvider.InitializeColor(this);
+        ColorProvider.InitializeInternal(this);
     }
 }

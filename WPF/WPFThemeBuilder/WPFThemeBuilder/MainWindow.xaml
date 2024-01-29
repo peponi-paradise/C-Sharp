@@ -38,32 +38,32 @@
             Background="{DynamicResource Brush.Primary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Primary.Container}">
-            Hello
+            Foreground="{DynamicResource Brush.On.Primary}">
+            Pri
         </TextBox>
         <TextBox
             Grid.Column="1"
             Background="{DynamicResource Brush.Secondary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Secondary.Container}">
-            Hello
+            Foreground="{DynamicResource Brush.On.Secondary}">
+            Sec
         </TextBox>
         <TextBox
             Grid.Column="2"
             Background="{DynamicResource Brush.Tertiary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Tertiary.Container}">
-            Hello
+            Foreground="{DynamicResource Brush.On.Tertiary}">
+            Ter
         </TextBox>
         <TextBox
             Grid.Column="3"
             Background="{DynamicResource Brush.Error}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Error.Container}">
-            Hello
+            Foreground="{DynamicResource Brush.On.Error}">
+            Err
         </TextBox>
     </Grid>
 </Window>

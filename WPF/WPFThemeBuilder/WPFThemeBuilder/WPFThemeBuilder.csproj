@@ -8,14 +8,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Fonts\Pretendard.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Fonts\Pretendard.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
 </Project>
