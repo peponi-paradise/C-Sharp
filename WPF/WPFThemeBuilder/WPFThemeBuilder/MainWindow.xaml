@@ -13,20 +13,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -36,34 +24,109 @@
         </Grid.RowDefinitions>
         <TextBox
             Background="{DynamicResource Brush.Primary}"
+            FontFamily="{DynamicResource Primary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Primary}">
-            Pri
+            Foreground="{DynamicResource Brush.OnPrimary}">
+            Primary
         </TextBox>
         <TextBox
             Grid.Column="1"
+            Background="{DynamicResource Brush.PrimaryContainer}"
+            FontFamily="{DynamicResource Primary}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OnPrimaryContainer}">
+            Primary Container
+        </TextBox>
+        <TextBox
+            Grid.Row="1"
             Background="{DynamicResource Brush.Secondary}"
+            FontFamily="{DynamicResource Secondary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Secondary}">
-            Sec
+            Foreground="{DynamicResource Brush.OnSecondary}">
+            Secondary
         </TextBox>
         <TextBox
-            Grid.Column="2"
+            Grid.Row="1"
+            Grid.Column="1"
+            Background="{DynamicResource Brush.SecondaryContainer}"
+            FontFamily="{DynamicResource Secondary}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OnSecondaryContainer}">
+            Secondary Container
+        </TextBox>
+        <TextBox
+            Grid.Row="2"
             Background="{DynamicResource Brush.Tertiary}"
+            FontFamily="{DynamicResource Tertiary}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Tertiary}">
-            Ter
+            Foreground="{DynamicResource Brush.OnTertiary}">
+            Tertiary
         </TextBox>
         <TextBox
-            Grid.Column="3"
+            Grid.Row="2"
+            Grid.Column="1"
+            Background="{DynamicResource Brush.TertiaryContainer}"
+            FontFamily="{DynamicResource Tertiary}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OnTertiaryContainer}">
+            Tertiary Container
+        </TextBox>
+        <TextBox
+            Grid.Row="3"
             Background="{DynamicResource Brush.Error}"
             FontSize="30"
             FontWeight="Bold"
-            Foreground="{DynamicResource Brush.On.Error}">
-            Err
+            Foreground="{DynamicResource Brush.OnError}">
+            Error
+        </TextBox>
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="1"
+            Background="{DynamicResource Brush.ErrorContainer}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OnErrorContainer}">
+            Error Container
+        </TextBox>
+        <TextBox
+            Grid.Row="4"
+            Background="{DynamicResource Brush.Surface}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OnSurface}">
+            Surface
+        </TextBox>
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            Background="{DynamicResource Brush.InverseSurface}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.InverseOnSurface}">
+            Inverse Surface
+        </TextBox>
+        <TextBox
+            Grid.Row="5"
+            Background="{DynamicResource Brush.Outline}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.OutlineVariant}">
+            Outline
+        </TextBox>
+        <TextBox
+            Grid.Row="5"
+            Grid.Column="1"
+            Background="{DynamicResource Brush.OutlineVariant}"
+            FontSize="30"
+            FontWeight="Bold"
+            Foreground="{DynamicResource Brush.Outline}">
+            Outline Variant
         </TextBox>
     </Grid>
 </Window>

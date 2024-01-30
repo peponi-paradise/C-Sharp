@@ -1,0 +1,12 @@
+﻿<ResourceDictionary
+    x:Class="Peponi.WPF.ThemeProvider.FontKeys"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:ClassModifier="public">
+    <FontFamily x:Key="Primary" />
+    <FontFamily x:Key="Secondary" />
+    <FontFamily x:Key="Tertiary" />
+    <FontFamily x:Key="Pretendard">./Fonts/#Pretendard Variable</FontFamily>
+    <FontFamily x:Key="RobotoFlex">./Fonts/#Roboto Flex Normal</FontFamily>
+    <FontFamily x:Key="Consolas">Consolas</FontFamily>
+</ResourceDictionary>

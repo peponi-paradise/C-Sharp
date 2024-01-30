@@ -47,8 +47,8 @@ public static class ColorProvider
         switch (e.Category)
         {
             case UserPreferenceCategory.General:
-                if (_useWindowsAccentColor) SetColor(GetAccentColor(), _colorMode);
-                else SetResources(_colorMode);
+                if (_useWindowsAccentColor) CreatePalette(GetAccentColor(), null, null);
+                SetResources(_colorMode);
                 break;
         }
     }
@@ -56,19 +56,17 @@ public static class ColorProvider
     public static void UseWindowsAccentColor(ColorMode colorMode = ColorMode.Auto)
     {
         _useWindowsAccentColor = true;
-        SetColor(GetAccentColor(), colorMode);
+
+        CreatePalette(GetAccentColor(), null, null);
+
+        SetResources(colorMode);
     }
 
     public static void SetColor(Color color, ColorMode colorMode = ColorMode.Auto)
     {
         _useWindowsAccentColor = false;
 
-        _palettes[Primary] = new TonalPalette(color);
-        var hue = _palettes[Primary].Hue;
-        _palettes[Secondary] = new TonalPalette(hue, 16);
-        _palettes[Tertiary] = new TonalPalette(hue + 60, 24);
-        _palettes[Neutral] = new TonalPalette(hue, 4);
-        _palettes[NeutralVariant] = new TonalPalette(hue, 8);
+        CreatePalette(color, null, null);
 
         SetResources(colorMode);
     }
@@ -77,12 +75,7 @@ public static class ColorProvider
     {
         _useWindowsAccentColor = false;
 
-        _palettes[Primary] = new TonalPalette(primary);
-        var hue = _palettes[Primary].Hue;
-        _palettes[Secondary] = new TonalPalette(secondary);
-        _palettes[Tertiary] = new TonalPalette(tertiary);
-        _palettes[Neutral] = new TonalPalette(hue, 4);
-        _palettes[NeutralVariant] = new TonalPalette(hue, 8);
+        CreatePalette(primary, secondary, tertiary);
 
         SetResources(colorMode);
     }
@@ -118,6 +111,16 @@ public static class ColorProvider
     {
         _resource = resource;
         SetColor(Color.FromRgb(0x75, 0x75, 0x75), IsSystemLight() ? ColorMode.Light : ColorMode.Dark);
+    }
+
+    private static void CreatePalette(Color primary, Color? secondary, Color? tertiary)
+    {
+        _palettes[Primary] = new TonalPalette(primary);
+        var hue = _palettes[Primary].Hue;
+        _palettes[Secondary] = secondary == null ? new TonalPalette(hue, 16) : new TonalPalette((Color)secondary);
+        _palettes[Tertiary] = tertiary == null ? new TonalPalette(hue + 60, 24) : new TonalPalette((Color)tertiary);
+        _palettes[Neutral] = new TonalPalette(hue, 4);
+        _palettes[NeutralVariant] = new TonalPalette(hue, 8);
     }
 
     private static void SetResources(ColorMode colorMode)
@@ -171,94 +174,94 @@ public static class ColorProvider
     private static void SetLight()
     {
         _resource!["Color.Primary"] = _palettes[Primary][40];
-        _resource!["Color.On.Primary"] = _palettes[Primary][100];
-        _resource!["Color.Primary.Container"] = _palettes[Primary][90];
-        _resource!["Color.On.Primary.Container"] = _palettes[Primary][10];
+        _resource!["Color.OnPrimary"] = _palettes[Primary][100];
+        _resource!["Color.PrimaryContainer"] = _palettes[Primary][90];
+        _resource!["Color.OnPrimaryContainer"] = _palettes[Primary][10];
         _resource!["Color.Secondary"] = _palettes[Secondary][40];
-        _resource!["Color.On.Secondary"] = _palettes[Secondary][100];
-        _resource!["Color.Secondary.Container"] = _palettes[Secondary][90];
-        _resource!["Color.On.Secondary.Container"] = _palettes[Secondary][10];
+        _resource!["Color.OnSecondary"] = _palettes[Secondary][100];
+        _resource!["Color.SecondaryContainer"] = _palettes[Secondary][90];
+        _resource!["Color.OnSecondaryContainer"] = _palettes[Secondary][10];
         _resource!["Color.Tertiary"] = _palettes[Tertiary][40];
-        _resource!["Color.On.Tertiary"] = _palettes[Tertiary][100];
-        _resource!["Color.Tertiary.Container"] = _palettes[Tertiary][90];
-        _resource!["Color.On.Tertiary.Container"] = _palettes[Tertiary][10];
+        _resource!["Color.OnTertiary"] = _palettes[Tertiary][100];
+        _resource!["Color.TertiaryContainer"] = _palettes[Tertiary][90];
+        _resource!["Color.OnTertiaryContainer"] = _palettes[Tertiary][10];
         _resource!["Color.Error"] = _palettes[Error][40];
-        _resource!["Color.On.Error"] = _palettes[Error][100];
-        _resource!["Color.Error.Container"] = _palettes[Error][90];
-        _resource!["Color.On.Error.Container"] = _palettes[Error][10];
-        _resource!["Color.Primary.Fixed"] = _palettes[Primary][90];
-        _resource!["Color.Primary.Fixed.Dim"] = _palettes[Primary][80];
-        _resource!["Color.On.Primary.Fixed"] = _palettes[Primary][10];
-        _resource!["Color.On.Primary.Fixed.Variant"] = _palettes[Primary][30];
-        _resource!["Color.Secondary.Fixed"] = _palettes[Secondary][90];
-        _resource!["Color.Secondary.Fixed.Dim"] = _palettes[Secondary][80];
-        _resource!["Color.On.Secondary.Fixed"] = _palettes[Secondary][10];
-        _resource!["Color.On.Secondary.Fixed.Variant"] = _palettes[Secondary][30];
-        _resource!["Color.Tertiary.Fixed"] = _palettes[Tertiary][90];
-        _resource!["Color.Tertiary.Fixed.Dim"] = _palettes[Tertiary][80];
-        _resource!["Color.On.Tertiary.Fixed"] = _palettes[Tertiary][10];
-        _resource!["Color.On.Tertiary.Fixed.Variant"] = _palettes[Tertiary][30];
-        _resource!["Color.Surface.Dim"] = _palettes[Neutral][87];
+        _resource!["Color.OnError"] = _palettes[Error][100];
+        _resource!["Color.ErrorContainer"] = _palettes[Error][90];
+        _resource!["Color.OnErrorContainer"] = _palettes[Error][10];
+        _resource!["Color.PrimaryFixed"] = _palettes[Primary][90];
+        _resource!["Color.PrimaryFixedDim"] = _palettes[Primary][80];
+        _resource!["Color.OnPrimaryFixed"] = _palettes[Primary][10];
+        _resource!["Color.OnPrimaryFixedVariant"] = _palettes[Primary][30];
+        _resource!["Color.SecondaryFixed"] = _palettes[Secondary][90];
+        _resource!["Color.SecondaryFixedDim"] = _palettes[Secondary][80];
+        _resource!["Color.OnSecondaryFixed"] = _palettes[Secondary][10];
+        _resource!["Color.OnSecondaryFixedVariant"] = _palettes[Secondary][30];
+        _resource!["Color.TertiaryFixed"] = _palettes[Tertiary][90];
+        _resource!["Color.TertiaryFixedDim"] = _palettes[Tertiary][80];
+        _resource!["Color.OnTertiaryFixed"] = _palettes[Tertiary][10];
+        _resource!["Color.OnTertiaryFixedVariant"] = _palettes[Tertiary][30];
+        _resource!["Color.SurfaceDim"] = _palettes[Neutral][87];
         _resource!["Color.Surface"] = _palettes[Neutral][98];
-        _resource!["Color.Surface.Bright"] = _palettes[Neutral][98];
-        _resource!["Color.Surface.Container.Lowest"] = _palettes[Neutral][100];
-        _resource!["Color.Surface.Container.Low"] = _palettes[Neutral][96];
-        _resource!["Color.Surface.Container"] = _palettes[Neutral][94];
-        _resource!["Color.Surface.Container.High"] = _palettes[Neutral][92];
-        _resource!["Color.Surface.Container.Highest"] = _palettes[Neutral][90];
-        _resource!["Color.On.Surface"] = _palettes[Neutral][10];
-        _resource!["Color.On.Surface.Variant"] = _palettes[NeutralVariant][30];
+        _resource!["Color.SurfaceBright"] = _palettes[Neutral][98];
+        _resource!["Color.SurfaceContainerLowest"] = _palettes[Neutral][100];
+        _resource!["Color.SurfaceContainerLow"] = _palettes[Neutral][96];
+        _resource!["Color.SurfaceContainer"] = _palettes[Neutral][94];
+        _resource!["Color.SurfaceContainerHigh"] = _palettes[Neutral][92];
+        _resource!["Color.SurfaceContainerHighest"] = _palettes[Neutral][90];
+        _resource!["Color.OnSurface"] = _palettes[Neutral][10];
+        _resource!["Color.OnSurfaceVariant"] = _palettes[NeutralVariant][30];
         _resource!["Color.Outline"] = _palettes[NeutralVariant][50];
-        _resource!["Color.Outline.Variant"] = _palettes[NeutralVariant][80];
-        _resource!["Color.Inverse.Surface"] = _palettes[Neutral][20];
-        _resource!["Color.Inverse.On.Surface"] = _palettes[Neutral][95];
-        _resource!["Color.Inverse.Primary"] = _palettes[Primary][80];
+        _resource!["Color.OutlineVariant"] = _palettes[NeutralVariant][80];
+        _resource!["Color.InverseSurface"] = _palettes[Neutral][20];
+        _resource!["Color.InverseOnSurface"] = _palettes[Neutral][95];
+        _resource!["Color.InversePrimary"] = _palettes[Primary][80];
         _resource!["Color.Scrim"] = _palettes[Neutral][0];
         _resource!["Color.Shadow"] = _palettes[Neutral][0];
 
         _resource!["Brush.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][40] };
-        _resource!["Brush.On.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][100] };
-        _resource!["Brush.Primary.Container"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
-        _resource!["Brush.On.Primary.Container"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
+        _resource!["Brush.OnPrimary"] = new SolidColorBrush() { Color = _palettes[Primary][100] };
+        _resource!["Brush.PrimaryContainer"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
+        _resource!["Brush.OnPrimaryContainer"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
         _resource!["Brush.Secondary"] = new SolidColorBrush() { Color = _palettes[Secondary][40] };
-        _resource!["Brush.On.Secondary"] = new SolidColorBrush() { Color = _palettes[Secondary][100] };
-        _resource!["Brush.Secondary.Container"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
-        _resource!["Brush.On.Secondary.Container"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
+        _resource!["Brush.OnSecondary"] = new SolidColorBrush() { Color = _palettes[Secondary][100] };
+        _resource!["Brush.SecondaryContainer"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
+        _resource!["Brush.OnSecondaryContainer"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
         _resource!["Brush.Tertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][40] };
-        _resource!["Brush.On.Tertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][100] };
-        _resource!["Brush.Tertiary.Container"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
-        _resource!["Brush.On.Tertiary.Container"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
+        _resource!["Brush.OnTertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][100] };
+        _resource!["Brush.TertiaryContainer"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
+        _resource!["Brush.OnTertiaryContainer"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
         _resource!["Brush.Error"] = new SolidColorBrush() { Color = _palettes[Error][40] };
-        _resource!["Brush.On.Error"] = new SolidColorBrush() { Color = _palettes[Error][100] };
-        _resource!["Brush.Error.Container"] = new SolidColorBrush() { Color = _palettes[Error][90] };
-        _resource!["Brush.On.Error.Container"] = new SolidColorBrush() { Color = _palettes[Error][10] };
-        _resource!["Brush.Primary.Fixed"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
-        _resource!["Brush.Primary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
-        _resource!["Brush.On.Primary.Fixed"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
-        _resource!["Brush.On.Primary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
-        _resource!["Brush.Secondary.Fixed"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
-        _resource!["Brush.Secondary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Secondary][80] };
-        _resource!["Brush.On.Secondary.Fixed"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
-        _resource!["Brush.On.Secondary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
-        _resource!["Brush.Tertiary.Fixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
-        _resource!["Brush.Tertiary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Tertiary][80] };
-        _resource!["Brush.On.Tertiary.Fixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
-        _resource!["Brush.On.Tertiary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
-        _resource!["Brush.Surface.Dim"] = new SolidColorBrush() { Color = _palettes[Neutral][87] };
+        _resource!["Brush.OnError"] = new SolidColorBrush() { Color = _palettes[Error][100] };
+        _resource!["Brush.ErrorContainer"] = new SolidColorBrush() { Color = _palettes[Error][90] };
+        _resource!["Brush.OnErrorContainer"] = new SolidColorBrush() { Color = _palettes[Error][10] };
+        _resource!["Brush.PrimaryFixed"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
+        _resource!["Brush.PrimaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
+        _resource!["Brush.OnPrimaryFixed"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
+        _resource!["Brush.OnPrimaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
+        _resource!["Brush.SecondaryFixed"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
+        _resource!["Brush.SecondaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Secondary][80] };
+        _resource!["Brush.OnSecondaryFixed"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
+        _resource!["Brush.OnSecondaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
+        _resource!["Brush.TertiaryFixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
+        _resource!["Brush.TertiaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Tertiary][80] };
+        _resource!["Brush.OnTertiaryFixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
+        _resource!["Brush.OnTertiaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
+        _resource!["Brush.SurfaceDim"] = new SolidColorBrush() { Color = _palettes[Neutral][87] };
         _resource!["Brush.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][98] };
-        _resource!["Brush.Surface.Bright"] = new SolidColorBrush() { Color = _palettes[Neutral][98] };
-        _resource!["Brush.Surface.Container.Lowest"] = new SolidColorBrush() { Color = _palettes[Neutral][100] };
-        _resource!["Brush.Surface.Container.Low"] = new SolidColorBrush() { Color = _palettes[Neutral][96] };
-        _resource!["Brush.Surface.Container"] = new SolidColorBrush() { Color = _palettes[Neutral][94] };
-        _resource!["Brush.Surface.Container.High"] = new SolidColorBrush() { Color = _palettes[Neutral][92] };
-        _resource!["Brush.Surface.Container.Highest"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
-        _resource!["Brush.On.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][10] };
-        _resource!["Brush.On.Surface.Variant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][30] };
+        _resource!["Brush.SurfaceBright"] = new SolidColorBrush() { Color = _palettes[Neutral][98] };
+        _resource!["Brush.SurfaceContainerLowest"] = new SolidColorBrush() { Color = _palettes[Neutral][100] };
+        _resource!["Brush.SurfaceContainerLow"] = new SolidColorBrush() { Color = _palettes[Neutral][96] };
+        _resource!["Brush.SurfaceContainer"] = new SolidColorBrush() { Color = _palettes[Neutral][94] };
+        _resource!["Brush.SurfaceContainerHigh"] = new SolidColorBrush() { Color = _palettes[Neutral][92] };
+        _resource!["Brush.SurfaceContainerHighest"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
+        _resource!["Brush.OnSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][10] };
+        _resource!["Brush.OnSurfaceVariant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][30] };
         _resource!["Brush.Outline"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][50] };
-        _resource!["Brush.Outline.Variant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][80] };
-        _resource!["Brush.Inverse.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][20] };
-        _resource!["Brush.Inverse.On.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][95] };
-        _resource!["Brush.Inverse.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
+        _resource!["Brush.OutlineVariant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][80] };
+        _resource!["Brush.InverseSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][20] };
+        _resource!["Brush.InverseOnSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][95] };
+        _resource!["Brush.InversePrimary"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
         _resource!["Brush.Scrim"] = new SolidColorBrush() { Color = _palettes[Neutral][0] };
         _resource!["Brush.Shadow"] = new SolidColorBrush() { Color = _palettes[Neutral][0] };
     }
@@ -266,94 +269,94 @@ public static class ColorProvider
     private static void SetDark()
     {
         _resource!["Color.Primary"] = _palettes[Primary][80];
-        _resource!["Color.On.Primary"] = _palettes[Primary][20];
-        _resource!["Color.Primary.Container"] = _palettes[Primary][30];
-        _resource!["Color.On.Primary.Container"] = _palettes[Primary][90];
+        _resource!["Color.OnPrimary"] = _palettes[Primary][20];
+        _resource!["Color.PrimaryContainer"] = _palettes[Primary][30];
+        _resource!["Color.OnPrimaryContainer"] = _palettes[Primary][90];
         _resource!["Color.Secondary"] = _palettes[Secondary][80];
-        _resource!["Color.On.Secondary"] = _palettes[Secondary][20];
-        _resource!["Color.Secondary.Container"] = _palettes[Secondary][30];
-        _resource!["Color.On.Secondary.Container"] = _palettes[Secondary][90];
+        _resource!["Color.OnSecondary"] = _palettes[Secondary][20];
+        _resource!["Color.SecondaryContainer"] = _palettes[Secondary][30];
+        _resource!["Color.OnSecondaryContainer"] = _palettes[Secondary][90];
         _resource!["Color.Tertiary"] = _palettes[Tertiary][80];
-        _resource!["Color.On.Tertiary"] = _palettes[Tertiary][20];
-        _resource!["Color.Tertiary.Container"] = _palettes[Tertiary][30];
-        _resource!["Color.On.Tertiary.Container"] = _palettes[Tertiary][90];
+        _resource!["Color.OnTertiary"] = _palettes[Tertiary][20];
+        _resource!["Color.TertiaryContainer"] = _palettes[Tertiary][30];
+        _resource!["Color.OnTertiaryContainer"] = _palettes[Tertiary][90];
         _resource!["Color.Error"] = _palettes[Error][80];
-        _resource!["Color.On.Error"] = _palettes[Error][20];
-        _resource!["Color.Error.Container"] = _palettes[Error][30];
-        _resource!["Color.On.Error.Container"] = _palettes[Error][90];
-        _resource!["Color.Primary.Fixed"] = _palettes[Primary][90];
-        _resource!["Color.Primary.Fixed.Dim"] = _palettes[Primary][80];
-        _resource!["Color.On.Primary.Fixed"] = _palettes[Primary][10];
-        _resource!["Color.On.Primary.Fixed.Variant"] = _palettes[Primary][30];
-        _resource!["Color.Secondary.Fixed"] = _palettes[Secondary][90];
-        _resource!["Color.Secondary.Fixed.Dim"] = _palettes[Secondary][80];
-        _resource!["Color.On.Secondary.Fixed"] = _palettes[Secondary][10];
-        _resource!["Color.On.Secondary.Fixed.Variant"] = _palettes[Secondary][30];
-        _resource!["Color.Tertiary.Fixed"] = _palettes[Tertiary][90];
-        _resource!["Color.Tertiary.Fixed.Dim"] = _palettes[Tertiary][80];
-        _resource!["Color.On.Tertiary.Fixed"] = _palettes[Tertiary][10];
-        _resource!["Color.On.Tertiary.Fixed.Variant"] = _palettes[Tertiary][30];
-        _resource!["Color.Surface.Dim"] = _palettes[Neutral][6];
+        _resource!["Color.OnError"] = _palettes[Error][20];
+        _resource!["Color.ErrorContainer"] = _palettes[Error][30];
+        _resource!["Color.OnErrorContainer"] = _palettes[Error][90];
+        _resource!["Color.PrimaryFixed"] = _palettes[Primary][90];
+        _resource!["Color.PrimaryFixedDim"] = _palettes[Primary][80];
+        _resource!["Color.OnPrimaryFixed"] = _palettes[Primary][10];
+        _resource!["Color.OnPrimaryFixedVariant"] = _palettes[Primary][30];
+        _resource!["Color.SecondaryFixed"] = _palettes[Secondary][90];
+        _resource!["Color.SecondaryFixedDim"] = _palettes[Secondary][80];
+        _resource!["Color.OnSecondaryFixed"] = _palettes[Secondary][10];
+        _resource!["Color.OnSecondaryFixedVariant"] = _palettes[Secondary][30];
+        _resource!["Color.TertiaryFixed"] = _palettes[Tertiary][90];
+        _resource!["Color.TertiaryFixedDim"] = _palettes[Tertiary][80];
+        _resource!["Color.OnTertiaryFixed"] = _palettes[Tertiary][10];
+        _resource!["Color.OnTertiaryFixedVariant"] = _palettes[Tertiary][30];
+        _resource!["Color.SurfaceDim"] = _palettes[Neutral][6];
         _resource!["Color.Surface"] = _palettes[Neutral][6];
-        _resource!["Color.Surface.Bright"] = _palettes[Neutral][24];
-        _resource!["Color.Surface.Container.Lowest"] = _palettes[Neutral][4];
-        _resource!["Color.Surface.Container.Low"] = _palettes[Neutral][10];
-        _resource!["Color.Surface.Container"] = _palettes[Neutral][12];
-        _resource!["Color.Surface.Container.High"] = _palettes[Neutral][17];
-        _resource!["Color.Surface.Container.Highest"] = _palettes[Neutral][22];
-        _resource!["Color.On.Surface"] = _palettes[Neutral][90];
-        _resource!["Color.On.Surface.Variant"] = _palettes[NeutralVariant][80];
+        _resource!["Color.SurfaceBright"] = _palettes[Neutral][24];
+        _resource!["Color.SurfaceContainerLowest"] = _palettes[Neutral][4];
+        _resource!["Color.SurfaceContainerLow"] = _palettes[Neutral][10];
+        _resource!["Color.SurfaceContainer"] = _palettes[Neutral][12];
+        _resource!["Color.SurfaceContainerHigh"] = _palettes[Neutral][17];
+        _resource!["Color.SurfaceContainerHighest"] = _palettes[Neutral][22];
+        _resource!["Color.OnSurface"] = _palettes[Neutral][90];
+        _resource!["Color.OnSurfaceVariant"] = _palettes[NeutralVariant][80];
         _resource!["Color.Outline"] = _palettes[NeutralVariant][60];
-        _resource!["Color.Outline.Variant"] = _palettes[NeutralVariant][30];
-        _resource!["Color.Inverse.Surface"] = _palettes[Neutral][90];
-        _resource!["Color.Inverse.On.Surface"] = _palettes[Neutral][20];
-        _resource!["Color.Inverse.Primary"] = _palettes[Primary][40];
+        _resource!["Color.OutlineVariant"] = _palettes[NeutralVariant][30];
+        _resource!["Color.InverseSurface"] = _palettes[Neutral][90];
+        _resource!["Color.InverseOnSurface"] = _palettes[Neutral][20];
+        _resource!["Color.InversePrimary"] = _palettes[Primary][40];
         _resource!["Color.Scrim"] = _palettes[Neutral][0];
         _resource!["Color.Shadow"] = _palettes[Neutral][0];
 
         _resource!["Brush.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
-        _resource!["Brush.On.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][20] };
-        _resource!["Brush.Primary.Container"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
-        _resource!["Brush.On.Primary.Container"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
+        _resource!["Brush.OnPrimary"] = new SolidColorBrush() { Color = _palettes[Primary][20] };
+        _resource!["Brush.PrimaryContainer"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
+        _resource!["Brush.OnPrimaryContainer"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
         _resource!["Brush.Secondary"] = new SolidColorBrush() { Color = _palettes[Secondary][80] };
-        _resource!["Brush.On.Secondary"] = new SolidColorBrush() { Color = _palettes[Secondary][20] };
-        _resource!["Brush.Secondary.Container"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
-        _resource!["Brush.On.Secondary.Container"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
+        _resource!["Brush.OnSecondary"] = new SolidColorBrush() { Color = _palettes[Secondary][20] };
+        _resource!["Brush.SecondaryContainer"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
+        _resource!["Brush.OnSecondaryContainer"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
         _resource!["Brush.Tertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][80] };
-        _resource!["Brush.On.Tertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][20] };
-        _resource!["Brush.Tertiary.Container"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
-        _resource!["Brush.On.Tertiary.Container"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
+        _resource!["Brush.OnTertiary"] = new SolidColorBrush() { Color = _palettes[Tertiary][20] };
+        _resource!["Brush.TertiaryContainer"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
+        _resource!["Brush.OnTertiaryContainer"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
         _resource!["Brush.Error"] = new SolidColorBrush() { Color = _palettes[Error][80] };
-        _resource!["Brush.On.Error"] = new SolidColorBrush() { Color = _palettes[Error][20] };
-        _resource!["Brush.Error.Container"] = new SolidColorBrush() { Color = _palettes[Error][30] };
-        _resource!["Brush.On.Error.Container"] = new SolidColorBrush() { Color = _palettes[Error][90] };
-        _resource!["Brush.Primary.Fixed"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
-        _resource!["Brush.Primary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
-        _resource!["Brush.On.Primary.Fixed"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
-        _resource!["Brush.On.Primary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
-        _resource!["Brush.Secondary.Fixed"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
-        _resource!["Brush.Secondary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Secondary][80] };
-        _resource!["Brush.On.Secondary.Fixed"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
-        _resource!["Brush.On.Secondary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
-        _resource!["Brush.Tertiary.Fixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
-        _resource!["Brush.Tertiary.Fixed.Dim"] = new SolidColorBrush() { Color = _palettes[Tertiary][80] };
-        _resource!["Brush.On.Tertiary.Fixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
-        _resource!["Brush.On.Tertiary.Fixed.Variant"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
-        _resource!["Brush.Surface.Dim"] = new SolidColorBrush() { Color = _palettes[Neutral][6] };
+        _resource!["Brush.OnError"] = new SolidColorBrush() { Color = _palettes[Error][20] };
+        _resource!["Brush.ErrorContainer"] = new SolidColorBrush() { Color = _palettes[Error][30] };
+        _resource!["Brush.OnErrorContainer"] = new SolidColorBrush() { Color = _palettes[Error][90] };
+        _resource!["Brush.PrimaryFixed"] = new SolidColorBrush() { Color = _palettes[Primary][90] };
+        _resource!["Brush.PrimaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Primary][80] };
+        _resource!["Brush.OnPrimaryFixed"] = new SolidColorBrush() { Color = _palettes[Primary][10] };
+        _resource!["Brush.OnPrimaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Primary][30] };
+        _resource!["Brush.SecondaryFixed"] = new SolidColorBrush() { Color = _palettes[Secondary][90] };
+        _resource!["Brush.SecondaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Secondary][80] };
+        _resource!["Brush.OnSecondaryFixed"] = new SolidColorBrush() { Color = _palettes[Secondary][10] };
+        _resource!["Brush.OnSecondaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Secondary][30] };
+        _resource!["Brush.TertiaryFixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][90] };
+        _resource!["Brush.TertiaryFixedDim"] = new SolidColorBrush() { Color = _palettes[Tertiary][80] };
+        _resource!["Brush.OnTertiaryFixed"] = new SolidColorBrush() { Color = _palettes[Tertiary][10] };
+        _resource!["Brush.OnTertiaryFixedVariant"] = new SolidColorBrush() { Color = _palettes[Tertiary][30] };
+        _resource!["Brush.SurfaceDim"] = new SolidColorBrush() { Color = _palettes[Neutral][6] };
         _resource!["Brush.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][6] };
-        _resource!["Brush.Surface.Bright"] = new SolidColorBrush() { Color = _palettes[Neutral][24] };
-        _resource!["Brush.Surface.Container.Lowest"] = new SolidColorBrush() { Color = _palettes[Neutral][4] };
-        _resource!["Brush.Surface.Container.Low"] = new SolidColorBrush() { Color = _palettes[Neutral][10] };
-        _resource!["Brush.Surface.Container"] = new SolidColorBrush() { Color = _palettes[Neutral][12] };
-        _resource!["Brush.Surface.Container.High"] = new SolidColorBrush() { Color = _palettes[Neutral][17] };
-        _resource!["Brush.Surface.Container.Highest"] = new SolidColorBrush() { Color = _palettes[Neutral][22] };
-        _resource!["Brush.On.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
-        _resource!["Brush.On.Surface.Variant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][80] };
+        _resource!["Brush.SurfaceBright"] = new SolidColorBrush() { Color = _palettes[Neutral][24] };
+        _resource!["Brush.SurfaceContainerLowest"] = new SolidColorBrush() { Color = _palettes[Neutral][4] };
+        _resource!["Brush.SurfaceContainerLow"] = new SolidColorBrush() { Color = _palettes[Neutral][10] };
+        _resource!["Brush.SurfaceContainer"] = new SolidColorBrush() { Color = _palettes[Neutral][12] };
+        _resource!["Brush.SurfaceContainerHigh"] = new SolidColorBrush() { Color = _palettes[Neutral][17] };
+        _resource!["Brush.SurfaceContainerHighest"] = new SolidColorBrush() { Color = _palettes[Neutral][22] };
+        _resource!["Brush.OnSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
+        _resource!["Brush.OnSurfaceVariant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][80] };
         _resource!["Brush.Outline"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][60] };
-        _resource!["Brush.Outline.Variant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][30] };
-        _resource!["Brush.Inverse.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
-        _resource!["Brush.Inverse.On.Surface"] = new SolidColorBrush() { Color = _palettes[Neutral][20] };
-        _resource!["Brush.Inverse.Primary"] = new SolidColorBrush() { Color = _palettes[Primary][40] };
+        _resource!["Brush.OutlineVariant"] = new SolidColorBrush() { Color = _palettes[NeutralVariant][30] };
+        _resource!["Brush.InverseSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][90] };
+        _resource!["Brush.InverseOnSurface"] = new SolidColorBrush() { Color = _palettes[Neutral][20] };
+        _resource!["Brush.InversePrimary"] = new SolidColorBrush() { Color = _palettes[Primary][40] };
         _resource!["Brush.Scrim"] = new SolidColorBrush() { Color = _palettes[Neutral][0] };
         _resource!["Brush.Shadow"] = new SolidColorBrush() { Color = _palettes[Neutral][0] };
     }

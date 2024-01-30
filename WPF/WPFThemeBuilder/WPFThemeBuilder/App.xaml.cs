@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using Peponi.WPF.ThemeProvider;
 using System.Windows;
 
 namespace WPFThemeBuilder
@@ -15,7 +14,7 @@ namespace WPFThemeBuilder
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            ThemeProvider.ApplyWindowsColorStyle();
+            ThemeProvider.UseWindowsAccentColor();
             base.OnStartup(e);
         }
     }
