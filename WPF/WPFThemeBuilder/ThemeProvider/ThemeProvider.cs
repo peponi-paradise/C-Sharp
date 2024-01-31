@@ -18,7 +18,9 @@ public static class ThemeProvider
 
     public static void SetColorMode(ColorMode colorMode) => ColorProvider.SetColorMode(colorMode);
 
-    public static bool SetFont(string dictionaryName, string fontFamilyName) => FontProvider.SetFont(dictionaryName, fontFamilyName);
+    public static bool AddFontFamily(string fontFamily) => FontProvider.AddFontFamily(fontFamily);
 
-    public static bool SetFont(string dictionaryName, string fontFamilyName, string uri) => FontProvider.SetFont(dictionaryName, fontFamilyName, uri);
+    public static bool AddFontFamily(string fontFamily, string uri) => FontProvider.AddFontFamily(fontFamily, uri);
+
+    public static bool SetFontFamily(string fontFamily) => FontProvider.SetFontFamily(fontFamily);
 }

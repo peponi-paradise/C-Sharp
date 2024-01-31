@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Fonts\Pretendard.ttf" />
     <None Remove="Fonts\RobotoFlex.ttf" />
+    <None Remove="Fonts\RobotoSerif.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\RobotoFlex.ttf" />
+    <Resource Include="Fonts\RobotoSerif.ttf" />
   </ItemGroup>
 
 </Project>

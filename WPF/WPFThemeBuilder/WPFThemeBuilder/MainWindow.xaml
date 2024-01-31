@@ -9,6 +9,14 @@
     Width="800"
     Height="800"
     mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="{DynamicResource FontFamily}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSize.DisplayMedium}" />
+            <Setter Property="FontWeight" Value="{StaticResource FontWeight.DisplayMedium}" />
+            <Setter Property="LineHeight" Value="{StaticResource LineHeight.DisplayMedium}" />
+        </Style>
+    </Window.Resources>
     <Grid Background="{DynamicResource Brush.Surface.Container}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -22,111 +30,79 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBox
-            Background="{DynamicResource Brush.Primary}"
-            FontFamily="{DynamicResource Primary}"
-            FontSize="30"
-            FontWeight="Bold"
-            Foreground="{DynamicResource Brush.OnPrimary}">
+        <TextBlock Background="{DynamicResource Brush.Primary}" Foreground="{DynamicResource Brush.OnPrimary}">
             Primary
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Column="1"
             Background="{DynamicResource Brush.PrimaryContainer}"
-            FontFamily="{DynamicResource Primary}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnPrimaryContainer}">
             Primary Container
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="1"
             Background="{DynamicResource Brush.Secondary}"
-            FontFamily="{DynamicResource Secondary}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnSecondary}">
             Secondary
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="1"
             Grid.Column="1"
             Background="{DynamicResource Brush.SecondaryContainer}"
-            FontFamily="{DynamicResource Secondary}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnSecondaryContainer}">
             Secondary Container
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="2"
             Background="{DynamicResource Brush.Tertiary}"
-            FontFamily="{DynamicResource Tertiary}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnTertiary}">
             Tertiary
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="2"
             Grid.Column="1"
             Background="{DynamicResource Brush.TertiaryContainer}"
-            FontFamily="{DynamicResource Tertiary}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnTertiaryContainer}">
             Tertiary Container
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="3"
             Background="{DynamicResource Brush.Error}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnError}">
             Error
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="3"
             Grid.Column="1"
             Background="{DynamicResource Brush.ErrorContainer}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnErrorContainer}">
             Error Container
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="4"
             Background="{DynamicResource Brush.Surface}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OnSurface}">
             Surface
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="4"
             Grid.Column="1"
             Background="{DynamicResource Brush.InverseSurface}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.InverseOnSurface}">
             Inverse Surface
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="5"
             Background="{DynamicResource Brush.Outline}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.OutlineVariant}">
             Outline
-        </TextBox>
-        <TextBox
+        </TextBlock>
+        <TextBlock
             Grid.Row="5"
             Grid.Column="1"
             Background="{DynamicResource Brush.OutlineVariant}"
-            FontSize="30"
-            FontWeight="Bold"
             Foreground="{DynamicResource Brush.Outline}">
             Outline Variant
-        </TextBox>
+        </TextBlock>
     </Grid>
 </Window>

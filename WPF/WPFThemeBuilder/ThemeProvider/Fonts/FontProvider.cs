@@ -6,16 +6,14 @@ namespace Peponi.WPF.ThemeProvider.Fonts;
 public static class FontProvider
 {
     private static ResourceDictionary? _resource;
-    private const string Primary = "Primary";
-    private const string Secondary = "Secondary";
-    private const string Tertiary = "Tertiary";
+    private const string FontFamily = "FontFamily";
 
-    public static bool SetFont(string dictionaryName, string fontFamilyName)
+    public static bool AddFontFamily(string fontFamily)
     {
         try
         {
-            FontFamily family = new(fontFamilyName);
-            _resource![dictionaryName] = family;
+            FontFamily family = new(fontFamily);
+            _resource![fontFamily] = family;
             return true;
         }
         catch
@@ -24,25 +22,31 @@ public static class FontProvider
         }
     }
 
-    public static bool SetFont(string dictionaryName, string fontFamilyName, string uri)
+    public static bool AddFontFamily(string fontFamily, string uri)
     {
         try
         {
-            FontFamily family = new(new Uri(uri), fontFamilyName);
-            _resource![dictionaryName] = family;
+            FontFamily family = new(new Uri(uri), fontFamily);
+            _resource![fontFamily] = family;
             return true;
         }
         catch
         {
             return false;
         }
+    }
+
+    public static bool SetFontFamily(string fontFamily)
+    {
+        if (!_resource!.Contains(fontFamily)) return false;
+
+        _resource[FontFamily] = _resource[fontFamily];
+        return true;
     }
 
     internal static void InitializeInternal(ResourceDictionary resource)
     {
         _resource = resource;
-        _resource[Primary] = _resource["Pretendard"];
-        _resource[Secondary] = _resource["RobotoFlex"];
-        _resource[Tertiary] = _resource["Consolas"];
+        _resource[FontFamily] = _resource["RobotoFlex"];
     }
 }
