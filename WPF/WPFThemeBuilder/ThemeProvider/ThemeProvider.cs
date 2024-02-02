@@ -1,8 +1,8 @@
-using Peponi.WPF.ThemeProvider.Colors;
-using Peponi.WPF.ThemeProvider.Fonts;
+using Peponi.MaterialDesign3.WPF.Colors;
+using Peponi.MaterialDesign3.WPF.Fonts;
 using System.Windows.Media;
 
-namespace Peponi.WPF.ThemeProvider;
+namespace Peponi.MaterialDesign3.WPF;
 
 public static class ThemeProvider
 {
@@ -23,4 +23,6 @@ public static class ThemeProvider
     public static bool AddFontFamily(string fontFamily, string uri) => FontProvider.AddFontFamily(fontFamily, uri);
 
     public static bool SetFontFamily(string fontFamily) => FontProvider.SetFontFamily(fontFamily);
+
+    public static bool ChangeFontOption(string key, FontOption option) => FontProvider.ChangeFontOption(key, option);
 }

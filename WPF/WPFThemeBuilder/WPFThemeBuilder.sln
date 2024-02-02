@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFThemeBuilder", "WPFThemeBuilder\WPFThemeBuilder.csproj", "{CF803FDD-B202-41B7-97A9-EDFF7D43834A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemeProvider", "ThemeProvider\ThemeProvider.csproj", "{3F047E04-4AD3-4D53-A519-FDA68BABA45B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThemeProvider", "ThemeProvider\ThemeProvider.csproj", "{3F047E04-4AD3-4D53-A519-FDA68BABA45B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google.MaterialColorUtilities", "Google.MaterialColorUtilities\Google.MaterialColorUtilities.csproj", "{CA969390-B7AE-49C5-8F03-ECAA5EB67564}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3F047E04-4AD3-4D53-A519-FDA68BABA45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F047E04-4AD3-4D53-A519-FDA68BABA45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F047E04-4AD3-4D53-A519-FDA68BABA45B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA969390-B7AE-49C5-8F03-ECAA5EB67564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA969390-B7AE-49C5-8F03-ECAA5EB67564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA969390-B7AE-49C5-8F03-ECAA5EB67564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA969390-B7AE-49C5-8F03-ECAA5EB67564}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

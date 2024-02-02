@@ -1,7 +1,7 @@
-﻿using Peponi.WPF.ThemeProvider.Colors;
+﻿using Peponi.MaterialDesign3.WPF.Colors;
 using System.Windows;
 
-namespace Peponi.WPF.ThemeProvider;
+namespace Peponi.MaterialDesign3.WPF;
 
 public partial class ColorKeys : ResourceDictionary
 {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2022 Google LLC
+ * Copyright 2021 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using System.Windows.Media;
+using System.Drawing;
 
-namespace Peponi.WPF.ThemeProvider.Colors;
+namespace Google.MaterialColorUtilities;
 
-public static class HCT
+internal static class HCT
 {
-    public static (double Hue, double Chroma) GetHueAndChroma(Color color)
+    public static (double Hue, double Chroma) FromColor(Color color)
     {
+        // Transform ARGB color to XYZ
         double redL = color.R.ToLinear();
         double greenL = color.G.ToLinear();
         double blueL = color.B.ToLinear();
@@ -30,15 +31,18 @@ public static class HCT
         double y = 0.2126 * redL + 0.7152 * greenL + 0.0722 * blueL;
         double z = 0.01932141 * redL + 0.11916382 * greenL + 0.95034478 * blueL;
 
-        var rgb = MatrixMultiply(new double[] { x, y, z }, HCTConstants.XyzToCam16Rgb);
+        // Transform XYZ to 'cone'/'rgb' responses
+        var rgb = MatrixMultiply(new double[] { x, y, z }, HCTConstants.XYZ_TO_CAM16RGB);
+
+        // Discount illuminant
         double rD = 1.0211777027575202 * rgb[0];
         double gD = 0.9863077294280123 * rgb[1];
         double bD = 0.9339605082802299 * rgb[2];
 
+        // Chromatic adaptation
         double rAF = Math.Pow(0.003884814537800353 * Math.Abs(rD), 0.42);
         double gAF = Math.Pow(0.003884814537800353 * Math.Abs(gD), 0.42);
         double bAF = Math.Pow(0.003884814537800353 * Math.Abs(bD), 0.42);
-
         double rA = Math.Sign(rD) * 400.0 * rAF / (rAF + 27.13);
         double gA = Math.Sign(gD) * 400.0 * gAF / (gAF + 27.13);
         double bA = Math.Sign(bD) * 400.0 * bAF / (bAF + 27.13);
@@ -52,7 +56,7 @@ public static class HCT
         double atanDegrees = Math.Atan2(b, a) * 57.29577951308232;
         double hue = atanDegrees < 0 ? atanDegrees + 360.0 : atanDegrees >= 360 ? atanDegrees - 360.0 : atanDegrees;
 
-        // chroma
+        // CAM16 chroma, colorfulness, and saturation.
         double ac = (40.0 * rA + 20.0 * gA + bA) * 0.050845959022293774;
         double j = 100.0 * Math.Pow(ac / 29.980997194447333, 1.3173270022537198);
         double huePrime = (hue < 20.14) ? hue + 360 : hue;
@@ -66,28 +70,28 @@ public static class HCT
         return (hue, chroma);
     }
 
-    public static uint ToARGB(double hue, double chroma, double tone)
+    public static Color ToColor(double hue, double chroma, double tone)
     {
         if (chroma < 0.0001 || tone < 0.0001 || tone > 99.9999)
         {
-            return ARGBFromTone(tone);
+            return Color.FromArgb(ARGBFromTone(tone));
         }
 
         hue %= 360;
         if (hue < 0) hue += 360;
         hue = hue * Math.PI / 180;
 
-        tone = tone > 8 ? Math.Pow((tone + 16) / 116, 3) * 100 : tone / 9.032962962962963;
+        tone = yFromTone(tone);
 
-        uint exactAnswer = Calc(hue, chroma, tone);
+        var exactAnswer = Calc(hue, chroma, tone);
         if (exactAnswer != 0)
         {
-            return exactAnswer;
+            return Color.FromArgb(exactAnswer);
         }
         double[] linrgb = BisectToLimit(tone, hue);
-        return (255u << 24) | ((linrgb[0].ToColor() & 255) << 16) | ((linrgb[1].ToColor() & 255) << 8) | (linrgb[2].ToColor() & 255);
+        return Color.FromArgb(ArgbFromRgb((int)linrgb[0], (int)linrgb[1], (int)linrgb[2]));
 
-        uint Calc(double hue, double chroma, double tone)
+        int Calc(double hue, double chroma, double tone)
         {
             var j = Math.Sqrt(tone) * 11;
             double eHue = 0.25 * (Math.Cos(hue + 2.0) + 3.8);
@@ -111,7 +115,7 @@ public static class HCT
                 double rCScaled = InverseChromatic((460.0 * p2 + 451.0 * a + 288.0 * b) / 1403.0);
                 double gCScaled = InverseChromatic((460.0 * p2 - 891.0 * a - 261.0 * b) / 1403.0);
                 double bCScaled = InverseChromatic((460.0 * p2 - 220.0 * a - 6300.0 * b) / 1403.0);
-                double[] linrgb = MatrixMultiply(new double[] { rCScaled, gCScaled, bCScaled }, HCTConstants.LinrgbFromScaledDiscount);
+                double[] linrgb = MatrixMultiply(new double[] { rCScaled, gCScaled, bCScaled }, HCTConstants.LINRGB_FROM_SCALED_DISCOUNT);
 
                 // ===========================================================
                 // Operations inlined from Cam16 to avoid repeated calculation
@@ -133,7 +137,7 @@ public static class HCT
                     {
                         return 0;
                     }
-                    return (255u << 24) | ((linrgb[0].ToColor() & 255) << 16) | ((linrgb[1].ToColor() & 255) << 8) | (linrgb[2].ToColor() & 255);
+                    return ArgbFromRgb((int)linrgb[0], (int)linrgb[1], (int)linrgb[2]);
                 }
                 // Iterates with Newton method,
                 // Using 2 * fn(j) / j as the approximation of fn'(j)
@@ -143,19 +147,57 @@ public static class HCT
         }
     }
 
-    private static uint ARGBFromTone(double tone)
+    private static int ARGBFromTone(double tone)
     {
-        double fy = (tone + 16.0) / 116.0;
-        double fyPow = Math.Pow(fy, 3);
-        bool lExceedsEpsilonKappa = tone > 8.0;
-        bool cubeExceedEpsilon = fyPow > 0.0088564516790356;
-        double x = cubeExceedEpsilon ? fyPow : tone / 903.2962962962963;
-        double y = lExceedsEpsilonKappa ? fyPow : tone / 903.2962962962963;
-        double z = x * 108.883;
-        x *= 95.047;
-        y *= 100;
-        var rgb = MatrixMultiply(new double[] { x, y, z }, HCTConstants.XyzToSrgb);
-        return (255u << 24) | ((rgb[0].ToColor() & 255) << 16) | ((rgb[1].ToColor() & 255) << 8) | (rgb[2].ToColor() & 255);
+        int component = delinearized(yFromTone(tone));
+        return ArgbFromRgb(component, component, component);
+
+        int delinearized(double rgbComponent)
+        {
+            double normalized = rgbComponent / 100.0;
+            double delinearized = normalized <= 0.0031308 ? normalized * 12.92 : 1.055 * Math.Pow(normalized, 1.0 / 2.4) - 0.055;
+
+            return clampInt(0, 255, (int)Math.Round(delinearized * 255.0));
+
+            int clampInt(int min, int max, int input)
+            {
+                if (input < min)
+                {
+                    return min;
+                }
+                else if (input > max)
+                {
+                    return max;
+                }
+
+                return input;
+            }
+        }
+    }
+
+    private static double yFromTone(double tone)
+    {
+        return 100.0 * labInvf((tone + 16.0) / 116.0);
+
+        double labInvf(double ft)
+        {
+            double e = 216.0 / 24389.0;
+            double kappa = 24389.0 / 27.0;
+            double ft3 = ft * ft * ft;
+            if (ft3 > e)
+            {
+                return ft3;
+            }
+            else
+            {
+                return (116 * ft - 16) / kappa;
+            }
+        }
+    }
+
+    private static int ArgbFromRgb(int red, int green, int blue)
+    {
+        return (255 << 24) | ((red & 255) << 16) | ((green & 255) << 8) | (blue & 255);
     }
 
     private static double ToLinear(this byte channel)
@@ -163,19 +205,6 @@ public static class HCT
         double normalized = channel / 255.0;
         if (normalized <= 0.040449936) return normalized * 7.739938080495356;
         else return Math.Pow((normalized + 0.055) / 1.055, 2.4) * 100.0;
-    }
-
-    private static uint ToColor(this double rgb)
-    {
-        double normalized = rgb / 100;
-        double delinearized = normalized <= 0.0031308 ? normalized * 12.92 : 1.055 * Math.Pow(normalized, 0.4166666666666667) - 0.055;
-        var rtn = (int)Math.Round(delinearized * 255.0);
-        return rtn switch
-        {
-            < 0 => 0,
-            > 255 => 255,
-            _ => (uint)rtn
-        };
     }
 
     private static double InverseChromatic(double value)
@@ -216,7 +245,7 @@ public static class HCT
                     else
                     {
                         int mPlane = (lPlane + rPlane) / 2;
-                        double midPlaneCoordinate = HCTConstants.CriticalPlanes[mPlane];
+                        double midPlaneCoordinate = HCTConstants.CRITICAL_PLANES[mPlane];
                         double[] mid = SetCoordinate(left, midPlaneCoordinate, right, axis);
                         double midHue = HueOf(mid);
                         if (AreInCyclicOrder(leftHue, hue, midHue))
@@ -263,16 +292,29 @@ public static class HCT
 
     private static double[][] BisectToSegment(double tone, double hue)
     {
-        List<double[]> vertices = EdgePoints(tone);
-        double[] left = vertices[0];
+        double[] left = new double[] { -1.0, -1.0, -1.0 };
         double[] right = left;
-        double leftHue = HueOf(left);
-        double rightHue = leftHue;
+        double leftHue = 0.0;
+        double rightHue = 0.0;
+        bool initialized = false;
         bool uncut = true;
-        for (int i = 1; i < vertices.Count; i++)
+        for (int n = 0; n < 12; n++)
         {
-            double[] mid = vertices[i];
+            double[] mid = nthVertex(tone, n);
+            if (mid[0] < 0)
+            {
+                continue;
+            }
             double midHue = HueOf(mid);
+            if (!initialized)
+            {
+                left = mid;
+                right = mid;
+                leftHue = midHue;
+                rightHue = midHue;
+                initialized = true;
+                continue;
+            }
             if (uncut || AreInCyclicOrder(leftHue, midHue, rightHue))
             {
                 uncut = false;
@@ -288,48 +330,68 @@ public static class HCT
                 }
             }
         }
-        return new[] { left, right };
-    }
+        return new double[][] { left, right };
 
-    private static List<double[]> EdgePoints(double tone)
-    {
-        double kR = 0.2126;
-        double kG = 0.7152;
-        double kB = 0.0722;
-        double[][] points = new double[][]
+        double[] nthVertex(double y, int n)
         {
-        new[] { tone / kR, 0.0, 0.0},
-        new[] {(tone - 100 * kB) / kR, 0.0, 100.0},
-        new[] {(tone - 100 * kG) / kR, 100.0, 0.0},
-        new[] {(tone - 78.74) / kR, 100.0, 100.0},
-        new[] {0.0, tone / kG, 0.0},
-        new[] {100.0, (tone - 21.26) / kG, 0.0},
-        new[] {0.0, (tone - 7.22) / kG, 100.0},
-        new[] {100.0, (tone - 28.48) / kG, 100.0},
-        new[] {0.0, 0.0, tone / kB},
-        new[] {100.0, 0.0, (tone - 21.26) / kB},
-        new[] {0.0, 100.0, (tone - 71.52) / kB},
-        new[] {100.0, 100.0, (tone - 92.78) / kB},
-        };
-        List<double[]> ans = new();
-        foreach (double[] point in points)
-        {
-            if (IsBounded(point[0]) && IsBounded(point[1]) && IsBounded(point[2]))
+            double kR = 0.2126;
+            double kG = 0.7152;
+            double kB = 0.0722;
+            double coordA = n % 4 <= 1 ? 0.0 : 100.0;
+            double coordB = n % 2 == 0 ? 0.0 : 100.0;
+            if (n < 4)
             {
-                ans.Add(point);
+                double g = coordA;
+                double b = coordB;
+                double r = (y - g * kG - b * kB) / kR;
+                if (IsBounded(r))
+                {
+                    return new double[] { r, g, b };
+                }
+                else
+                {
+                    return new double[] { -1.0, -1.0, -1.0 };
+                }
             }
-        }
-        return ans;
+            else if (n < 8)
+            {
+                double b = coordA;
+                double r = coordB;
+                double g = (y - r * kR - b * kB) / kG;
+                if (IsBounded(g))
+                {
+                    return new double[] { r, g, b };
+                }
+                else
+                {
+                    return new double[] { -1.0, -1.0, -1.0 };
+                }
+            }
+            else
+            {
+                double r = coordA;
+                double g = coordB;
+                double b = (y - r * kR - g * kG) / kB;
+                if (IsBounded(b))
+                {
+                    return new double[] { r, g, b };
+                }
+                else
+                {
+                    return new double[] { -1.0, -1.0, -1.0 };
+                }
+            }
 
-        bool IsBounded(double x)
-        {
-            return 0.0 <= x && x <= 100.0;
+            bool IsBounded(double x)
+            {
+                return 0.0 <= x && x <= 100.0;
+            }
         }
     }
 
     private static double HueOf(double[] linrgb)
     {
-        double[] scaledDiscount = MatrixMultiply(linrgb, HCTConstants.ScaledDiscountFromLinrgb);
+        double[] scaledDiscount = MatrixMultiply(linrgb, HCTConstants.SCALED_DISCOUNT_FROM_LINRGB);
         double rA = ChromaticAdaptation(scaledDiscount[0]);
         double gA = ChromaticAdaptation(scaledDiscount[1]);
         double bA = ChromaticAdaptation(scaledDiscount[2]);
@@ -354,15 +416,8 @@ public static class HCT
     private static double TrueDelinearized(double rgbComponent)
     {
         double normalized = rgbComponent / 100.0;
-        double delinearized;
-        if (normalized <= 0.0031308)
-        {
-            delinearized = normalized * 12.92;
-        }
-        else
-        {
-            delinearized = 1.055 * Math.Pow(normalized, 0.4166666666666667) - 0.055;
-        }
+        double delinearized = normalized <= 0.0031308 ? normalized * 12.92 : 1.055 * Math.Pow(normalized, 0.4166666666666667) - 0.055;
+
         return delinearized * 255.0;
     }
 
@@ -377,14 +432,14 @@ public static class HCT
 
 internal static class HCTConstants
 {
-    public static readonly double[][] ScaledDiscountFromLinrgb = new double[][]
+    public static readonly double[][] SCALED_DISCOUNT_FROM_LINRGB = new double[][]
 {
     new[] { 0.001200833568784504, 0.002389694492170889, 0.0002795742885861124 },
     new[] { 0.0005891086651375999, 0.0029785502573438758, 0.0003270666104008398 },
     new[] { 0.00010146692491640572, 0.0005364214359186694, 0.0032979401770712076 },
 };
 
-    public static readonly double[][] XyzToCam16Rgb =
+    public static readonly double[][] XYZ_TO_CAM16RGB =
    {
     new[] { 0.401288, 0.650173, -0.051461 },
     new[] { -0.250268, 1.204414, 0.045854 },
@@ -398,14 +453,14 @@ internal static class HCTConstants
         new[] { 0.05562093689691305, -0.20395524564742123, 1.0571799111220335 }
     };
 
-    public static readonly double[][] LinrgbFromScaledDiscount = new double[][]
+    public static readonly double[][] LINRGB_FROM_SCALED_DISCOUNT = new double[][]
 {
     new[] { 1373.2198709594231, -1100.4251190754821, -7.278681089101213 },
     new[] { -271.815969077903, 559.6580465940733, -32.46047482791194 },
     new[] { 1.9622899599665666, -57.173814538844006, 308.7233197812385 },
 };
 
-    public static readonly double[] CriticalPlanes = new[]
+    public static readonly double[] CRITICAL_PLANES = new[]
     {
     0.015176349177441876,
     0.045529047532325624,

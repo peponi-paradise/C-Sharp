@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary
-    x:Class="Peponi.WPF.ThemeProvider.ColorKeys"
+    x:Class="Peponi.MaterialDesign3.WPF.ColorKeys"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:ClassModifier="public">
