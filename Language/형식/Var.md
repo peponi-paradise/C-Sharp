@@ -64,7 +64,7 @@ var coordinateData = from coordinate in coordinates
                      select new { coordinate.X, coordinate.Y };
 ```
 
-- 쿼리 식을 이용하여 익명 형식으로 유추하게 되는경우 `IEnumerable` 형식으로 지정되지만 `out` 타입이 `T`이다.
+- 쿼리 식을 이용하여 익명 형식으로 유추하게 되는경우 `IEnumerable` 형식으로 지정되지만 `out` 타입이 `'a (익명 형식)`이다.
 - 따라서 반복문 [foreach](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/iteration-statements#the-foreach-statement)를 이어 호출하는 경우 역시 `var` 키워드가 필요하다.
 
 ```cs
