@@ -9,6 +9,7 @@
     - [params](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/params) : 인수의 수가 가변인 것을 지정한다.
     - [in](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/in-parameter-modifier) : 매개 변수를 참조로 전달, 호출된 메서드에서 읽기 가능
     - [ref](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/ref) : 매개 변수를 참조로 전달, 호출된 메서드에서 읽기 / 쓰기 가능
+    - [ref readonly](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/proposals/csharp-12.0/ref-readonly-parameters) : 매개 변수를 참조로 전달, 호출된 메서드에서 읽기 가능 (C# 12)
     - [out](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/keywords/out-parameter-modifier) : 매개 변수를 참조로 전달, 호출된 메서드에서 쓰기 가능
 
 <br>

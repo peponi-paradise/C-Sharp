@@ -41,6 +41,27 @@
     4, 5
     */
     ```
+- C# 12 버전부터는 람다 식에 [선택적 매개 변수](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-12.0/lambda-method-group-defaults) 기능이 지원된다.
+    - 람다 식의 매개 변수에 기본값 설정이 가능하다.
+    - 람다 식의 매개 변수에 배열 (`params`) 설정이 가능하다.
+    ```cs
+    var getValueOrDefault = (int value = default) => value;
+
+    var multiply = (params int[] values) =>
+    {
+        int rtn = 1;
+        foreach (var value in values) rtn *= value;
+        return rtn;
+    };
+
+    Console.WriteLine(getValueOrDefault(5));
+    Console.WriteLine(multiply(1, 2, 3, 4, 5));
+
+    /* output:
+    5
+    120
+    */
+    ```
 
 <br>
 
@@ -53,7 +74,7 @@
     member => expression;
     ```
     - `expression`의 반환 형식은 멤버의 반환 형식이거나 암시적으로 변환할 수 있어야 한다.
-    - 멤버의 형식이 다음과 같은 경우, `expression`은 [문 식](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/language-specification/statements#137-expression-statements)으로 정의한다.
+    - 멤버의 형식이 다음과 같은 경우, `expression`은 [문 식](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/language-specification/statements#137-expression-statements)이어야 한다.
         1. void
         2. 생성자
         3. 소멸자
@@ -87,3 +108,4 @@
 - [람다 식(=>) 연산자는 람다 식을 정의합니다.](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/lambda-operator)
 - [람다 식](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/lambda-expressions)
 - [식 본문 정의](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/lambda-operator#expression-body-definition)
+- [Optional and parameter array parameters for lambdas and method groups](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-12.0/lambda-method-group-defaults)

@@ -11,6 +11,7 @@
     - [yield return](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/yield), `yield break`
 - 확장 메서드에는 다음과 같은 제약이 있다.
     - 첫 번째 인수가 `ref struct`가 아니거나 구조체로 제한되지 않은 제네릭 형식인 경우 사용 불가
+- `ref readonly` 키워드를 통해 읽기 전용으로 참조를 전달할 수 있다 (C# 12)
 
 <br>
 
@@ -172,6 +173,49 @@ private static void Main()
 /* output:
 1, 2, 3
 1, 100, 3
+*/
+```
+
+<br>
+
+## ref readonly
+
+<br>
+
+- C# 12부터 `ref readonly` 한정자를 이용해 매개 변수를 읽기 전용으로 만들 수 있다.
+- 읽기 전용이므로 쓰기 작업이 불가능해진다.
+- 메서드 호출 등을 통해 내부 값을 조작할 수 있는데, 이 때 내부적으로 복사가 일어나 의도치 않은 결과를 얻을 수 있다.
+```cs
+public struct Foo
+{
+    public int X;
+
+    public int AddOne() => X++;
+}
+```
+```cs
+static void Main()
+{
+    Foo foo = new();
+
+    RefReadonly(ref foo);
+
+    Console.WriteLine(foo.AddOne());
+}
+
+static void RefReadonly(ref readonly Foo foo)
+{
+    //foo = new();    // CS8331
+    //foo.X = 5;       // CS8332
+
+    Console.WriteLine(foo.AddOne());
+    Console.WriteLine(foo.AddOne());
+}
+
+/* output:
+0
+0
+0
 */
 ```
 
