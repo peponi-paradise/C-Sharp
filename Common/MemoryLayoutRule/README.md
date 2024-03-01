@@ -3,7 +3,7 @@
 <br>
 
 - [구조체](https://peponi-paradise.tistory.com/entry/C-Language-%EA%B5%AC%EC%A1%B0%EC%B2%B4-struct) 또는 [클래스](https://peponi-paradise.tistory.com/entry/C-Language-%ED%81%B4%EB%9E%98%EC%8A%A4-class)는 필드, 메서드 등을 캡슐화하는 데 사용한다.
-- 선언된 멤버의 수에 따라 크기가 달라지게 되는데, 그 크기는 [sizeof, Marshal.SizeOf](https://주소넣기)로 구할 수 있다.
+- 선언된 멤버의 수에 따라 크기가 달라지게 되는데, 그 크기는 [sizeof, Marshal.SizeOf](https://peponi-paradise.tistory.com/entry/C-Language-sizeof-operator)로 구할 수 있다.
 - 구조체 또는 클래스는 정의한 크기보다 크거나 필드의 위치가 바뀌는 일이 발생하는데, 이를 해결하기 위해 어느 정도 메모리 레이아웃 규칙에 대해 알 필요가 있다.
 
 <br>
@@ -264,7 +264,7 @@
 - [StructLayoutAttribute.Pack Field](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute.pack?view=net-8.0)
 - [CA1414: MarshalAs로 부울 P/Invoke 인수를 표시합니다.](https://learn.microsoft.com/ko-kr/visualstudio/code-quality/ca1414?view=vs-2019&tabs=csharp)
 - [객체의 메모리 레이아웃에 대하여](https://www.csharpstudy.com/DevNote/Article/10)
-- [제목 작성해야함](주소)
+- [C# - Language - sizeof operator](https://peponi-paradise.tistory.com/entry/C-Language-sizeof-operator)
 
 <br>
 

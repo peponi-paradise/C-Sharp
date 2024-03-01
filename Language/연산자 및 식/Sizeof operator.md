@@ -6,7 +6,7 @@
 - `sizeof`에 사용 가능한 형식은 [비관리형 형식](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/unmanaged-types)이다.
 - 관리 메모리 영역에 할당될 byte 수를 반환하며, 컴파일 타임에 상수 값으로 계산된다.
 - 메모리 레이아웃 규칙에 따라 `sizeof`에 의해 예상되는 크기가 실제와는 다를 수 있다.
-- 메모리 레이아웃 규칙에 대한 자세한 내용은 [제목-작성해야함](주소)를 참조한다.
+- 메모리 레이아웃 규칙에 대한 자세한 내용은 [C# - Data structure alignment (Memory layout)](https://peponi-paradise.tistory.com/entry/C-Data-structure-alignment-Memory-layout)를 참조한다.
 
 <br>
 
@@ -96,4 +96,4 @@ static void Main(string[] args)
 - [비관리형 형식](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/builtin-types/unmanaged-types)
 - [Marshal.SizeOf](https://learn.microsoft.com/ko-kr/dotnet/api/system.runtime.interopservices.marshal.sizeof?view=net-8.0)
 - [Using sizeof() Operator in C#](https://code-maze.com/csharp-sizeof-operator/)
-- [제목-작성해야함](주소)
+- [C# - Data structure alignment (Memory layout)](https://peponi-paradise.tistory.com/entry/C-Data-structure-alignment-Memory-layout)
