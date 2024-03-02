@@ -1,4 +1,4 @@
-﻿namespace DataBinding
+﻿namespace TextBoxDataBinding
 {
     partial class Form1
     {
