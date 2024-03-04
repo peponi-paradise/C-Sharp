@@ -44,8 +44,10 @@ namespace TextBoxDataBinding
 
         private void ConfigureComponents()
         {
-            TextBox textbox1 = new();
-            TextBox textbox2 = new();
+            TextBox textbox1 = new();   // string 그대로 출력
+            TextBox textbox2 = new();   // Format 적용된 string 출력
+            Button button = new();      // string 값을 코드에서 업데이트
+            button.Click += delegate { TextData += "a"; };
 
             textbox1.DataBindings.Add(new Binding(nameof(textbox1.Text), this, nameof(TextData), false, DataSourceUpdateMode.OnPropertyChanged));
             var binding = new Binding(nameof(textbox2.Text), this, nameof(TextData), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -54,9 +56,10 @@ namespace TextBoxDataBinding
             textbox2.DataBindings.Add(binding);
 
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
-            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnCount = 3;
             tableLayoutPanel.Controls.Add(textbox1, 0, 0);
             tableLayoutPanel.Controls.Add(textbox2, 1, 0);
+            tableLayoutPanel.Controls.Add(button, 2, 0);
             tableLayoutPanel.Size = this.Size;
             tableLayoutPanel.Dock = DockStyle.Fill;
             this.Controls.Add(tableLayoutPanel);
