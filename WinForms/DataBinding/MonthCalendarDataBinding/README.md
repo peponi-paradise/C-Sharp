@@ -1,3 +1,19 @@
+## Introduction
+
+<br>
+
+- Controlì˜ data bindingì„ ìœ„í•´ì„œëŠ” ë‹¤ìŒ ë°©ë²• ì¤‘ í•˜ë‚˜ê°€ í•„ìš”í•˜ë‹¤.
+    - [INotifyPropertyChanged](https://learn.microsoft.com/ko-kr/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-8.0) : XAML ë°”ì¸ë”©ì„ ìœ„í•´ ì‚¬ìš©í•˜ëŠ” ê²ƒê³¼ ë™ì¼í•˜ë‹¤.
+    - ë°”ì¸ë”© í˜•ì‹ì˜ í”„ë¡œí¼í‹° ë³€ê²½ ì´ë²¤íŠ¸ êµ¬í˜„
+- ì—¬ê¸°ì„œëŠ” `INotifyPropertyChanged` ì¸í„°í˜ì´ìŠ¤ë¥¼ í†µí•œ ë°”ì¸ë”© ë°©ë²•ì„ ì•Œì•„ë³¸ë‹¤.
+
+<br>
+
+## Example
+
+<br>
+
+```cs
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -5,7 +21,7 @@ namespace MonthCalendarDataBinding
 {
     public partial class Form1 : Form, INotifyPropertyChanged
     {
-        // INotifyPropertyChanged ±¸Çö
+        // INotifyPropertyChanged êµ¬í˜„
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private DateTime _startDate = DateTime.Today;
@@ -16,7 +32,7 @@ namespace MonthCalendarDataBinding
             set
             {
                 _startDate = value;
-                OnPropertyChanged();    // ÇÁ·ÎÆÛÆ¼°¡ º¯°æµÇ¾úÀ½À» ¾Ë¸²
+                OnPropertyChanged();    // í”„ë¡œí¼í‹°ê°€ ë³€ê²½ë˜ì—ˆìŒì„ ì•Œë¦¼
             }
         }
 
@@ -28,7 +44,7 @@ namespace MonthCalendarDataBinding
             set
             {
                 _endDate = value;
-                OnPropertyChanged();    // ÇÁ·ÎÆÛÆ¼°¡ º¯°æµÇ¾úÀ½À» ¾Ë¸²
+                OnPropertyChanged();    // í”„ë¡œí¼í‹°ê°€ ë³€ê²½ë˜ì—ˆìŒì„ ì•Œë¦¼
             }
         }
 
@@ -45,19 +61,19 @@ namespace MonthCalendarDataBinding
             DateTimePicker startPicker = new();
             DateTimePicker endPicker = new();
             Button button = new();
-            button.Click += Update;     // ³¯Â¥ ÃÊ±âÈ­
+            button.Click += Update;     // ë‚ ì§œ ì´ˆê¸°í™”
 
-            // ¸ÕÀú ¼³Á¤ÇÑ ÇÊµå¸¸ °ªÀÌ ¼öÁ¤µÇ¾î Á¤»óÀûÀ¸·Î ¹ÙÀÎµù ºÒ°¡
+            // ë¨¼ì € ì„¤ì •í•œ í•„ë“œë§Œ ê°’ì´ ìˆ˜ì •ë˜ì–´ ì •ìƒì ìœ¼ë¡œ ë°”ì¸ë”© ë¶ˆê°€
 
             // monthCalendar.DataBindings.Add(new Binding(nameof(monthCalendar.SelectionStart), this, nameof(StartDate), false, DataSourceUpdateMode.OnPropertyChanged));
             // monthCalendar.DataBindings.Add(new Binding(nameof(monthCalendar.SelectionEnd), this, nameof(EndDate), false, DataSourceUpdateMode.OnPropertyChanged));
 
-            // ÀÌº¥Æ®¸¦ Ãß°¡·Î ¼³Á¤ÇÏ´Â°Ô ¾ç¹æÇâ ¹ÙÀÎµùÀ¸·Î´Â ÃÖ¼± (ÀÌº¥Æ®¸¸ ¼³Á¤ÇÏ´Â °æ¿ì ¾ç¹æÇâ ¹ÙÀÎµù ºÒ°¡)
+            // ì´ë²¤íŠ¸ë¥¼ ì¶”ê°€ë¡œ ì„¤ì •í•˜ëŠ”ê²Œ ì–‘ë°©í–¥ ë°”ì¸ë”©ìœ¼ë¡œëŠ” ìµœì„  (ì´ë²¤íŠ¸ë§Œ ì„¤ì •í•˜ëŠ” ê²½ìš° ì–‘ë°©í–¥ ë°”ì¸ë”© ë¶ˆê°€)
             monthCalendar.DateSelected += MonthCalendar_DateSelected;
             monthCalendar.DataBindings.Add(new Binding(nameof(monthCalendar.SelectionStart), this, nameof(StartDate), false, DataSourceUpdateMode.OnPropertyChanged));
             monthCalendar.DataBindings.Add(new Binding(nameof(monthCalendar.SelectionEnd), this, nameof(EndDate), false, DataSourceUpdateMode.OnPropertyChanged));
 
-            // °ª È®ÀÎ¿ë (ÀÌº¥Æ® ¼³Á¤ ¾ÈÇÏ¸é, Ä¶¸°´õ ¼³Á¤ ÈÄ Æ÷Ä¿½º ÀÌµ¿ÇØ¾ß StartDate ¹İ¿µµÊ. EndDate´Â ¹İ¿µ¾ÈµÊ)
+            // ê°’ í™•ì¸ìš© (ì´ë²¤íŠ¸ ì„¤ì • ì•ˆí•˜ë©´, ìº˜ë¦°ë” ì„¤ì • í›„ í¬ì»¤ìŠ¤ ì´ë™í•´ì•¼ StartDate ë°˜ì˜ë¨. EndDateëŠ” ë°˜ì˜ì•ˆë¨)
             startPicker.DataBindings.Add(new Binding(nameof(startPicker.Value), this, nameof(StartDate), false, DataSourceUpdateMode.OnPropertyChanged));
             endPicker.DataBindings.Add(new Binding(nameof(endPicker.Value), this, nameof(EndDate), false, DataSourceUpdateMode.OnPropertyChanged));
 
@@ -91,3 +107,16 @@ namespace MonthCalendarDataBinding
         }
     }
 }
+```
+
+- ìœ„ì˜ ì£¼ì„ ë‚´ìš©ê³¼ ê°™ì´, ì´ë²¤íŠ¸ ì„¤ì • ì—†ì´ ë°”ì¸ë”© í•˜ëŠ” ê²½ìš°
+
+<br>
+
+## ì°¸ì¡° ìë£Œ
+
+<br>
+
+- [Control.DataBindings Property](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.control.databindings?view=windowsdesktop-8.0)
+- [INotifyPropertyChanged ì¸í„°í˜ì´ìŠ¤](https://learn.microsoft.com/ko-kr/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-8.0)
+- [Binding Class](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.binding?view=windowsdesktop-8.0)
