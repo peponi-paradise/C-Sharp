@@ -1,20 +1,11 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ListBoxDataBinding
 {
-    public enum EnumItems
-    {
-        A = 0,
-        B = 1,
-        C = 2,
-        D = 3,
-        E = 4
-    }
-
     public class Account(int id, string name) : INotifyPropertyChanged
     {
+        // INotifyPropertyChanged 구현
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private int _id = id;
@@ -25,7 +16,7 @@ namespace ListBoxDataBinding
             set
             {
                 _id = value;
-                OnPropertyChanged();
+                OnPropertyChanged();        // 프로퍼티가 변경되었음을 알림
             }
         }
 
@@ -37,7 +28,7 @@ namespace ListBoxDataBinding
             set
             {
                 _name = value;
-                OnPropertyChanged();
+                OnPropertyChanged();        // 프로퍼티가 변경되었음을 알림
             }
         }
 
@@ -49,54 +40,18 @@ namespace ListBoxDataBinding
         }
     }
 
-    public partial class Form1 : Form, INotifyPropertyChanged
+    public partial class Form1 : Form
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private EnumItems _enumItem = default;
-
-        public EnumItems EnumItem
-        {
-            get => _enumItem;
-            set
-            {
-                _enumItem = value;
-                OnPropertyChanged();
-            }
-        }
-
         public Form1()
         {
             InitializeComponent();
 
-            ConfigureEnum();
-
-            ConfigureBindingSource();
+            ConfigureComponents();
         }
 
-        void ConfigureEnum()
+        void ConfigureComponents()
         {
-            ListBox listBox = new();
-            Button button = new();
-            button.Click += delegate { EnumItem = EnumItems.C; };
-
-            listBox.DataSource = Enum.GetValues<EnumItems>();
-            listBox.DataBindings.Add(new Binding(nameof(listBox.SelectedItem), this, nameof(EnumItem), false, DataSourceUpdateMode.OnPropertyChanged));
-
-            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
-            tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.RowCount = 2;
-            tableLayoutPanel.Controls.Add(listBox, 0, 0);
-            tableLayoutPanel.SetRowSpan(listBox, 2);
-            tableLayoutPanel.Controls.Add(button, 1, 0);
-            tableLayoutPanel.Size = this.Size / 3;
-            tableLayoutPanel.Dock = DockStyle.Left;
-            this.Controls.Add(tableLayoutPanel);
-        }
-
-        void ConfigureBindingSource()
-        {
-            ObservableCollection<Account> accounts = new()
+            BindingList<Account> accounts = new()
             {
                 new(0,"A"),
                 new(1,"B"),
@@ -104,19 +59,15 @@ namespace ListBoxDataBinding
             };
             BindingSource source = new(accounts, null);
 
-            ListBox listBox = new();
+            ListBox listBox = new() { DataSource = source };
             Button button = new();
-            button.Click += Update;
-
-            // SelectedItem 변경 시 바로 textbox에 반영, textbox 수정 내용이 바로 listbox에 반영
-            listBox.DataSource = source;
+            button.Click += Update;     // ID, Name 변경
 
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.ColumnCount = 2;
             tableLayoutPanel.Controls.Add(listBox, 0, 0);
             tableLayoutPanel.Controls.Add(button, 1, 0);
-            tableLayoutPanel.Size = this.Size / 3;
-            tableLayoutPanel.Dock = DockStyle.Right;
+            tableLayoutPanel.Dock = DockStyle.Fill;
             this.Controls.Add(tableLayoutPanel);
 
             void Update(object? sender, EventArgs e)
@@ -127,11 +78,6 @@ namespace ListBoxDataBinding
                     ((Account)listBox.SelectedItem).Name += "a";
                 }
             }
-        }
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

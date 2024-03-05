@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,6 +5,7 @@ namespace PropertyGridDataBinding
 {
     public class Account(int id, string name) : INotifyPropertyChanged
     {
+        // INotifyPropertyChanged 구현
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private int _id = id;
@@ -16,7 +16,7 @@ namespace PropertyGridDataBinding
             set
             {
                 _id = value;
-                OnPropertyChanged();
+                OnPropertyChanged();        // 프로퍼티가 변경되었음을 알림
             }
         }
 
@@ -28,7 +28,7 @@ namespace PropertyGridDataBinding
             set
             {
                 _name = value;
-                OnPropertyChanged();
+                OnPropertyChanged();        // 프로퍼티가 변경되었음을 알림
             }
         }
 
@@ -49,7 +49,7 @@ namespace PropertyGridDataBinding
 
         private void ConfigureComponents()
         {
-            ObservableCollection<Account> accounts = new()
+            BindingList<Account> accounts = new()
             {
                 new(0,"A"),
                 new(1,"B"),
@@ -57,12 +57,11 @@ namespace PropertyGridDataBinding
             };
             BindingSource source = new(accounts, null);
 
-            ListBox listBox = new() { Width = 200 };
+            ListBox listBox = new() { Width = 200, DataSource = source };
             PropertyGrid grid = new() { Width = 200, Height = 300 };
             Button button = new();
-            button.Click += Update;
+            button.Click += Update;     // ID, Name 변경
 
-            listBox.DataSource = source;
             grid.DataBindings.Add(new Binding(nameof(grid.SelectedObject), source, null));
 
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel();
@@ -70,17 +69,15 @@ namespace PropertyGridDataBinding
             tableLayoutPanel.Controls.Add(listBox, 0, 0);
             tableLayoutPanel.Controls.Add(grid, 1, 0);
             tableLayoutPanel.Controls.Add(button, 2, 0);
-
-            tableLayoutPanel.Size = this.Size;
             tableLayoutPanel.Dock = DockStyle.Fill;
             this.Controls.Add(tableLayoutPanel);
 
             void Update(object? sender, EventArgs e)
             {
-                if (listBox.SelectedItem is not null)
+                if (grid.SelectedObject is not null)
                 {
-                    ((Account)listBox.SelectedItem).ID++;
-                    ((Account)listBox.SelectedItem).Name += "a";
+                    ((Account)grid.SelectedObject).ID++;
+                    ((Account)grid.SelectedObject).Name += "a";
                 }
             }
         }
