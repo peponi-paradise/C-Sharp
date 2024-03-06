@@ -49,7 +49,7 @@ namespace ListBoxDataBinding
             ConfigureComponents();
         }
 
-        void ConfigureComponents()
+        private void ConfigureComponents()
         {
             BindingList<Account> accounts = new()
             {
@@ -72,10 +72,10 @@ namespace ListBoxDataBinding
 
             void Update(object? sender, EventArgs e)
             {
-                if (listBox.SelectedItem is not null)
+                if (listBox.SelectedItem is not null && listBox.SelectedItem is Account item)
                 {
-                    ((Account)listBox.SelectedItem).ID++;
-                    ((Account)listBox.SelectedItem).Name += "a";
+                    item.ID++;
+                    item.Name += "a";
                 }
             }
         }

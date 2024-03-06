@@ -74,10 +74,10 @@ namespace PropertyGridDataBinding
 
             void Update(object? sender, EventArgs e)
             {
-                if (grid.SelectedObject is not null)
+                if (grid.SelectedObject is not null && grid.SelectedObject is Account item)
                 {
-                    ((Account)grid.SelectedObject).ID++;
-                    ((Account)grid.SelectedObject).Name += "a";
+                    item.ID++;
+                    item.Name += "a";
                 }
             }
         }

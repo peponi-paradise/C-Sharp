@@ -49,7 +49,7 @@ namespace ComboBoxDataBinding
             ConfigureComponents();
         }
 
-        void ConfigureComponents()
+        private void ConfigureComponents()
         {
             BindingList<Account> accounts = new()
             {
@@ -72,10 +72,10 @@ namespace ComboBoxDataBinding
 
             void Update(object? sender, EventArgs e)
             {
-                if (comboBox.SelectedItem is not null)
+                if (comboBox.SelectedItem is not null && comboBox.SelectedItem is Account item)
                 {
-                    ((Account)comboBox.SelectedItem).ID++;
-                    ((Account)comboBox.SelectedItem).Name += "a";
+                    item.ID++;
+                    item.Name += "a";
                 }
             }
         }

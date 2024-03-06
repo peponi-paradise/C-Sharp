@@ -89,10 +89,10 @@ namespace DataGridViewDataBinding
 
             void Update(object? sender, EventArgs e)
             {
-                if (gridView.CurrentRow is not null)
+                if (gridView.CurrentRow is not null && gridView.CurrentRow.DataBoundItem is Account item)
                 {
-                    ((Account)gridView.CurrentRow.DataBoundItem).ID++;
-                    ((Account)gridView.CurrentRow.DataBoundItem).Name += "a";
+                    item.ID++;
+                    item.Name += "a";
                 }
             }
         }
