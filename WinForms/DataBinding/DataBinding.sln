@@ -27,7 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProgressBarDataBinding", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGridDataBinding", "PropertyGridDataBinding\PropertyGridDataBinding.csproj", "{473D49C0-EAD0-449A-B8A2-7D3B366FA96A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridViewDataBinding", "DataGridViewDataBinding\DataGridViewDataBinding.csproj", "{456CC728-0A6B-4CDA-A1D2-A2ABE015088F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataGridViewDataBinding", "DataGridViewDataBinding\DataGridViewDataBinding.csproj", "{456CC728-0A6B-4CDA-A1D2-A2ABE015088F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PictureBoxDataBinding", "PictureBoxDataBinding\PictureBoxDataBinding.csproj", "{DAD04F40-E1D6-4586-8DDE-A226C89A0CEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskedTextBoxDataBinding", "MaskedTextBoxDataBinding\MaskedTextBoxDataBinding.csproj", "{A1E67913-2A8C-4D19-BD8C-77C22AFD24F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichTextBoxDataBinding", "RichTextBoxDataBinding\RichTextBoxDataBinding.csproj", "{C4BCF4A2-995D-47E2-AFBF-EA8B462359F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +93,18 @@ Global
 		{456CC728-0A6B-4CDA-A1D2-A2ABE015088F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456CC728-0A6B-4CDA-A1D2-A2ABE015088F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{456CC728-0A6B-4CDA-A1D2-A2ABE015088F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD04F40-E1D6-4586-8DDE-A226C89A0CEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD04F40-E1D6-4586-8DDE-A226C89A0CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD04F40-E1D6-4586-8DDE-A226C89A0CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD04F40-E1D6-4586-8DDE-A226C89A0CEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1E67913-2A8C-4D19-BD8C-77C22AFD24F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1E67913-2A8C-4D19-BD8C-77C22AFD24F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1E67913-2A8C-4D19-BD8C-77C22AFD24F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1E67913-2A8C-4D19-BD8C-77C22AFD24F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BCF4A2-995D-47E2-AFBF-EA8B462359F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BCF4A2-995D-47E2-AFBF-EA8B462359F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BCF4A2-995D-47E2-AFBF-EA8B462359F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BCF4A2-995D-47E2-AFBF-EA8B462359F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
