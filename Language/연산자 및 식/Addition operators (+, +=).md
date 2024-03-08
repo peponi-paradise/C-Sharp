@@ -68,30 +68,30 @@
 
 - `+` 연산자는 동일한 대리자 형식의 연결을 지원한다.
     - 이 때, 반환되는 인스턴스를 호출하는 경우 왼쪽 피연산자를 호출한 다음, 오른쪽 피연산자를 호출한다.
-    ```cs
-    Action foo = delegate { Console.WriteLine("Foo"); };
-    Action bar = delegate { Console.WriteLine("Bar"); };
-    Action baz = foo + bar;
+        ```cs
+        Action foo = delegate { Console.WriteLine("Foo"); };
+        Action bar = delegate { Console.WriteLine("Bar"); };
+        Action baz = foo + bar;
 
-    baz();
+        baz();
 
-    /* output:
-    Foo
-    Bar
-    */
-    ```
+        /* output:
+        Foo
+        Bar
+        */
+        ```
     - 피연산자 중 `null`이 있는 경우 해당 피연산자는 무시된다.
-    ```cs
-    Action? foo = null;
-    Action bar = delegate { Console.WriteLine("Bar"); };
-    Action baz = foo + bar;
-
-    baz();
-
-    /* output:
-    Bar
-    */
-    ```
+        ```cs
+        Action? foo = null;
+        Action bar = delegate { Console.WriteLine("Bar"); };
+        Action baz = foo + bar;
+    
+        baz();
+    
+        /* output:
+        Bar
+        */
+        ```
 
 <br>
 
@@ -165,11 +165,14 @@
     */
     ```
     - 위 예시와 같이 복합 할당을 하는 경우 최초 1회 확인한 피연산자의 형식 (`byte`) 으로 결과가 출력된다.
-    - `byte` 형식은 연산 시 `int` 형식으로 변환되는데, 이로 인해 동일한 연산을 수행하는 두 경우에 대해 다른 결과가 나타난다.
-    - 따라서 복합 할당 시 형식에 주의할 필요가 있다.
+        `byte` 형식은 연산 시 `int` 형식으로 변환되는데, 이로 인해 동일한 연산을 수행하는 두 경우에 대해 다른 결과가 나타난다.
+        따라서 복합 할당 시 형식에 주의할 필요가 있다.
 
 <br>
 
 ## 참조 자료
 
 <br>
+
+- [더하기 연산자 - + 및 +=](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/addition-operator)
+- [문자열 보간 ($)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/tokens/interpolated)
