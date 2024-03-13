@@ -69,7 +69,7 @@ Console.WriteLine(bar["One"]);
 */
 ```
 
-- 만일 리스트 형식의 범위를 벗어난 경우 [ArgumentOutOfRangeException](https://learn.microsoft.com/ko-kr/dotnet/api/system.argumentoutofrangeexception?view=net-8.0)이 발생한다.
+- 리스트 형식 조회 시 범위를 벗어난 경우 [ArgumentOutOfRangeException](https://learn.microsoft.com/ko-kr/dotnet/api/system.argumentoutofrangeexception?view=net-8.0)이 발생한다.
 
 ```cs
 List<int> foo = [1, 2, 3];
@@ -88,7 +88,7 @@ Index was out of range. Must be non-negative and less than the size of the colle
 */
 ```
 
-- 만일 딕셔너리 형식의 키를 찾을 수 없는 경우 [KeyNotFoundException](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.keynotfoundexception?view=net-7.0)이 발생한다.
+- 딕셔너리 형식 조회 시 키를 찾을 수 없는 경우 [KeyNotFoundException](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.keynotfoundexception?view=net-7.0)이 발생한다.
 
 ```cs
 Dictionary<string, int> foo = new() { { "Zero", 0 }, { "One", 1 }, { "Two", 2 } };
