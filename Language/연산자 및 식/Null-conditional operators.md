@@ -102,7 +102,7 @@
     var delegateExpression = Foo;
     if (delegateExpression is not null) delegateExpression?.Invoke(null, new());
     ```
-    - delegate를 미리 복사하여 `null` 체크와 delegate invoke 사이에 `Foo`가 변경되더라도 안전한 동작 보장
+    - delegate를 미리 복사하여 `null` 체크와 delegate invoke 사이에 `Foo`가 변경되더라도 안전한 동작이 보장된다.
 
 <br>
 
