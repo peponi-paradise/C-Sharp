@@ -82,7 +82,7 @@ foo < 10
 
 <br>
 
-- [패턴 - 상수 패턴](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/patterns#constant-pattern)
+- [패턴 - 관계형 패턴](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/patterns#relational-patterns)
 - [is 연산자(C# 참조)](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/is)
 - [C# - Language - Switch expression](https://peponi-paradise.tistory.com/entry/C-Language-Switch-expression)
 - [선택 문 - if, if-else 및 switch](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/selection-statements#the-switch-statement)

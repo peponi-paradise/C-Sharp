@@ -64,7 +64,8 @@ string GetName(Common item)
 {
     return item switch
     {
-        Foo or Bar => item.ToString()!,
+        Foo => item.ToString()!,
+        Bar => item.ToString()!,
         _ => string.Empty
     };
 }
