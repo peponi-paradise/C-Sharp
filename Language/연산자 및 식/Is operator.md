@@ -178,6 +178,44 @@
 
 - `is` 연산자를 이용하여 패턴 일치 여부를 확인할 수 있다.
 - 여기서는 간단한 사례를 보여준다.
-    - 자세한 사항은 아래 항목을 참조한다.
-        1. [MSDN - 패턴 일치 - 패턴의 is 및 switch 식, 연산자 and, or 및 not](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/patterns)
-        2. [블로그 - 패턴 발행글](https://peponi-paradise.tistory.com/tag/%ED%8C%A8%ED%84%B4)
+    자세한 사항은 아래 항목을 참조한다.
+    1. [MSDN - 패턴 일치 - 패턴의 is 및 switch 식, 연산자 and, or 및 not](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/patterns)
+    2. [블로그 - 패턴 발행글](https://peponi-paradise.tistory.com/tag/%ED%8C%A8%ED%84%B4)
+
+<br>
+
+```cs
+// 상수 패턴
+
+int foo = 7;
+
+if (foo is 7) Console.WriteLine("foo is 7");
+else Console.WriteLine("foo is not 7");
+
+/* output:
+foo is 7
+*/
+```
+```cs
+// 관계형 패턴
+
+int foo = 7;
+
+if (foo is < 0) Console.WriteLine("foo < 0");
+else if (foo is < 5) Console.WriteLine("foo < 5");
+else if (foo is < 10) Console.WriteLine("foo < 10");
+
+/* output:
+foo < 10
+*/
+```
+
+<br>
+
+## 참조 자료
+
+<br>
+
+- [형식 테스트 연산자 및 캐스트 식 - is 연산자](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/type-testing-and-cast#is-operator)
+- [패턴 일치 - 패턴의 is 및 switch 식, 연산자 and, or 및 not](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/patterns)
+- [블로그 - 패턴 발행글](https://peponi-paradise.tistory.com/tag/%ED%8C%A8%ED%84%B4)
