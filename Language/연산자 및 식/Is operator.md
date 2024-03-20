@@ -118,13 +118,14 @@
 
 - 다음은 주어진 식에 대해 `is` 연산자가 boxing, unboxing을 확인한다는 것을 보여준다.
     ```cs
-    int value = 1;
-    object boxed = value;
+    int foo = 1;
+    object fooBoxed = foo;
 
-    Console.WriteLine(value is object);
-    Console.WriteLine(boxed is int);
+    Console.WriteLine(foo is object);
+    Console.WriteLine(fooBoxed is int);
 
     /* output:
+    True
     True
     */
     ```
@@ -149,21 +150,21 @@
         ```
     2. 사용자 정의 변환
         ```cs
-        public readonly struct Integer
+        public readonly struct Byte
         {
             private readonly byte _value;
 
-            public Integer(byte value) => _value = value;
+            public Byte(byte value) => _value = value;
 
-            public static explicit operator byte(Integer value) => value._value;
-            public static implicit operator Integer(byte value) => new(value);
+            public static explicit operator byte(Byte value) => value._value;
+            public static implicit operator Byte(byte value) => new(value);
         }
         ```
         ```cs
         byte foo = 1;
-        Integer bar = foo;
+        Byte bar = foo;
 
-        Console.WriteLine(foo is Integer);
+        Console.WriteLine(foo is Byte);
 
         /* output:
         False
