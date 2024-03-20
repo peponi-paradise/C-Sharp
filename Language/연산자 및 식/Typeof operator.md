@@ -58,7 +58,7 @@
 <br>
 
 - `typeof` 연산자를 이용하여 형식 확인을 하는 경우 런타임 형식의 정확한 일치 여부를 파악할 수 있다.
-    - [is 연산자](https://peponi-paradise.tistory.com/entry/C-Language-is-operator)와는 달리 정확히 동일한 형식일 때만 `true`를 반환한다.
+    [is 연산자](https://peponi-paradise.tistory.com/entry/C-Language-is-operator)와는 달리 정확히 동일한 형식일 때만 `true`를 반환한다.
     ```cs
     public class Base { }
     public class Derived : Base { }
