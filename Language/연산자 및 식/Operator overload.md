@@ -83,7 +83,7 @@
 |-----|----|
 |`&&`, `\|\|`|`true`, `false`, `&`, `\|` 정의에 따라 동작|
 |`[]`, `?[]`|[인덱서](https://learn.microsoft.com/ko-kr/dotnet/csharp/programming-guide/indexers/) 정의에 따라 동작|
-|`(T)`|[사용자 정의 변환]() 정의에 따라 동작|
+|`(T)`|[사용자 정의 변환](https://peponi-paradise.tistory.com/entry/C-Language-User-defined-conversion-operators) 정의에 따라 동작|
 |`+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `\|=`, `^=`, `<<=`, `>>=`, `>>>=`|해당 이진 연산자의 정의에 따라 동작|
 |`=`||
 |`^`, `..`||
