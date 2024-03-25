@@ -216,9 +216,54 @@
     */
     ```
 
+<br>
 
+## 포인터 비교
 
+<br>
 
+- `==`, `!=`, `>`, `<`, `>=`, `<=` 연산자는 포인터 비교에 사용 가능하며 피연산자의 주소를 비교한다.
+    ```cs
+    unsafe static void Main(string[] args)
+    {
+        int* ints = stackalloc int[] { 1, 3, 5, 7, 9, 11 };
+        int* foo = &ints[0];
+        int* bar = foo + 2;
 
+        Console.WriteLine(foo == bar);
+        Console.WriteLine(foo != bar);
+        Console.WriteLine(foo > bar);
+        Console.WriteLine(foo < bar);
+        Console.WriteLine(foo >= bar);
+        Console.WriteLine(foo <= bar);
+    }
 
-https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/pointer-related-operators
+    /* output:
+    False
+    True
+    False
+    True
+    False
+    True
+    */
+    ```
+
+<br>
+
+## 연산자 우선 순위
+
+<br>
+
+- 포인터 관련 연산자의 우선 순위는 아래 순서를 따르며 괄호 `()`를 이용해 우선 순위를 변경할 수 있다.
+    1. `X++`, `X--`, `->`, `[]`
+    2. `++X`, `--X`, `&`, `*`
+    3. `+`, `-`
+    4. `>`, `<`, `>=`, `<=`
+    5. `==`, `!=`
+
+<br>
+
+## 참조 자료
+
+- [포인터 관련 연산자 - 변수의 주소 가져오기, 스토리지 위치 역참조, 메모리 위치 액세스](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/pointer-related-operators)
+- [C# - Language - Unmanaged types](https://peponi-paradise.tistory.com/entry/C-Language-Unmanaged-types)
