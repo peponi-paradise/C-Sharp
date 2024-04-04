@@ -6,7 +6,7 @@ namespace DatabaseManagement
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string baseUri = $"https://api.notion.com/v1/databases";
             string databaseKey = "데이터베이스 키";
@@ -16,7 +16,7 @@ namespace DatabaseManagement
             Console.WriteLine(Update(baseUri, databaseKey, APIKey));
         }
 
-        static bool Retrieve(string baseUri, string databaseKey, string APIKey)
+        private static bool Retrieve(string baseUri, string databaseKey, string APIKey)
         {
             HttpClient client = new();
 
@@ -30,13 +30,12 @@ namespace DatabaseManagement
             // StatusCode를 포함한 HTTP response 출력
             Console.WriteLine(response);
             // JSON 형식의 response data 출력
-            var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
-            Console.WriteLine(content);
+            Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        static bool Update(string baseUri, string databaseKey, string APIKey)
+        private static bool Update(string baseUri, string databaseKey, string APIKey)
         {
             // 데이터베이스 정보를 얻어온 후 select에 옵션 추가
             HttpClient client = new();
@@ -64,18 +63,18 @@ namespace DatabaseManagement
             if (parsed is not null)
             {
                 var information = new DatabaseInformation();
-                var property = new Properties();
+                var property = new DatabaseProperties();
                 property.선택 = new();
                 property.선택.select = new();
-                var options = new List<Option>();
+                var selects = new List<Select>();
 
-                foreach (var option in parsed.properties!.선택!.select!.options!)
+                foreach (var select in parsed.properties!.선택!.select!.options!)
                 {
-                    options.Add(new Option() { name = option.name });
+                    selects.Add(new Select() { name = select.name });
                 }
-                options.Add(new() { name = "3", color = "blue" });
+                selects.Add(new() { name = "3", color = "blue" });
 
-                property.선택!.select!.options = options.ToArray();
+                property.선택!.select!.options = selects.ToArray();
                 information.properties = property;
                 patchRequest.Content = JsonContent.Create(information);
             }

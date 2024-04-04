@@ -2,7 +2,11 @@
 
 namespace NotionAPI.Objects;
 
-public class DatabaseSelect
+// https://developers.notion.com/reference/property-object 에 따라 작성
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(DatabaseSelect), typeDiscriminator: "select")]
+[JsonDerivedType(typeof(DatabaseTitle), typeDiscriminator: "title")]
+public class DatabaseProperty
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? id { get; set; }
@@ -12,36 +16,22 @@ public class DatabaseSelect
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? type { get; set; }
+}
 
-    public Select? select { get; set; }
+public class DatabaseSelect : DatabaseProperty
+{
+    public SelectOptions? select { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? equals { get; set; }
 }
 
-public class DatabaseTitle
+public class DatabaseTitle : DatabaseProperty
 {
-    public string? id { get; set; }
-    public string? name { get; set; }
-    public string? type { get; set; }
     public object? title { get; set; }
 }
 
-public class Select
+public class SelectOptions
 {
-    public Option[]? options { get; set; }
-}
-
-public class Option
-{
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? id { get; set; }
-
-    public string? name { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? color { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? description { get; set; }
+    public Select[]? options { get; set; }
 }

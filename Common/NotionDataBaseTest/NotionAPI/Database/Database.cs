@@ -36,7 +36,7 @@ public class DatabaseInformation
     public object? cover { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Properties? properties { get; set; }
+    public DatabaseProperties? properties { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Parent? parent { get; set; }
@@ -58,7 +58,7 @@ public class DatabaseInformation
     // public string? request_id { get; set; }
 }
 
-public class Properties
+public class DatabaseProperties
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public DatabaseSelect? 선택 { get; set; }
@@ -67,6 +67,7 @@ public class Properties
     public DatabaseTitle? 이름 { get; set; }
 }
 
+// https://developers.notion.com/reference/post-database-query 에 따라 작성
 public class FilterEntry
 {
     public Filter? filter { get; set; }
