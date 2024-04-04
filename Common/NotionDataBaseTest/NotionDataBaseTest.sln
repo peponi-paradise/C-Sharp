@@ -5,9 +5,11 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseQuery", "DataBaseQuery\DatabaseQuery.csproj", "{5AAF748D-501E-4B32-AF5F-B9BAFA27E97A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagement", "DataBaseManagement\DatabaseManagement.csproj", "{1800AF42-CCC4-4484-9232-C14D57646705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseManagement", "DataBaseManagement\DatabaseManagement.csproj", "{1800AF42-CCC4-4484-9232-C14D57646705}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotionAPI", "NotionAPI\NotionAPI.csproj", "{7400823D-CDF3-4BDF-8F07-42520A8BB3DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotionAPI", "NotionAPI\NotionAPI.csproj", "{7400823D-CDF3-4BDF-8F07-42520A8BB3DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageQuery", "PageQuery\PageQuery.csproj", "{7E085098-59DB-4D97-B44B-06A8DC2B3021}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7400823D-CDF3-4BDF-8F07-42520A8BB3DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7400823D-CDF3-4BDF-8F07-42520A8BB3DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7400823D-CDF3-4BDF-8F07-42520A8BB3DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E085098-59DB-4D97-B44B-06A8DC2B3021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E085098-59DB-4D97-B44B-06A8DC2B3021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E085098-59DB-4D97-B44B-06A8DC2B3021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E085098-59DB-4D97-B44B-06A8DC2B3021}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
