@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Page\" />
+    <Compile Remove="Page\**" />
+    <EmbeddedResource Remove="Page\**" />
+    <None Remove="Page\**" />
   </ItemGroup>
 
 </Project>

@@ -9,15 +9,19 @@ namespace NotionAPI.Objects;
 [JsonDerivedType(typeof(RichTextWithEquation), typeDiscriminator: "equation")]
 public class RichText
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Annotations? annotations { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? plain_text { get; set; }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? href { get; set; }
 }
 
 public sealed class RichTextWithText : RichText
 {
-    public object? text { get; set; }
+    public Text? text { get; set; }
 }
 
 public sealed class RichTextWithMention : RichText
@@ -38,4 +42,17 @@ public class Annotations
     public bool underline { get; set; }
     public bool code { get; set; }
     public string? color { get; set; } = "default";
+}
+
+public class Text
+{
+    public string? content { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Link? link { get; set; }
+}
+
+public class Link
+{
+    public string? url { get; set; }
 }

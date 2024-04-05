@@ -14,7 +14,7 @@ public class NotionResponse
     public string? @object { get; set; }
 
     // 데이터가 들어감
-    public object[]? results { get; set; }
+    public List<object>? results { get; set; }
 
     // results의 데이터 형식
     public string? type { get; set; }

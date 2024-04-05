@@ -28,10 +28,5 @@ public class DatabaseSelect : DatabaseProperty
 
 public class DatabaseTitle : DatabaseProperty
 {
-    public object? title { get; set; }
-}
-
-public class SelectOptions
-{
-    public Select[]? options { get; set; }
+    public RichText? title { get; set; }
 }

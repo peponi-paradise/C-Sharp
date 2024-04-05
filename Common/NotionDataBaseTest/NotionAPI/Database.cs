@@ -24,10 +24,10 @@ public class DatabaseInformation
     public User? last_edited_by { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public RichText[]? title { get; set; }
+    public List<RichText>? title { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public RichText[]? description { get; set; }
+    public List<RichText>? description { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object? icon { get; set; }
@@ -36,7 +36,7 @@ public class DatabaseInformation
     public object? cover { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseProperties? properties { get; set; }
+    public DatabaseQuery? properties { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Parent? parent { get; set; }
@@ -56,34 +56,4 @@ public class DatabaseInformation
     // 아래는 웹페이지 정보에는 없지만, 통신 받을 때 같이 들어옴
     // 필요할 때 사용
     // public string? request_id { get; set; }
-}
-
-public class DatabaseProperties
-{
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseSelect? 선택 { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseTitle? 이름 { get; set; }
-}
-
-// https://developers.notion.com/reference/post-database-query 에 따라 작성
-public class FilterEntry
-{
-    public Filter? filter { get; set; }
-}
-
-public class Filter
-{
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Filter[]? and { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Filter[]? or { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? property { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseSelect? select { get; set; }
 }

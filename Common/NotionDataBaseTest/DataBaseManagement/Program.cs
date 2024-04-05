@@ -30,7 +30,11 @@ namespace DatabaseManagement
             // StatusCode를 포함한 HTTP response 출력
             Console.WriteLine(response);
             // JSON 형식의 response data 출력
-            Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
+            var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
+            Console.WriteLine(content);
+
+            // Parsing test
+            var parsed = JsonSerializer.Deserialize<DatabaseInformation>(content);
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
@@ -63,18 +67,17 @@ namespace DatabaseManagement
             if (parsed is not null)
             {
                 var information = new DatabaseInformation();
-                var property = new DatabaseProperties();
+                var property = new DatabaseQuery();
                 property.선택 = new();
                 property.선택.select = new();
-                var selects = new List<Select>();
+                property.선택.select.options = new();
 
                 foreach (var select in parsed.properties!.선택!.select!.options!)
                 {
-                    selects.Add(new Select() { name = select.name });
+                    property.선택.select.options.Add(new Select() { name = select.name });
                 }
-                selects.Add(new() { name = "3", color = "blue" });
+                property.선택.select.options.Add(new() { name = "3", color = "blue" });
 
-                property.선택!.select!.options = selects.ToArray();
                 information.properties = property;
                 patchRequest.Content = JsonContent.Create(information);
             }

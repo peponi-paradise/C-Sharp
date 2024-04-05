@@ -12,3 +12,8 @@ public class Select
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? color { get; set; }
 }
+
+public class SelectOptions
+{
+    public List<Select>? options { get; set; }
+}

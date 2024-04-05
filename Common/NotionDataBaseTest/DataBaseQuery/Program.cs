@@ -12,11 +12,10 @@ namespace DatabaseQuery
             string baseUri = $"https://api.notion.com/v1/databases";
             string databaseKey = "데이터베이스 키";
             string APIKey = "API 키";
-            int dataSize = 50;
 
             Console.WriteLine(DefaultQuery(baseUri, databaseKey, APIKey));
-            Console.WriteLine(PaginatedQuery(baseUri, databaseKey, APIKey, dataSize));
-            Console.WriteLine(ContinuedPaginatedQuery(baseUri, databaseKey, APIKey, dataSize));
+            Console.WriteLine(PaginatedQuery(baseUri, databaseKey, APIKey));
+            Console.WriteLine(ContinuedPaginatedQuery(baseUri, databaseKey, APIKey));
             Console.WriteLine(FilteredQuery(baseUri, databaseKey, APIKey));
         }
 
@@ -39,7 +38,7 @@ namespace DatabaseQuery
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        static bool PaginatedQuery(string baseUri, string databaseKey, string APIKey, int dataSize)
+        static bool PaginatedQuery(string baseUri, string databaseKey, string APIKey, int pageSize = 100)
         {
             HttpClient client = new();
 
@@ -48,7 +47,7 @@ namespace DatabaseQuery
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
             // Query 옵션 추가
-            request.Content = JsonContent.Create(new PaginatedRequest { page_size = dataSize });
+            request.Content = JsonContent.Create(new PaginatedRequest { page_size = pageSize });
 
             var response = client.Send(request);
 
@@ -60,7 +59,19 @@ namespace DatabaseQuery
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        static bool ContinuedPaginatedQuery(string baseUri, string databaseKey, string APIKey, int dataSize, string? startCursor = null)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="baseUri"></param>
+        /// <param name="databaseKey"></param>
+        /// <param name="APIKey"></param>
+        /// <param name="pageSize">Number of items<br/>1. Default : 100<br/>2. Maximum : 100</param>
+        /// <param name="startCursor">Starts from the beginning of the list when value is null</param>
+        /// <returns>true when '<see cref="HttpResponseMessage.StatusCode"/>' is '<see cref="System.Net.HttpStatusCode.OK"/>'</returns>
+        /// <remarks>
+        /// <see href="https://developers.notion.com/reference/intro#parameters-for-paginated-requests"/>
+        /// </remarks>
+        static bool ContinuedPaginatedQuery(string baseUri, string databaseKey, string APIKey, int pageSize = 100, string? startCursor = null)
         {
             bool hasMore = false;
             HttpClient client = new();
@@ -72,7 +83,7 @@ namespace DatabaseQuery
                 request.Headers.Add("Authorization", $"Bearer {APIKey}");
                 request.Headers.Add("Notion-Version", "2022-06-28");
                 // Query 옵션 추가
-                request.Content = JsonContent.Create(new PaginatedRequest { page_size = dataSize, start_cursor = startCursor });
+                request.Content = JsonContent.Create(new PaginatedRequest { page_size = pageSize, start_cursor = startCursor });
 
                 var response = client.Send(request);
 
@@ -105,7 +116,7 @@ namespace DatabaseQuery
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUri}/{databaseKey}/query");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
-            request.Content = JsonContent.Create(new FilterEntry() { filter = new Filter() { property = "선택", select = new() { equals = "1" } } });
+            request.Content = JsonContent.Create(new DatabaseFilterEntry() { filter = new DatabaseFilter() { property = "선택", select = new() { equals = "1" } } });
 
             var response = client.Send(request);
 
