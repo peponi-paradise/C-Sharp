@@ -52,8 +52,4 @@ public class DatabaseInformation
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? public_url { get; set; }
-
-    // 아래는 웹페이지 정보에는 없지만, 통신 받을 때 같이 들어옴
-    // 필요할 때 사용
-    // public string? request_id { get; set; }
 }
