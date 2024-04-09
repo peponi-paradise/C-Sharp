@@ -59,18 +59,6 @@ namespace DatabaseQuery
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="baseUri"></param>
-        /// <param name="databaseKey"></param>
-        /// <param name="APIKey"></param>
-        /// <param name="pageSize">Number of items<br/>1. Default : 100<br/>2. Maximum : 100</param>
-        /// <param name="startCursor">Starts from the beginning of the list when value is null</param>
-        /// <returns>true when '<see cref="HttpResponseMessage.StatusCode"/>' is '<see cref="System.Net.HttpStatusCode.OK"/>'</returns>
-        /// <remarks>
-        /// <see href="https://developers.notion.com/reference/intro#parameters-for-paginated-requests"/>
-        /// </remarks>
         static bool ContinuedPaginatedQuery(string baseUri, string databaseKey, string APIKey, int pageSize = 100, string? startCursor = null)
         {
             bool hasMore = false;

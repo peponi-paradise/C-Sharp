@@ -18,11 +18,6 @@ public class NotionResponse
 
     // results의 데이터 형식
     public string? type { get; set; }
-
-    // 아래는 웹페이지 정보에는 없지만, 통신 받을 때 같이 들어옴
-    // 필요할 때 사용
-    // public object? page_or_database { get; set; }
-    // public string? request_id { get; set; }
 }
 
 public class PaginatedRequest

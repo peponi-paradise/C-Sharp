@@ -21,7 +21,7 @@
 	- `선택`으로 명명되어 있는 `select` 항목의 옵션은 아래와 같다.
 		![selectImage](./select.PNG)
 - DB 작업 수행 간 JSON 형식의 [Database object](https://developers.notion.com/reference/database)를 HTTP body에 실어 노션과 주고받게 된다.
-- Reference 페이지를 참조하여 구현한 `Database object`의 형태는 아래와 같다.
+- Reference 페이지를 참조하여 구현한 JSON object의 형태는 아래와 같다.
 	<details>
 	<summary>DatabaseInformation (펼치기 / 접기)</summary>
 	
@@ -80,6 +80,190 @@
 
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	    public string? public_url { get; set; }
+	}
+	```
+	</details>
+	<details>
+	<summary>User (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	// https://developers.notion.com/reference/user 에 따라 작성
+	[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+	[JsonDerivedType(typeof(People), typeDiscriminator: "person")]
+	[JsonDerivedType(typeof(Bots), typeDiscriminator: "bot")]
+	public class User
+	{
+	    public string? @object { get; set; }
+	    public string? id { get; set; }
+	    public string? name { get; set; }
+	    public string? avatar_url { get; set; }
+	}
+
+	public sealed class People : User
+	{
+	    public object? person { get; set; }
+	}
+
+	public sealed class Bots : User
+	{
+	    public object? bot { get; set; }
+	}
+	```
+	</details>
+	<details>
+	<summary>RichText (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	// https://developers.notion.com/reference/rich-text 에 따라 작성
+	[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+	[JsonDerivedType(typeof(RichTextWithText), typeDiscriminator: "text")]
+	[JsonDerivedType(typeof(RichTextWithMention), typeDiscriminator: "mention")]
+	[JsonDerivedType(typeof(RichTextWithEquation), typeDiscriminator: "equation")]
+	public class RichText
+	{
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public Annotations? annotations { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? plain_text { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? href { get; set; }
+	}
+
+	public sealed class RichTextWithText : RichText
+	{
+	    public Text? text { get; set; }
+	}
+
+	public sealed class RichTextWithMention : RichText
+	{
+	    public object? mention { get; set; }
+	}
+
+	public sealed class RichTextWithEquation : RichText
+	{
+	    public object? equation { get; set; }
+	}
+
+	public class Annotations
+	{
+	    public bool bold { get; set; }
+	    public bool italic { get; set; }
+	    public bool strikethrough { get; set; }
+	    public bool underline { get; set; }
+	    public bool code { get; set; }
+	    public string? color { get; set; } = "default";
+	}
+
+	public class Text
+	{
+	    public string? content { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public Link? link { get; set; }
+	}
+
+	public class Link
+	{
+	    public string? url { get; set; }
+	}
+	```
+	</details>
+	<details>
+	<summary>Parent (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	// https://developers.notion.com/reference/parent-object 에 따라 작성
+	[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+	[JsonDerivedType(typeof(DatabaseParent), typeDiscriminator: "database_id")]
+	[JsonDerivedType(typeof(PageParent), typeDiscriminator: "page_id")]
+	[JsonDerivedType(typeof(WorkspaceParent), typeDiscriminator: "workspace")]
+	[JsonDerivedType(typeof(BlockParent), typeDiscriminator: "block_id")]
+	public class Parent
+	{
+	}
+
+	public sealed class DatabaseParent : Parent
+	{
+	    public string? database_id { get; set; }
+	}
+
+	public sealed class PageParent : Parent
+	{
+	    public string? page_id { get; set; }
+	}
+
+	public sealed class WorkspaceParent : Parent
+	{
+	    public bool workspace { get; set; } = true;
+	}
+
+	public sealed class BlockParent : Parent
+	{
+	    public string? block_id { get; set; }
+	}
+	```
+	</details>
+	<details>
+	<summary>DatabaseQuery (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	public class DatabaseQuery
+	{
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public DatabaseSelect? 선택 { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public DatabaseTitle? 이름 { get; set; }
+	}
+	```
+	</details>
+	<details>
+	<summary>DatabaseSelect, DatabaseTitle (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	// https://developers.notion.com/reference/property-object 에 따라 작성
+	public class DatabaseProperty
+	{
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? id { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? name { get; set; }
+	}
+
+	public class DatabaseSelect : DatabaseProperty
+	{
+	    public SelectOptions? select { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? equals { get; set; }
+	}
+
+	public class DatabaseTitle : DatabaseProperty
+	{
+	    public RichText? title { get; set; }
 	}
 	```
 	</details>

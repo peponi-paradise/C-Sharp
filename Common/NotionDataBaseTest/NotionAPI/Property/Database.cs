@@ -3,9 +3,6 @@
 namespace NotionAPI.Objects;
 
 // https://developers.notion.com/reference/property-object 에 따라 작성
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(DatabaseSelect), typeDiscriminator: "select")]
-[JsonDerivedType(typeof(DatabaseTitle), typeDiscriminator: "title")]
 public class DatabaseProperty
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -13,9 +10,6 @@ public class DatabaseProperty
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? name { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string? type { get; set; }
 }
 
 public class DatabaseSelect : DatabaseProperty
