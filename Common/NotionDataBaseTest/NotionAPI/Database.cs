@@ -36,7 +36,7 @@ public class DatabaseInformation
     public object? cover { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseQuery? properties { get; set; }
+    public Dictionary<string, DatabaseProperty>? properties { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Parent? parent { get; set; }
