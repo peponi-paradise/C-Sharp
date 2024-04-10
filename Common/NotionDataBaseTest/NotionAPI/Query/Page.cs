@@ -6,7 +6,7 @@ namespace NotionAPI.Objects;
 public class CreatePageItem
 {
     public Parent? parent { get; set; }
-    public CreatePageProperties? properties { get; set; }
+    public Dictionary<string, PageProperty>? properties { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<object>? children { get; set; }
@@ -16,13 +16,4 @@ public class CreatePageItem
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object? cover { get; set; }
-}
-
-public class CreatePageProperties
-{
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PageTitle? 이름 { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PageSelect? 선택 { get; set; }
 }

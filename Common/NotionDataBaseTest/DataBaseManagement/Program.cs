@@ -51,17 +51,20 @@ namespace DatabaseManagement
 
             // select에 '3' 옵션 추가
             var information = new DatabaseInformation();
-            var property = new DatabaseQuery();
-            property.선택 = new();
-            property.선택.select = new();
-            property.선택.select.options = new();
+            var property = new Dictionary<string, DatabaseProperty>();
+            var select = new DatabaseSelect();
+            property.Add("선택", select);
+            select.select = new()
+            {
+                options = new()
+            };
 
             // 기존 옵션 정보 추가 (덮어쓰기 형태로 동작)
             for (int index = 1; index < 3; index++)
             {
-                property.선택.select.options.Add(new() { name = index.ToString() });
+                select.select.options.Add(new() { name = index.ToString() });
             }
-            property.선택.select.options.Add(new() { name = "3", color = "blue" });
+            select.select.options.Add(new() { name = "3", color = "blue" });
 
             information.properties = property;
             patchRequest.Content = JsonContent.Create(information);
@@ -100,16 +103,19 @@ namespace DatabaseManagement
             if (parsed is not null)
             {
                 var information = new DatabaseInformation();
-                var property = new DatabaseQuery();
-                property.선택 = new();
-                property.선택.select = new();
-                property.선택.select.options = new();
-
-                foreach (var select in parsed.properties!.선택!.select!.options!)
+                var property = new Dictionary<string, DatabaseProperty>();
+                var select = new DatabaseSelect();
+                property.Add("선택", select);
+                select.select = new()
                 {
-                    property.선택.select.options.Add(new Select() { name = select.name });
+                    options = new()
+                };
+
+                foreach (var option in ((DatabaseSelect)parsed.properties!["선택"]!).select!.options!)
+                {
+                    select.select.options.Add(new Select() { name = option.name });
                 }
-                property.선택.select.options.Add(new() { name = "3", color = "blue" });
+                select.select.options.Add(new() { name = "3", color = "blue" });
 
                 information.properties = property;
                 patchRequest.Content = JsonContent.Create(information);

@@ -64,7 +64,7 @@
 	    public object? cover { get; set; }
 
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	    public DatabaseQuery? properties { get; set; }
+	    public Dictionary<string, DatabaseProperty>? properties { get; set; }
 
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	    public Parent? parent { get; set; }
@@ -218,25 +218,7 @@
 	```
 	</details>
 	<details>
-	<summary>DatabaseQuery (펼치기 / 접기)</summary>
-
-	```cs
-	using System.Text.Json.Serialization;
-
-	namespace NotionAPI.Objects;
-
-	public class DatabaseQuery
-	{
-	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	    public DatabaseSelect? 선택 { get; set; }
-
-	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	    public DatabaseTitle? 이름 { get; set; }
-	}
-	```
-	</details>
-	<details>
-	<summary>DatabaseSelect, DatabaseTitle (펼치기 / 접기)</summary>
+	<summary>DatabaseProperty (펼치기 / 접기)</summary>
 
 	```cs
 	using System.Text.Json.Serialization;
@@ -244,6 +226,7 @@
 	namespace NotionAPI.Objects;
 
 	// https://developers.notion.com/reference/property-object 에 따라 작성
+	[JsonConverter(typeof(DatabasePropertyConverter))]
 	public class DatabaseProperty
 	{
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -264,6 +247,39 @@
 	public class DatabaseTitle : DatabaseProperty
 	{
 	    public RichText? title { get; set; }
+	}
+
+	public class DatabasePropertyConverter : JsonConverter<DatabaseProperty>
+	{
+	    public override DatabaseProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	    {
+	        var jsonDoc = JsonDocument.ParseValue(ref reader);
+	        if (jsonDoc.RootElement.TryGetProperty("type", out var typeName))
+	        {
+	            return typeName.GetString() switch
+	            {
+	                "select" => JsonSerializer.Deserialize<DatabaseSelect>(jsonDoc),
+	                "title" => JsonSerializer.Deserialize<DatabaseTitle>(jsonDoc),
+	                _ => null
+	            };
+	        }
+
+	        return null;
+	    }
+
+	    public override void Write(Utf8JsonWriter writer, DatabaseProperty value, JsonSerializerOptions options)
+	    {
+	        switch (value)
+	        {
+	            case DatabaseSelect select:
+	                JsonSerializer.Serialize(writer, select);
+	                break;
+
+	            case DatabaseTitle title:
+	                JsonSerializer.Serialize(writer, title);
+	                break;
+	        }
+	    }
 	}
 	```
 	</details>
@@ -450,22 +466,25 @@
 
 	    // select에 '3' 옵션 추가
 	    var information = new DatabaseInformation();
-	    var property = new DatabaseQuery();
-	    property.선택 = new();
-	    property.선택.select = new();
-	    property.선택.select.options = new();
+		var property = new Dictionary<string, DatabaseProperty>();
+		var select = new DatabaseSelect();
+		property.Add("선택", select);
+		select.select = new()
+		{
+		    options = new()
+		};
 
-	    // 기존 옵션 정보 추가 (덮어쓰기 형태로 동작)
-	    for (int index = 1; index < 3; index++)
-	    {
-	        property.선택.select.options.Add(new() { name = index.ToString() });
-	    }
-	    property.선택.select.options.Add(new() { name = "3", color = "blue" });
+		// 기존 옵션 정보 추가 (덮어쓰기 형태로 동작)
+		for (int index = 1; index < 3; index++)
+		{
+		    select.select.options.Add(new() { name = index.ToString() });
+		}
+		select.select.options.Add(new() { name = "3", color = "blue" });
 
-	    information.properties = property;
-	    patchRequest.Content = JsonContent.Create(information);
+		information.properties = property;
+		patchRequest.Content = JsonContent.Create(information);
 
-	    var response = client.Send(patchRequest);
+		var response = client.Send(patchRequest);
 
 	    // StatusCode를 포함한 Header 출력
 	    Console.WriteLine(response);
@@ -630,22 +649,25 @@
 	    // Parsing 후 select에 '3' 옵션 추가
 	    var parsed = JsonSerializer.Deserialize<DatabaseInformation>(content);
 	    if (parsed is not null)
-	    {
-	        var information = new DatabaseInformation();
-	        var property = new DatabaseQuery();
-	        property.선택 = new();
-	        property.선택.select = new();
-	        property.선택.select.options = new();
+		{
+		    var information = new DatabaseInformation();
+		    var property = new Dictionary<string, DatabaseProperty>();
+		    var select = new DatabaseSelect();
+		    property.Add("선택", select);
+		    select.select = new()
+		    {
+		        options = new()
+		    };
 
-	        foreach (var select in parsed.properties!.선택!.select!.options!)
-	        {
-	            property.선택.select.options.Add(new Select() { name = select.name });
-	        }
-	        property.선택.select.options.Add(new() { name = "3", color = "blue" });
+		    foreach (var option in ((DatabaseSelect)parsed.properties!["선택"]!).select!.options!)
+		    {
+		        select.select.options.Add(new Select() { name = option.name });
+		    }
+		    select.select.options.Add(new() { name = "3", color = "blue" });
 
-	        information.properties = property;
-	        patchRequest.Content = JsonContent.Create(information);
-	    }
+		    information.properties = property;
+		    patchRequest.Content = JsonContent.Create(information);
+		}
 
 	    response = client.Send(patchRequest);
 
@@ -779,3 +801,4 @@
 - [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)
 - [Update a database](https://developers.notion.com/reference/update-a-database)
 - [System.Text.Json을 사용하여 속성을 무시하는 방법](https://learn.microsoft.com/ko-kr/dotnet/standard/serialization/system-text-json/ignore-properties)
+- [.NET에서 JSON serialization(마샬링)용 사용자 지정 변환기를 작성하는 방법](https://learn.microsoft.com/ko-kr/dotnet/standard/serialization/system-text-json/converters-how-to?pivots=dotnet-8-0)

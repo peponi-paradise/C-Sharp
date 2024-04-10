@@ -2,15 +2,6 @@
 
 namespace NotionAPI.Objects;
 
-public class DatabaseQuery
-{
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseSelect? 선택 { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public DatabaseTitle? 이름 { get; set; }
-}
-
 // https://developers.notion.com/reference/post-database-query 에 따라 작성
 public class DatabaseFilterEntry
 {

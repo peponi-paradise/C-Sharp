@@ -36,7 +36,7 @@ public class DatabasePropertyConverter : JsonConverter<DatabaseProperty>
         {
             return typeName.GetString() switch
             {
-                "select" => JsonSerializer.Deserialize<DatabaseProperty>(jsonDoc),
+                "select" => JsonSerializer.Deserialize<DatabaseSelect>(jsonDoc),
                 "title" => JsonSerializer.Deserialize<DatabaseTitle>(jsonDoc),
                 _ => null
             };

@@ -24,11 +24,12 @@ namespace PageQuery
             request.Headers.Add("Notion-Version", "2022-06-28");
             var addItem = new CreatePageItem();
             addItem.parent = new DatabaseParent() { database_id = databaseKey };
-            addItem.properties = new()
+            var properties = new Dictionary<string, PageProperty>
             {
-                이름 = new() { title = [new RichTextWithText() { text = new() { content = "5" } }] },
-                선택 = new() { select = new() { name = "2" } }
+                { "이름", new PageTitle() { title = [new RichTextWithText() { text = new() { content = "5" } }] } },
+                { "선택", new PageSelect() { select = new() { name = "2" } } }
             };
+            addItem.properties = properties;
             request.Content = JsonContent.Create(addItem, null, new JsonSerializerOptions() { IncludeFields = true });
 
             var response = client.Send(request);
