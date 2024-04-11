@@ -27,13 +27,16 @@ namespace PageQuery
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUri}");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
+
             var queryItem = new QueryPageItem();
             queryItem.parent = new DatabaseParent() { database_id = databaseKey };
+
             var properties = new Dictionary<string, PageProperty>
             {
                 { "이름", new PageTitle() { title = [new RichTextWithText() { text = new() { content = "5" } }] } },
                 { "선택", new PageSelect() { select = new() { name = "2" } } }
             };
+
             queryItem.properties = properties;
             request.Content = JsonContent.Create(queryItem);
 
@@ -42,7 +45,12 @@ namespace PageQuery
             // StatusCode를 포함한 Header 출력
             Console.WriteLine(response);
             // JSON 형식의 Body 출력
-            Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
+            var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
+            Console.WriteLine(content);
+
+            // Parsing
+            var parsed = JsonSerializer.Deserialize<PageInformation>(content);
+            Console.WriteLine($"Page key : {parsed?.id}");
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
@@ -77,11 +85,14 @@ namespace PageQuery
             var request = new HttpRequestMessage(HttpMethod.Patch, $"{baseUri}/{pageKey}");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
+
             var queryItem = new QueryPageItem();
+
             var properties = new Dictionary<string, PageProperty>()
             {
                 { "선택" , new PageSelect() { select = new() { name = "1" } } }
             };
+
             queryItem.properties = properties;
             request.Content = JsonContent.Create(queryItem);
 
@@ -92,6 +103,8 @@ namespace PageQuery
             // JSON 형식의 Body 출력
             var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
             Console.WriteLine(content);
+
+            var parsed = JsonSerializer.Deserialize<PageInformation>(content);
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
@@ -105,6 +118,7 @@ namespace PageQuery
             var request = new HttpRequestMessage(HttpMethod.Patch, $"{baseUri}/{pageKey}");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
+
             var queryItem = new QueryPageItem();
             queryItem.archived = false;
             request.Content = JsonContent.Create(queryItem);
@@ -114,8 +128,7 @@ namespace PageQuery
             // StatusCode를 포함한 Header 출력
             Console.WriteLine(response);
             // JSON 형식의 Body 출력
-            var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
-            Console.WriteLine(content);
+            Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
