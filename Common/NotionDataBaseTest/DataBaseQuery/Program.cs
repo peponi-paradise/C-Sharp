@@ -7,7 +7,7 @@ namespace DatabaseQuery
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string baseUri = $"https://api.notion.com/v1/databases";
             string databaseKey = "데이터베이스 키";
@@ -19,7 +19,7 @@ namespace DatabaseQuery
             Console.WriteLine(FilteredQuery(baseUri, databaseKey, APIKey));
         }
 
-        static bool DefaultQuery(string baseUri, string databaseKey, string APIKey)
+        private static bool DefaultQuery(string baseUri, string databaseKey, string APIKey)
         {
             HttpClient client = new();
 
@@ -30,10 +30,14 @@ namespace DatabaseQuery
 
             var response = client.Send(request);
 
-            // StatusCode를 포함한 HTTP response 출력
+            // StatusCode를 포함한 Header 출력
             Console.WriteLine(response);
-            // JSON 형식의 response data 출력
-            Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
+            // JSON 형식의 Body 출력
+            var content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
+            Console.WriteLine(content);
+
+            // Parsing
+            var parsed = JsonSerializer.Deserialize<NotionResponse>(content);
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
@@ -46,20 +50,20 @@ namespace DatabaseQuery
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUri}/{databaseKey}/query");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
-            // Query 옵션 추가
+            // https://developers.notion.com/reference/intro#pagination 에 따라 Query 옵션 추가
             request.Content = JsonContent.Create(new PaginatedRequest { page_size = pageSize });
 
             var response = client.Send(request);
 
-            // StatusCode를 포함한 HTTP response 출력
+            // StatusCode를 포함한 Header 출력
             Console.WriteLine(response);
-            // JSON 형식의 response data 출력
+            // JSON 형식의 Body 출력
             Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        static bool ContinuedPaginatedQuery(string baseUri, string databaseKey, string APIKey, int pageSize = 100, string? startCursor = null)
+        private static bool ContinuedPaginatedQuery(string baseUri, string databaseKey, string APIKey, int pageSize = 100, string? startCursor = null)
         {
             bool hasMore = false;
             HttpClient client = new();
@@ -70,16 +74,16 @@ namespace DatabaseQuery
                 var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUri}/{databaseKey}/query");
                 request.Headers.Add("Authorization", $"Bearer {APIKey}");
                 request.Headers.Add("Notion-Version", "2022-06-28");
-                // Query 옵션 추가
+                // https://developers.notion.com/reference/intro#pagination 에 따라 Query 옵션 추가
                 request.Content = JsonContent.Create(new PaginatedRequest { page_size = pageSize, start_cursor = startCursor });
 
                 var response = client.Send(request);
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK) return false;
 
-                // StatusCode를 포함한 HTTP response 출력
+                // StatusCode를 포함한 Header 출력
                 Console.WriteLine(response);
-                // JSON 형식의 response data 출력
+                // JSON 형식의 Body 출력
                 string content = new StreamReader(response.Content.ReadAsStream()).ReadToEnd();
                 Console.WriteLine(content);
 
@@ -96,7 +100,7 @@ namespace DatabaseQuery
             return true;
         }
 
-        static bool FilteredQuery(string baseUri, string databaseKey, string APIKey)
+        private static bool FilteredQuery(string baseUri, string databaseKey, string APIKey)
         {
             HttpClient client = new();
 
@@ -104,13 +108,14 @@ namespace DatabaseQuery
             var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUri}/{databaseKey}/query");
             request.Headers.Add("Authorization", $"Bearer {APIKey}");
             request.Headers.Add("Notion-Version", "2022-06-28");
+            // https://developers.notion.com/reference/post-database-query 에 따라 Query 옵션 추가
             request.Content = JsonContent.Create(new DatabaseFilterEntry() { filter = new DatabaseFilter() { property = "선택", select = new() { equals = "1" } } });
 
             var response = client.Send(request);
 
-            // StatusCode를 포함한 HTTP response 출력
+            // StatusCode를 포함한 Header 출력
             Console.WriteLine(response);
-            // JSON 형식의 response data 출력
+            // JSON 형식의 Body 출력
             Console.WriteLine(new StreamReader(response.Content.ReadAsStream()).ReadToEnd());
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;

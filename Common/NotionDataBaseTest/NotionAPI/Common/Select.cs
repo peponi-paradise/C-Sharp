@@ -2,6 +2,7 @@
 
 namespace NotionAPI.Objects;
 
+// https://developers.notion.com/reference/property-object#select 에 따라 작성
 public class Select
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

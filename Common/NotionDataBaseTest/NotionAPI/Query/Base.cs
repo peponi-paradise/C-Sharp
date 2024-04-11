@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using NotionAPI.Objects;
+using System.Text.Json.Serialization;
 
 namespace NotionAPI;
 
@@ -14,12 +15,13 @@ public class NotionResponse
     public string? @object { get; set; }
 
     // 데이터가 들어감
-    public List<object>? results { get; set; }
+    public List<PageInformation>? results { get; set; }
 
     // results의 데이터 형식
     public string? type { get; set; }
 }
 
+// https://developers.notion.com/reference/intro#parameters-for-paginated-requests 에 따라 작성
 public class PaginatedRequest
 {
     // 기본값 및 최대값은 100

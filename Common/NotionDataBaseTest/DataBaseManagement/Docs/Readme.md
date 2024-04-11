@@ -84,6 +84,73 @@
 	```
 	</details>
 	<details>
+	<summary>DatabaseProperty (펼치기 / 접기)</summary>
+
+	```cs
+	using System.Text.Json.Serialization;
+
+	namespace NotionAPI.Objects;
+
+	// https://developers.notion.com/reference/property-object 에 따라 작성
+	[JsonConverter(typeof(DatabasePropertyConverter))]
+	public class DatabaseProperty
+	{
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? id { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? name { get; set; }
+	}
+
+	public class DatabaseSelect : DatabaseProperty
+	{
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public SelectOptions? select { get; set; }
+
+	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	    public string? equals { get; set; }
+	}
+
+	public class DatabaseTitle : DatabaseProperty
+	{
+	    public RichText? title { get; set; }
+	}
+
+	public class DatabasePropertyConverter : JsonConverter<DatabaseProperty>
+	{
+	    public override DatabaseProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	    {
+	        var jsonDoc = JsonDocument.ParseValue(ref reader);
+	        if (jsonDoc.RootElement.TryGetProperty("type", out var typeName))
+	        {
+	            return typeName.GetString() switch
+	            {
+	                "select" => JsonSerializer.Deserialize<DatabaseSelect>(jsonDoc),
+	                "title" => JsonSerializer.Deserialize<DatabaseTitle>(jsonDoc),
+	                _ => null
+	            };
+	        }
+
+	        return null;
+	    }
+
+	    public override void Write(Utf8JsonWriter writer, DatabaseProperty value, JsonSerializerOptions options)
+	    {
+	        switch (value)
+	        {
+	            case DatabaseSelect select:
+	                JsonSerializer.Serialize(writer, select);
+	                break;
+
+	            case DatabaseTitle title:
+	                JsonSerializer.Serialize(writer, title);
+	                break;
+	        }
+	    }
+	}
+	```
+	</details>
+	<details>
 	<summary>User (펼치기 / 접기)</summary>
 
 	```cs
@@ -218,68 +285,28 @@
 	```
 	</details>
 	<details>
-	<summary>DatabaseProperty (펼치기 / 접기)</summary>
+	<summary>Select, SelectOptions (펼치기 / 접기)</summary>
 
 	```cs
 	using System.Text.Json.Serialization;
 
 	namespace NotionAPI.Objects;
 
-	// https://developers.notion.com/reference/property-object 에 따라 작성
-	[JsonConverter(typeof(DatabasePropertyConverter))]
-	public class DatabaseProperty
+	// https://developers.notion.com/reference/property-object#select 에 따라 작성
+	public class Select
 	{
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	    public string? id { get; set; }
 
-	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	    public string? name { get; set; }
-	}
-
-	public class DatabaseSelect : DatabaseProperty
-	{
-	    public SelectOptions? select { get; set; }
 
 	    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	    public string? equals { get; set; }
+	    public string? color { get; set; }
 	}
 
-	public class DatabaseTitle : DatabaseProperty
+	public class SelectOptions
 	{
-	    public RichText? title { get; set; }
-	}
-
-	public class DatabasePropertyConverter : JsonConverter<DatabaseProperty>
-	{
-	    public override DatabaseProperty? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-	    {
-	        var jsonDoc = JsonDocument.ParseValue(ref reader);
-	        if (jsonDoc.RootElement.TryGetProperty("type", out var typeName))
-	        {
-	            return typeName.GetString() switch
-	            {
-	                "select" => JsonSerializer.Deserialize<DatabaseSelect>(jsonDoc),
-	                "title" => JsonSerializer.Deserialize<DatabaseTitle>(jsonDoc),
-	                _ => null
-	            };
-	        }
-
-	        return null;
-	    }
-
-	    public override void Write(Utf8JsonWriter writer, DatabaseProperty value, JsonSerializerOptions options)
-	    {
-	        switch (value)
-	        {
-	            case DatabaseSelect select:
-	                JsonSerializer.Serialize(writer, select);
-	                break;
-
-	            case DatabaseTitle title:
-	                JsonSerializer.Serialize(writer, title);
-	                break;
-	        }
-	    }
+	    public List<Select>? options { get; set; }
 	}
 	```
 	</details>
@@ -800,5 +827,6 @@
 - [Build your first integration](https://developers.notion.com/docs/create-a-notion-integration)
 - [Retrieve a database](https://developers.notion.com/reference/retrieve-a-database)
 - [Update a database](https://developers.notion.com/reference/update-a-database)
+- [System.Text.Json을 사용하여 파생 클래스의 속성을 직렬화하는 방법](https://learn.microsoft.com/ko-kr/dotnet/standard/serialization/system-text-json/polymorphism?pivots=dotnet-8-0)
 - [System.Text.Json을 사용하여 속성을 무시하는 방법](https://learn.microsoft.com/ko-kr/dotnet/standard/serialization/system-text-json/ignore-properties)
 - [.NET에서 JSON serialization(마샬링)용 사용자 지정 변환기를 작성하는 방법](https://learn.microsoft.com/ko-kr/dotnet/standard/serialization/system-text-json/converters-how-to?pivots=dotnet-8-0)

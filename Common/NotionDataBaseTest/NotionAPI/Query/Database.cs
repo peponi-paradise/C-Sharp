@@ -19,6 +19,7 @@ public class DatabaseFilter
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? property { get; set; }
 
+    // Filter 테스트용으로 select만 작성
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public DatabaseSelect? select { get; set; }
 }

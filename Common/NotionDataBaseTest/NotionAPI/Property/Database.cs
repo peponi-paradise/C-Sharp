@@ -16,6 +16,7 @@ public class DatabaseProperty
 
 public class DatabaseSelect : DatabaseProperty
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SelectOptions? select { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
