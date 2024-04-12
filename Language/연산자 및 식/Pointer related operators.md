@@ -110,7 +110,7 @@
 
         bar->Bar = 10;
 
-        Console.WriteLine(bar->Bar);
+        Console.WriteLine(foo.Bar);
     }
 
     /* output:
@@ -264,6 +264,8 @@
 <br>
 
 ## 참조 자료
+
+<br>
 
 - [포인터 관련 연산자 - 변수의 주소 가져오기, 스토리지 위치 역참조, 메모리 위치 액세스](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/operators/pointer-related-operators)
 - [C# - Language - Unmanaged types](https://peponi-paradise.tistory.com/entry/C-Language-Unmanaged-types)

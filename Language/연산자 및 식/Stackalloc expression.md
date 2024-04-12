@@ -4,7 +4,7 @@
 
 - `stackalloc` 식은 [스택](https://en.wikipedia.org/wiki/Data_segment)에 메모리 블록을 할당한다.
     - 할당된 메모리 블록은 메서드가 반환될 때 자동으로 해제되며 명시적으로 해제가 불가능하다.
-    - 할당된 메모리 블록은 `GC`의 대상이 아니기 때문에 [fixed 문](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/fixed)을 사용하여 피닝하지 않아도 된다.
+    - 할당된 메모리 블록은 `GC`의 대상이 아니며 [fixed 문](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/fixed)을 사용하여 피닝하지 않아도 된다.
 
 <br>
 

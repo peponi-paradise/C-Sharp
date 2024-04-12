@@ -6,7 +6,7 @@
 	- API 접근을 하려면 Database 및 API 키가 필요하다.
 		키를 얻는 방법에 대해서는 [Build your first integration](https://developers.notion.com/docs/create-a-notion-integration)을 참조한다.
 	- Notion의 API Reference는 [NOTION API - Introduction](https://developers.notion.com/reference/intro)을 참조한다.
-- 여기서는 다음 항목을 다룬다.
+- 여기서는 `database`에 대한 `page` 작업을 다룬다.
 	1. [Create a page](https://developers.notion.com/reference/post-page)
 	2. [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page)
 	3. [Update page properties](https://developers.notion.com/reference/patch-page)
