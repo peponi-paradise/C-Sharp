@@ -32,6 +32,7 @@
 <br>
 
 - 불러올 데이터는 아래와 같다.
+
     ![dynamicQuery](dynamicQuery.PNG)
 - `MiniExcel.Query(string)`로 호출하며 `IEnumerable<dynamic>`을 반환한다. 
     코드 및 출력 결과는 아래와 같다.
@@ -91,6 +92,7 @@
 <br>
 
 - 불러올 데이터는 아래와 같다.
+
     ![dynamicQuery2](dynamicQuery.PNG)
 - `MiniExcel.Query(string, true)`로 호출하며 `IEnumerable<dynamic>`을 반환한다.
     또한, 헤더 이름을 속성으로 사용하는 것이 가능해진다.
@@ -150,6 +152,7 @@
 <br>
 
 - 불러올 데이터는 아래와 같다.
+
     ![dynamicQuery3](dynamicQuery.PNG)
 - `MiniExcel.Query<T>(string)`로 호출하며 `IEnumerable<T>`를 반환한다.
     코드 및 출력 결과는 아래와 같다.
@@ -221,6 +224,7 @@
 <br>
 
 - 불러올 데이터는 아래와 같다.
+
     ![dynamicQuery4](dynamicQuery.PNG)
 - `MiniExcel.Query<T>(string)`의 반환형이 `IEnumerable<T>`이기 때문에 `LINQ` 사용이 가능하다.
     ```cs
@@ -264,6 +268,7 @@
 
 - 엑셀 파일이 여러 sheet로 구성되어 있는 경우, `sheet name`을 이용해 해당 부분의 데이터를 불러올 수 있다.
 - 불러올 데이터는 아래와 같다.
+
     ![employeeSheet](employeeSheet.PNG)
 - 여기서는 `MiniExcel.Query<T>(string, string)`을 이용한 예시를 보여준다.
     ```cs
@@ -335,6 +340,7 @@
 <br>
 
 - 아래 그림과 같이 병합된 셀이 있는 경우를 위해 `MiniExcel`에는 병합 셀에 대한 옵션을 지원한다.
+
     ![departmentSheet](departmentSheet.PNG)
 - `OpenXmlConfiguration`클래스의 `FillMergedCells` 속성을 이용하여 설정 가능하다.
     코드 및 출력 결과는 아래와 같다.
@@ -493,6 +499,7 @@
     }
     ```
 - 저장된 데이터는 아래와 같다.
+
     ![multipleSheets](multipleSheets.png)
 
 <br>
@@ -504,6 +511,7 @@
 - 개인적으로는 `MiniExcel`의 가장 큰 장점 중 하나가 아닐까 싶다.
 - 엑셀 파일의 내용을 템플릿화 하여 동적으로 저장하는 것이 가능해진다.
 - 템플릿은 아래와 같다.
+
     ![template](template.PNG)
     - 기능 소개에 따르면 `Vue` 템플릿과 유사하다고 되어있다.
     - `{{Customers.속성}}`으로 지정되어 있는 셀 (`A2`~`D2`) 을 인식하여 자동으로 데이터를 채워준다.
@@ -558,7 +566,7 @@
     ```cs
     using MiniExcelLibs;
     using MiniExcelLibs.OpenXml;
-    
+
     namespace MiniExcelTest
     {
         public record PersonBase
@@ -567,120 +575,120 @@
             public string? Name { get; init; }
             public string? PhoneNumber { get; init; }
         }
-    
+
         public sealed record Customer : PersonBase
         {
             public ulong SalesVolume { get; init; }
         }
-    
+
         public record Employee : PersonBase
         {
             public uint Age { get; init; }
             public DateTime Join { get; init; }
         }
-    
+
         public sealed record EmployeeWithDepartment : Employee
         {
             public string? Department { get; init; }
         }
-    
+
         internal class Program
         {
             static void Main(string[] args)
             {
                 string dataFile = "MiniExcel.xlsx";
                 string dataPath = Path.Combine(Environment.CurrentDirectory, dataFile);
-    
+
                 DynamicQuery(dataPath);
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 DynamicQueryWithHeader(dataPath);
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 QueryWithType(dataPath);
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 QueryWithLINQ(dataPath);
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 QueryBySheetName(dataPath, nameof(Employee));
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 QueryWithMergedCells(dataPath, nameof(EmployeeWithDepartment.Department));
-    
+
                 Console.WriteLine("----------------------------------------------------");
-    
+
                 Save();
                 SaveWithMultipleSheets();
                 SaveWithTemplate();
             }
-    
+
             static void DynamicQuery(string dataPath)
             {
                 var datas = MiniExcel.Query(dataPath);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.A}, {data.B}, {data.C}, {data.D}");
                 }
             }
-    
+
             static void DynamicQueryWithHeader(string dataPath)
             {
                 var datas = MiniExcel.Query(dataPath, true);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.ID}, {data.Name}, {data.PhoneNumber}, {data.SalesVolume}");
                 }
             }
-    
+
             static void QueryWithType(string dataPath)
             {
                 var datas = MiniExcel.Query<Customer>(dataPath);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.ID}, {data.Name}, {data.PhoneNumber}, {data.SalesVolume}");
                 }
             }
-    
+
             static void QueryWithLINQ(string dataPath)
             {
                 var datas = MiniExcel.Query<Customer>(dataPath).Where(x => x.SalesVolume >= 1015);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.ID}, {data.Name}, {data.PhoneNumber}, {data.SalesVolume}");
                 }
             }
-    
+
             static void QueryBySheetName(string dataPath, string sheetName)
             {
                 var datas = MiniExcel.Query<Employee>(dataPath, sheetName);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.ID}, {data.Name}, {data.PhoneNumber}, {data.Age}, {data.Join}");
                 }
             }
-    
+
             static void QueryWithMergedCells(string dataPath, string sheetName)
             {
                 var config = new OpenXmlConfiguration() { FillMergedCells = true };
                 var datas = MiniExcel.Query<EmployeeWithDepartment>(dataPath, sheetName, configuration: config);
-    
+
                 foreach (var data in datas)
                 {
                     Console.WriteLine($"{data.Department}, {data.ID}, {data.Name}, {data.PhoneNumber}, {data.Age}, {data.Join}");
                 }
             }
-    
+
             static void Save()
             {
                 List<Employee> employees = [];
@@ -688,11 +696,11 @@
                 {
                     employees.Add(new() { ID = i, Name = i.ToString(), PhoneNumber = i.ToString("010-0000-0000"), Age = i + 20, Join = DateTime.Today.AddDays(i) });
                 }
-    
+
                 string savePath = Path.Combine(Environment.CurrentDirectory, $"{nameof(Employee)}.xlsx");
                 MiniExcel.SaveAs(savePath, employees);
             }
-    
+
             static void SaveWithMultipleSheets()
             {
                 List<Customer> customers = [];
@@ -705,18 +713,18 @@
                 {
                     employees.Add(new() { ID = i, Name = i.ToString(), PhoneNumber = i.ToString("010-0000-0000"), Age = i + 20, Join = DateTime.Today.AddDays(i) });
                 }
-    
+
                 // 각 키마다 하나의 sheet로 저장
                 var multipleSheets = new Dictionary<string, object>
                 {
                     [nameof(customers)] = customers,
                     [nameof(employees)] = employees
                 };
-    
+
                 string savePath = Path.Combine(Environment.CurrentDirectory, $"{nameof(multipleSheets)}.xlsx");
                 MiniExcel.SaveAs(savePath, multipleSheets);
             }
-    
+
             static void SaveWithTemplate()
             {
                 List<Customer> customers = [];
@@ -724,12 +732,12 @@
                 {
                     customers.Add(new() { ID = i, Name = i.ToString(), PhoneNumber = i.ToString("010-0000-0000"), SalesVolume = 1000 + i });
                 }
-    
+
                 var saveObject = new
                 {
                     Customers = customers
                 };
-    
+
                 string savePath = Path.Combine(Environment.CurrentDirectory, $"{nameof(Customer)}.xlsx");
                 string templatePath = Path.Combine(Environment.CurrentDirectory, $"{nameof(Customer)}Template.xlsx");
                 MiniExcel.SaveAsByTemplate(savePath, templatePath, saveObject);
@@ -738,3 +746,12 @@
     }
     ```
     </details>
+- 데이터 및 템플릿 파일을 포함한 전체 코드는 [Github - peponi-paradise/C-Sharp](https://github.com/peponi-paradise/C-Sharp/tree/main/Common/MiniExcelTest/MiniExcelTest)에서 확인 가능하다.
+
+<br>
+
+## 12. 참조 자료
+
+<br>
+
+- [Github - mini-software/MiniExcel](https://github.com/mini-software/MiniExcel)
