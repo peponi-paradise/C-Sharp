@@ -142,7 +142,7 @@
             {
                 get
                 {
-                    if (TabPages.Count > 0) return TabPages[index];
+                    if (TabPages.Count > index) return TabPages[index];
                     return null;
                 }
             }
