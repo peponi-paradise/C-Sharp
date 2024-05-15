@@ -121,13 +121,14 @@
 
 <br>
 
-- 외부 접근 가능성 등에 의해 변수의 수명이 모호한 경우 컴파일러는 `CS8352`와 같은 오류를 출력하게 된다.
-- 이 때, `scoped` 키워드를 이용해 변수의 수명을 선언된 범위 내로 제한한 것을 컴파일러에 알릴 수 있다.
-    - `scoped` 키워드는 `ref` 또는 `ref struct`에만 적용할 수 있다.
+- `scoped`는 C# 11에 추가된 키워드로 다음과 같은 경우에 사용한다.
+    1. 변수의 수명을 선언된 범위(메서드) 내로 제한
+    2. 변수의 수명이 모호한 경우(외부 노출 등에 의해) 컴파일러에 명확한 수명 범위 제공
+- `scoped` 키워드는 `ref` 또는 `ref struct`에만 적용할 수 있다.
     ```cs
     // Local variable
 
-    static Span<int> Scoped()
+    static Span<int> NonScoped()
     {
         Span<int> span = default;
         return span;   // OK
@@ -142,12 +143,12 @@
     ```cs
     // Method parameter
 
-    static Span<int> Method(Span<int> span)
+    static Span<int> NonScoped(Span<int> span)
     {
         return span;    // OK
     }
 
-    static Span<int> Method(scoped Span<int> span)
+    static Span<int> Scoped(scoped Span<int> span)
     {
         return span;    // CS8352
     }
@@ -157,7 +158,11 @@
 
     public ref struct Foo
     {
-        public void Bar(scoped ReadOnlySpan<char> span)
+        public void NonScoped(ReadOnlySpan<char> span)
+        {
+        }
+
+        public void Scoped(scoped ReadOnlySpan<char> span)
         {
         }
     }
@@ -166,22 +171,8 @@
     {
         Span<char> chars = stackalloc char[] { 'a', 'b', 'c' };
         var foo = new Foo();
-        foo.Bar(chars);     // OK
-    }
-    ```
-    ```cs
-    public ref struct Foo
-    {
-        public void Bar(ReadOnlySpan<char> span)
-        {
-        }
-    }
-     
-    static void Main(string[] args)
-    {
-        Span<char> chars = stackalloc char[] { 'a', 'b', 'c' };
-        var foo = new Foo();
-        foo.Bar(chars);     // CS8350
+        foo.NonScoped(chars);  // CS8350
+        foo.Scoped(chars);     // OK
     }
     ```
 - 형식이 `ref struct`인 경우 메서드의 `this`, `out` 및 `ref` 변수에 `scoped` 한정자가 암시적으로 적용된다.
