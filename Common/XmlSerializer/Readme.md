@@ -13,7 +13,7 @@
 
 <br>
 
-- 여기서는 `class`, `struct`, `List<T>` 형식의 객체를 serialize를 수행하는 예시를 보여준다.
+- 여기서는 `class`, `struct`, `List<T>` 형식의 객체를 직렬화하는 예시를 보여준다.
 
 <br>
 
@@ -141,7 +141,7 @@ public static void SerializeList()
 
 <br>
 
-- 여기서는 `class`, `struct`, `List<T>` 형식의 객체를 serialize를 수행하는 예시를 보여준다.
+- 여기서는 `class`, `struct`, `List<T>` 형식의 객체를 역직렬화하는 예시를 보여준다.
 - 편의상, [MemoryStream](https://learn.microsoft.com/ko-kr/dotnet/api/system.io.memorystream?view=net-8.0)에 쓰고 바로 deserialize를 수행한다.
 
 <br>
