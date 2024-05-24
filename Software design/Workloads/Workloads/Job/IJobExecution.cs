@@ -6,11 +6,11 @@ public interface IJobExecution
 
     event EventHandler<ExecutionData>? StepExecutionChanged;
 
-    bool Start();
+    void Start();
 
     bool Stop();
 
-    void Pause();
+    Task Pause();
 
     void Resume();
 

@@ -8,7 +8,7 @@ public interface IJobContext
 
     event EventHandler<ExecutionData>? StepExecutionChanged;
 
-    bool Start();
+    void Start();
 
     Task<bool> Stop();
 

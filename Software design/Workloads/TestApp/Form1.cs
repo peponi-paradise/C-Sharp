@@ -18,12 +18,12 @@ namespace TestApp
 
         private void _operator_StepExecutionChanged(object? sender, Workloads.ExecutionData e)
         {
-            Trace.WriteLine($"From Step - {sender}: {e.Name}, {e.ExecutionId}, {e.ExecutionStatus}");
+            Trace.WriteLine($"From Step - {e.Name}, {e.ExecutionId}, {e.ExecutionStatus}");
         }
 
         private void _operator_JobExecutionChanged(object? sender, Workloads.ExecutionData e)
         {
-            Trace.WriteLine($"From Job - {sender}: {e.Name}, {e.ExecutionId}, {e.ExecutionStatus}");
+            Trace.WriteLine($"From Job - {e.Name}, {e.ExecutionId}, {e.ExecutionStatus}");
         }
 
         private void _startButton_Click(object sender, EventArgs e)

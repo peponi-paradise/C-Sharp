@@ -4,7 +4,7 @@ public interface IStepContext
 {
     event EventHandler<ExecutionData>? StepExecutionChanged;
 
-    bool Start();
+    void Start();
 
     ExecutionData GetExecutionData();
 }

@@ -1,4 +1,5 @@
 ﻿using BreakfastMaker.Step;
+using System.Diagnostics;
 using Workloads;
 using Workloads.Job;
 using Workloads.Step;
@@ -68,28 +69,42 @@ public class BreakfastJobExecution : IJobExecution
     private void Step_StepExecutionChanged(object? sender, ExecutionData e)
     {
         StepExecutionChanged?.Invoke(e.Name, e);
+
+        if (_stepContextDatas.Find(context => context.StepNumber == e.ExecutionId) is null)
+            return;
+
         if (e.ExecutionStatus == ExecutionStatus.Success)
         {
-            foreach (var data in _stepContextDatas)
+            DoNextStep();
+        }
+    }
+
+    private void DoNextStep()
+    {
+        foreach (var data in _stepContextDatas)
+        {
+            var executionData = _stepExecutionDatas!.Find(execution => execution.Name == data.Name);
+            if (executionData is null)
             {
-                if (_stepExecutionDatas!.Find(execution => execution.Name == data.Name) is null)
+                // Start next
+                var nextStep = BreakfastStepFactory.GetStepContext(data);
+                nextStep.StepExecutionChanged += Step_StepExecutionChanged;
+                if (nextStep.Start())
                 {
-                    // Start next
-                    var nextStep = BreakfastStepFactory.GetStepContext(data);
-                    nextStep.StepExecutionChanged += Step_StepExecutionChanged;
-                    if (nextStep.Start())
-                    {
-                        _stepExecutionDatas.Add(nextStep.GetExecutionData());
-                        StepExecutionChanged?.Invoke(nextStep.GetExecutionData().Name, nextStep.GetExecutionData());
-                    }
+                    _stepExecutionDatas.Add(nextStep.GetExecutionData());
                 }
                 else
                 {
-                    _jobExecutionData.EndTime = DateTime.Now;
-                    _jobExecutionData.Duration = _jobExecutionData.EndTime - _jobExecutionData.StartTime;
-                    _jobExecutionData.ExecutionStatus = ExecutionStatus.Success;
-                    JobExecutionChanged?.Invoke(_jobExecutionData.Name, _jobExecutionData);
+                    nextStep.StepExecutionChanged -= Step_StepExecutionChanged;
                 }
+                return;
+            }
+            else if (executionData.Name == _stepContextDatas.Last().Name)
+            {
+                _jobExecutionData.EndTime = DateTime.Now;
+                _jobExecutionData.Duration = _jobExecutionData.EndTime - _jobExecutionData.StartTime;
+                _jobExecutionData.ExecutionStatus = ExecutionStatus.Success;
+                JobExecutionChanged?.Invoke(_jobExecutionData.Name, _jobExecutionData);
             }
         }
     }

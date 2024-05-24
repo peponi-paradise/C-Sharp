@@ -13,10 +13,9 @@ public record ExecutionData
 
     public ExecutionData(string name) => Name = name;
 
-    public ExecutionData(string name, ulong executionId, DateTime startTime)
+    public ExecutionData(string name, ulong executionId)
     {
         Name = name;
         ExecutionId = executionId;
-        StartTime = startTime;
     }
 }

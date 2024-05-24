@@ -4,5 +4,7 @@ public interface IStepExecution
 {
     event EventHandler<ExecutionData>? StepExecutionChanged;
 
-    ExecutionData? DoWork();
+    void Start();
+
+    ExecutionData GetExecutionData();
 }

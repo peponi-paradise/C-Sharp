@@ -3,99 +3,31 @@ using Workloads.Step;
 
 namespace BreakfastMaker.Step;
 
-public class PreparingIngredientsStepExecution : IStepExecution
+public class PreparingIngredientsStepExecution(StepContextData data) : StepExecution(data)
 {
-    public event EventHandler<ExecutionData>? StepExecutionChanged;
-
-    private ExecutionData _executionData;
-    private PreparingIngredientsStepContextData _contextData;
-    private Task? _task;
-
-    public PreparingIngredientsStepExecution(PreparingIngredientsStepContextData data)
+    protected override async Task Work()
     {
-        _contextData = data;
-        _executionData = new(_contextData.Name);
-    }
-
-    public ExecutionData? DoWork()
-    {
-        try
-        {
-            _task = Task.Run(Work);
-        }
-        catch
-        {
-            return null;
-        }
-        _executionData.ExecutionId = _contextData.StepNumber;
-        return _executionData;
-    }
-
-    private async void Work()
-    {
-        RaiseEvent(ExecutionStatus.Run);
+        ProcessExecutionStatus(ExecutionStatus.Run);
 
         // Preparing...
         await Task.Delay(2000);
 
         int number = Random.Shared.Next(10);
-        if (number < 8) RaiseEvent(ExecutionStatus.Success);
-        else RaiseEvent(ExecutionStatus.Failed);
-    }
-
-    private void RaiseEvent(ExecutionStatus status)
-    {
-        switch (status)
-        {
-            case ExecutionStatus.Run:
-                _executionData.StartTime = DateTime.Now;
-                break;
-
-            case ExecutionStatus.Success:
-            case ExecutionStatus.Failed:
-                _executionData.EndTime = DateTime.Now;
-                _executionData.Duration = _executionData.StartTime - _executionData.EndTime;
-                break;
-        }
-        _executionData.ExecutionStatus = status;
-        StepExecutionChanged?.Invoke(_executionData.Name, _executionData);
+        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
 
-public class PlatingStepExecution : IStepExecution
+public class PlatingStepExecution(StepContextData data) : StepExecution(data)
 {
-    public event EventHandler<ExecutionData>? StepExecutionChanged;
+    private readonly PlatingStepContextData _derivedContextData = (PlatingStepContextData)data;
 
-    private ExecutionData _executionData;
-    private PlatingStepContextData _contextData;
-    private Task? _task;
-
-    public PlatingStepExecution(PlatingStepContextData data)
+    protected override async Task Work()
     {
-        _contextData = data;
-        _executionData = new(_contextData.Name);
-    }
-
-    public ExecutionData? DoWork()
-    {
-        try
-        {
-            _task = Task.Run(Work);
-        }
-        catch
-        {
-            return null;
-        }
-        _executionData.ExecutionId = _contextData.StepNumber;
-        return _executionData;
-    }
-
-    private async void Work()
-    {
-        RaiseEvent(ExecutionStatus.Run);
+        ProcessExecutionStatus(ExecutionStatus.Run);
 
         // Plating...
-        if (_contextData.IsEggLeft)
+        if (_derivedContextData.IsEggLeft)
         {
             await Task.Delay(2000);
         }
@@ -105,143 +37,41 @@ public class PlatingStepExecution : IStepExecution
         }
 
         int number = Random.Shared.Next(10);
-        if (number < 8) RaiseEvent(ExecutionStatus.Success);
-        else RaiseEvent(ExecutionStatus.Failed);
-    }
-
-    private void RaiseEvent(ExecutionStatus status)
-    {
-        switch (status)
-        {
-            case ExecutionStatus.Run:
-                _executionData.StartTime = DateTime.Now;
-                break;
-
-            case ExecutionStatus.Success:
-            case ExecutionStatus.Failed:
-                _executionData.EndTime = DateTime.Now;
-                _executionData.Duration = _executionData.StartTime - _executionData.EndTime;
-                break;
-        }
-        _executionData.ExecutionStatus = status;
-        StepExecutionChanged?.Invoke(_executionData.Name, _executionData);
+        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
 
-public class FryingStepExecution : IStepExecution
+public class FryingStepExecution(StepContextData data) : StepExecution(data)
 {
-    public event EventHandler<ExecutionData>? StepExecutionChanged;
+    private readonly FryingStepContextData _derivedContextData = (FryingStepContextData)data;
 
-    private ExecutionData _executionData;
-    private FryingStepContextData _contextData;
-    private Task? _task;
-
-    public FryingStepExecution(FryingStepContextData data)
+    protected override async Task Work()
     {
-        _contextData = data;
-        _executionData = new(_contextData.Name);
-    }
-
-    public ExecutionData? DoWork()
-    {
-        try
-        {
-            _task = Task.Run(Work);
-        }
-        catch
-        {
-            return null;
-        }
-        _executionData.ExecutionId = _contextData.StepNumber;
-        return _executionData;
-    }
-
-    private async void Work()
-    {
-        RaiseEvent(ExecutionStatus.Run);
+        ProcessExecutionStatus(ExecutionStatus.Run);
 
         // Frying...
-        await Task.Delay(_contextData.FryingTime);
+        await Task.Delay(_derivedContextData.FryingTime);
 
         int number = Random.Shared.Next(10);
-        if (number < 8) RaiseEvent(ExecutionStatus.Success);
-        else RaiseEvent(ExecutionStatus.Failed);
-    }
-
-    private void RaiseEvent(ExecutionStatus status)
-    {
-        switch (status)
-        {
-            case ExecutionStatus.Run:
-                _executionData.StartTime = DateTime.Now;
-                break;
-
-            case ExecutionStatus.Success:
-            case ExecutionStatus.Failed:
-                _executionData.EndTime = DateTime.Now;
-                _executionData.Duration = _executionData.StartTime - _executionData.EndTime;
-                break;
-        }
-        _executionData.ExecutionStatus = status;
-        StepExecutionChanged?.Invoke(_executionData.Name, _executionData);
+        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
 
-public class BoilingStepExecution : IStepExecution
+public class BoilingStepExecution(StepContextData data) : StepExecution(data)
 {
-    public event EventHandler<ExecutionData>? StepExecutionChanged;
+    private readonly BoilingStepContextData _derivedContextData = (BoilingStepContextData)data;
 
-    private ExecutionData _executionData;
-    private BoilingStepContextData _contextData;
-    private Task? _task;
-
-    public BoilingStepExecution(BoilingStepContextData data)
+    protected override async Task Work()
     {
-        _contextData = data;
-        _executionData = new(_contextData.Name);
-    }
-
-    public ExecutionData? DoWork()
-    {
-        try
-        {
-            _task = Task.Run(Work);
-        }
-        catch
-        {
-            return null;
-        }
-        _executionData.ExecutionId = _contextData.StepNumber;
-        return _executionData;
-    }
-
-    private async void Work()
-    {
-        RaiseEvent(ExecutionStatus.Run);
+        ProcessExecutionStatus(ExecutionStatus.Run);
 
         // Boiling...
-        await Task.Delay(_contextData.BoilingTime);
+        await Task.Delay(_derivedContextData.BoilingTime);
 
         int number = Random.Shared.Next(10);
-        if (number < 8) RaiseEvent(ExecutionStatus.Success);
-        else RaiseEvent(ExecutionStatus.Failed);
-    }
-
-    private void RaiseEvent(ExecutionStatus status)
-    {
-        switch (status)
-        {
-            case ExecutionStatus.Run:
-                _executionData.StartTime = DateTime.Now;
-                break;
-
-            case ExecutionStatus.Success:
-            case ExecutionStatus.Failed:
-                _executionData.EndTime = DateTime.Now;
-                _executionData.Duration = _executionData.StartTime - _executionData.EndTime;
-                break;
-        }
-        _executionData.ExecutionStatus = status;
-        StepExecutionChanged?.Invoke(_executionData.Name, _executionData);
+        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }

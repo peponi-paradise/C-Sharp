@@ -268,19 +268,21 @@ public class BreakfastJobContext : IJobContext
         var cookingStep = new StepContextData("Cooking")
         {
             StepNumber = 1,
-            IsMapped = true,
             MappedContexts =
             [
                 new FryingStepContextData("Egg", TimeSpan.FromSeconds(5))
                 {
+                    IsMapped = true,
                     StepNumber = 1001
                 },
                 new FryingStepContextData("Bacon", TimeSpan.FromSeconds(3))
                 {
+                    IsMapped = true,
                     StepNumber = 1002
                 },
                 new BoilingStepContextData("Coffee", TimeSpan.FromSeconds(10))
                 {
+                    IsMapped = true,
                     StepNumber = 1010
                 }
             ]
