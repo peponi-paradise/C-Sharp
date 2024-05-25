@@ -1,5 +1,12 @@
 ﻿namespace Workloads.Step;
 
+public enum StepContextType
+{
+    Sequential,
+    Mapped,
+    Stopping,
+}
+
 public record StepContextData
 {
     public string Name { get; init; }
@@ -8,7 +15,7 @@ public record StepContextData
     /// <summary>
     /// Determine is it mapped context
     /// </summary>
-    public bool IsMapped { get; set; }
+    public StepContextType ContextType { get; set; }
     public List<StepContextData>? MappedContexts { get; set; }
 
     public StepContextData(string name, uint stepNumber)

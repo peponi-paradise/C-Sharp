@@ -41,29 +41,35 @@ public abstract class JobExecution : IJobExecution
         if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Paused)
             return false;
 
-        ProcessJobExecutionStatus(ExecutionStatus.Stopped);
+        // If there is stopping process, maybe override this method
+        var someStoppingStep = _stepContextDatas.Find(context => context.ContextType == StepContextType.Stopping);
+        if (someStoppingStep is not null)
+        {
+            IStepContext stepContext = SomeStepFactory.GetStepContext(someStoppingStep);
+            stepContext.StepExecutionChanged += ProcessStepExecutionChanged;
+            _stepExecutionDatas.Add(stepContext.GetExecutionData());
+            stepContext.Start();
+            ProcessJobExecutionStatus(ExecutionStatus.Stopping);
+        }
+        else
+        {
+            ProcessJobExecutionStatus(ExecutionStatus.Stopped);
+        }
         return true;
     }
 
-    public async Task Pause()
+    public virtual bool Pause()
     {
         if (_stepExecutionDatas is null || _stepExecutionDatas.Count == 0)
-            return;
+            return false;
         if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Run)
-            return;
+            return false;
 
-        _jobExecutionData.ExecutionStatus = ExecutionStatus.Paused;
-
-        await Task.Run(() =>
-        {
-            while (_stepExecutionDatas.Last().ExecutionStatus == ExecutionStatus.Run)
-                Task.Delay(50);
-        });
-
-        ProcessJobExecutionStatus(ExecutionStatus.Paused);
+        _jobExecutionData.ExecutionStatus = ExecutionStatus.Pausing;
+        return true;
     }
 
-    public void Resume()
+    public virtual void Resume()
     {
         if (_stepExecutionDatas is null || _stepExecutionDatas.Count == 0)
             return;
@@ -85,8 +91,8 @@ public abstract class JobExecution : IJobExecution
         // Redirect step's report
         StepExecutionChanged?.Invoke(sender, e);
 
-        // Check if step is mapped step
-        if (stepContext.IsMapped)
+        // Check if step is not sequential
+        if (stepContext.ContextType != StepContextType.Sequential)
             return;
 
         // Process
@@ -147,9 +153,17 @@ public abstract class JobExecution : IJobExecution
             executionData.ExecutionStatus = data.ExecutionStatus;
         }
 
-        // Pend process
-        if (_jobExecutionData.ExecutionStatus == ExecutionStatus.Paused)
+        // Pend or kill process
+        if (_jobExecutionData.ExecutionStatus == ExecutionStatus.Pausing)
+        {
+            ProcessJobExecutionStatus(ExecutionStatus.Paused);
             return;
+        }
+        else if (_jobExecutionData.ExecutionStatus == ExecutionStatus.Stopping)
+        {
+            ProcessJobExecutionStatus(ExecutionStatus.Stopped);
+            return;
+        }
 
         switch (data.ExecutionStatus)
         {

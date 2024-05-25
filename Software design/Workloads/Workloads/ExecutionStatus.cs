@@ -6,6 +6,8 @@ public enum ExecutionStatus
     Run,
     Success,
     Failed,
+    Pausing,
     Paused,
+    Stopping,
     Stopped
 }

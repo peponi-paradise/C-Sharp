@@ -10,7 +10,7 @@ public interface IJobExecution
 
     bool Stop();
 
-    Task Pause();
+    bool Pause();
 
     void Resume();
 
