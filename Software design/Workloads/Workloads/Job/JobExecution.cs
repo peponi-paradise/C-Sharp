@@ -74,13 +74,13 @@ public abstract class JobExecution : IJobExecution
 
     public virtual List<ExecutionData>? GetStepExecutionDatas() => _stepExecutionDatas;
 
-    protected virtual void ProcessStepExecutionChanged(object? sender, ExecutionData e)
+    protected virtual void ProcessStepExecutionChanged(object? sender, ExecutionData data)
     {
         // Redirect step's report
-        StepExecutionChanged?.Invoke(sender, e);
+        StepExecutionChanged?.Invoke(sender, data);
 
         // Check is right step
-        var stepContext = _stepContextDatas.Find(context => context.Name == e.Name);
+        var stepContext = _stepContextDatas.Find(context => context.Name == data.Name);
         if (stepContext is null)
             return;
 
@@ -89,7 +89,7 @@ public abstract class JobExecution : IJobExecution
             return;
 
         // Process
-        ProcessStepExecutionData(e);
+        ProcessStepExecutionData(data);
     }
 
     protected virtual bool HasNextStep()
