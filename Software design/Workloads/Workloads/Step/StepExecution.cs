@@ -19,7 +19,7 @@ public abstract class StepExecution : IStepExecution
         _task = Task.Run(Work);
     }
 
-    public ExecutionData GetExecutionData() => _executionData;
+    public virtual ExecutionData GetExecutionData() => _executionData;
 
     protected abstract Task Work();
 

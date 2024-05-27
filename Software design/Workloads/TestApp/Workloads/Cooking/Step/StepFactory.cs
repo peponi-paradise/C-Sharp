@@ -1,8 +1,8 @@
 ﻿using Workloads.Step;
 
-namespace BreakfastMaker.Step;
+namespace Cooking.Step;
 
-public static class BreakfastStepFactory
+public static class CookingStepFactory
 {
     public static IStepContext GetStepContext(StepContextData data)
     {

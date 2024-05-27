@@ -3,8 +3,7 @@
 public enum StepContextType
 {
     Sequential,
-    Mapped,
-    Stopping,
+    Mapped
 }
 
 public record StepContextData

@@ -1,7 +1,7 @@
 ﻿using Workloads;
 using Workloads.Step;
 
-namespace BreakfastMaker.Step;
+namespace Cooking.Step;
 
 public class PreparingIngredientsStepExecution(StepContextData data) : StepExecution(data)
 {
@@ -12,8 +12,8 @@ public class PreparingIngredientsStepExecution(StepContextData data) : StepExecu
         // Preparing...
         await Task.Delay(2000);
 
-        int number = Random.Shared.Next(10);
-        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        int number = Random.Shared.Next(100);
+        if (number < 95) ProcessExecutionStatus(ExecutionStatus.Success);
         else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
@@ -36,8 +36,8 @@ public class PlatingStepExecution(StepContextData data) : StepExecution(data)
             await Task.Delay(5000);
         }
 
-        int number = Random.Shared.Next(10);
-        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        int number = Random.Shared.Next(100);
+        if (number < 95) ProcessExecutionStatus(ExecutionStatus.Success);
         else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
@@ -53,8 +53,8 @@ public class FryingStepExecution(StepContextData data) : StepExecution(data)
         // Frying...
         await Task.Delay(_derivedContextData.FryingTime);
 
-        int number = Random.Shared.Next(10);
-        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        int number = Random.Shared.Next(100);
+        if (number < 95) ProcessExecutionStatus(ExecutionStatus.Success);
         else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }
@@ -70,8 +70,8 @@ public class BoilingStepExecution(StepContextData data) : StepExecution(data)
         // Boiling...
         await Task.Delay(_derivedContextData.BoilingTime);
 
-        int number = Random.Shared.Next(10);
-        if (number < 8) ProcessExecutionStatus(ExecutionStatus.Success);
+        int number = Random.Shared.Next(100);
+        if (number < 95) ProcessExecutionStatus(ExecutionStatus.Success);
         else ProcessExecutionStatus(ExecutionStatus.Failed);
     }
 }

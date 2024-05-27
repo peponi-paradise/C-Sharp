@@ -24,10 +24,6 @@ public abstract class JobExecution : IJobExecution
         _jobExecutionData = new(_jobContextData.Name);
     }
 
-    public virtual ExecutionData GetJobExecutionData() => _jobExecutionData;
-
-    public virtual List<ExecutionData>? GetStepExecutionDatas() => _stepExecutionDatas;
-
     public virtual void Start()
     {
         if (HasNextStep())
@@ -36,60 +32,57 @@ public abstract class JobExecution : IJobExecution
         ProcessJobExecutionStatus(ExecutionStatus.Run);
     }
 
-    public virtual bool Stop()
+    public virtual bool CouldStop()
     {
         if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Paused)
             return false;
-
-        // If there is stopping process, maybe override this method
-        var someStoppingStep = _stepContextDatas.Find(context => context.ContextType == StepContextType.Stopping);
-        if (someStoppingStep is not null)
-        {
-            IStepContext stepContext = SomeStepFactory.GetStepContext(someStoppingStep);
-            stepContext.StepExecutionChanged += ProcessStepExecutionChanged;
-            _stepExecutionDatas.Add(stepContext.GetExecutionData());
-            stepContext.Start();
-            ProcessJobExecutionStatus(ExecutionStatus.Stopping);
-        }
-        else
-        {
-            ProcessJobExecutionStatus(ExecutionStatus.Stopped);
-        }
         return true;
     }
 
-    public virtual bool Pause()
+    public virtual void Stop() => ProcessJobExecutionStatus(ExecutionStatus.Stopped);
+
+    public virtual bool CouldPause()
     {
         if (_stepExecutionDatas is null || _stepExecutionDatas.Count == 0)
             return false;
         if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Run)
             return false;
 
-        _jobExecutionData.ExecutionStatus = ExecutionStatus.Pausing;
+        return true;
+    }
+
+    public virtual void Pause() => _jobExecutionData.ExecutionStatus = ExecutionStatus.Pausing;
+
+    public virtual bool CouldResume()
+    {
+        if (_stepExecutionDatas is null || _stepExecutionDatas.Count == 0)
+            return false;
+        if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Paused)
+            return false;
+
         return true;
     }
 
     public virtual void Resume()
     {
-        if (_stepExecutionDatas is null || _stepExecutionDatas.Count == 0)
-            return;
-        if (_jobExecutionData.ExecutionStatus != ExecutionStatus.Paused)
-            return;
-
         _jobExecutionData.ExecutionStatus = ExecutionStatus.Run;
 
         ProcessStepExecutionData(_stepExecutionDatas.Last());
     }
 
+    public virtual ExecutionData GetJobExecutionData() => _jobExecutionData;
+
+    public virtual List<ExecutionData>? GetStepExecutionDatas() => _stepExecutionDatas;
+
     protected virtual void ProcessStepExecutionChanged(object? sender, ExecutionData e)
     {
+        // Redirect step's report
+        StepExecutionChanged?.Invoke(sender, e);
+
         // Check is right step
         var stepContext = _stepContextDatas.Find(context => context.Name == e.Name);
         if (stepContext is null)
             return;
-
-        // Redirect step's report
-        StepExecutionChanged?.Invoke(sender, e);
 
         // Check if step is not sequential
         if (stepContext.ContextType != StepContextType.Sequential)

@@ -1,5 +1,5 @@
-﻿using BreakfastMaker.JobOperator;
-using CommunityToolkit.Mvvm.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Cooking.JobOperator;
 using Microsoft.Extensions.DependencyInjection;
 using Workloads.JobOperator;
 
@@ -16,7 +16,7 @@ internal static class BootStrap
     {
         var collection = new ServiceCollection();
 
-        collection.AddSingleton<IJobOperator, BreakfastJobOperator>();
+        collection.AddSingleton<IJobOperator, CookingJobOperator>();
 
         return collection.BuildServiceProvider();
     }

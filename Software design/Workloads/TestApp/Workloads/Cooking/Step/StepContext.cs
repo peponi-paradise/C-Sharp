@@ -1,14 +1,13 @@
-﻿using Workloads;
-using Workloads.Step;
+﻿using Workloads.Step;
 
-namespace BreakfastMaker.Step;
+namespace Cooking.Step;
 
 public class PreparingIngredientsStepContext : StepContext
 {
     public PreparingIngredientsStepContext(StepContextData data) : base(data)
     {
-        _execution = BreakfastStepFactory.GetStepExecution(_contextData);
-        _execution.StepExecutionChanged += ExecutionChanged;
+        _execution = CookingStepFactory.GetStepExecution(_contextData);
+        _execution.StepExecutionChanged += StepExecutionDataChanged;
     }
 }
 
@@ -21,8 +20,8 @@ public class CookingStepContext : StepContext
             _mappedContexts = [];
             foreach (var contextData in data.MappedContexts)
             {
-                var context = BreakfastStepFactory.GetStepContext(contextData);
-                context.StepExecutionChanged += MappedContextsExecutionChanged;
+                var context = CookingStepFactory.GetStepContext(contextData);
+                context.StepExecutionChanged += MappedContextsExecutionDataChanged;
                 _mappedContexts.Add(context);
             }
         }
@@ -33,8 +32,8 @@ public class PlatingStepContext : StepContext
 {
     public PlatingStepContext(StepContextData data) : base(data)
     {
-        _execution = BreakfastStepFactory.GetStepExecution(_contextData);
-        _execution.StepExecutionChanged += ExecutionChanged;
+        _execution = CookingStepFactory.GetStepExecution(_contextData);
+        _execution.StepExecutionChanged += StepExecutionDataChanged;
     }
 }
 
@@ -42,8 +41,8 @@ public class FryingStepContext : StepContext
 {
     public FryingStepContext(StepContextData data) : base(data)
     {
-        _execution = BreakfastStepFactory.GetStepExecution(_contextData);
-        _execution.StepExecutionChanged += ExecutionChanged;
+        _execution = CookingStepFactory.GetStepExecution(_contextData);
+        _execution.StepExecutionChanged += StepExecutionDataChanged;
     }
 }
 
@@ -51,7 +50,7 @@ public class BoilingStepContext : StepContext
 {
     public BoilingStepContext(StepContextData data) : base(data)
     {
-        _execution = BreakfastStepFactory.GetStepExecution(_contextData);
-        _execution.StepExecutionChanged += ExecutionChanged;
+        _execution = CookingStepFactory.GetStepExecution(_contextData);
+        _execution.StepExecutionChanged += StepExecutionDataChanged;
     }
 }

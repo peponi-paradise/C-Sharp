@@ -8,27 +8,41 @@ public interface IJobContext
 
     event EventHandler<ExecutionData>? StepExecutionChanged;
 
+    bool CouldStart();
+
     void Start();
 
-    Task<bool> Stop();
+    bool CouldStop();
 
-    Task<bool> Stop(ulong executionId);
+    bool CouldStop(ulong executionId);
 
-    Task<bool> Pause();
+    void Stop();
 
-    Task<bool> Pause(ulong executionId);
+    void Stop(ulong executionId);
 
-    bool Resume();
+    bool CouldPause();
 
-    bool Resume(ulong executionId);
+    bool CouldPause(ulong executionId);
+
+    void Pause();
+
+    void Pause(ulong executionId);
+
+    bool CouldResume();
+
+    bool CouldResume(ulong executionId);
+
+    void Resume();
+
+    void Resume(ulong executionId);
 
     JobContextData GetJobContextData();
 
     List<StepContextData> GetStepContextDatas();
 
-    List<ExecutionData>? GetJobExecutionDatas();
-
     ExecutionData GetJobExecutionData(ulong executionId);
+
+    List<ExecutionData>? GetJobExecutionDatas();
 
     List<ExecutionData>? GetStepExecutionDatas(ulong executionId);
 }

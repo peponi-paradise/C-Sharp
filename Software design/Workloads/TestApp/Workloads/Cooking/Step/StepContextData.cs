@@ -1,10 +1,10 @@
 ﻿using Workloads.Step;
 
-namespace BreakfastMaker.Step;
+namespace Cooking.Step;
 
 public record PreparingIngredientsStepContextData : StepContextData
 {
-    public PreparingIngredientsStepContextData(string name) : base(name)
+    public PreparingIngredientsStepContextData(string name, uint stepNumber) : base(name, stepNumber)
     {
     }
 }
@@ -12,7 +12,7 @@ public record PreparingIngredientsStepContextData : StepContextData
 public record PlatingStepContextData : StepContextData
 {
     public bool IsEggLeft { get; init; }
-    public PlatingStepContextData(string name, bool isEggLeft) : base(name)
+    public PlatingStepContextData(string name, uint stepNumber, bool isEggLeft) : base(name, stepNumber)
     {
         IsEggLeft = isEggLeft;
     }
@@ -21,7 +21,7 @@ public record PlatingStepContextData : StepContextData
 public record FryingStepContextData : StepContextData
 {
     public TimeSpan FryingTime { get; init; }
-    public FryingStepContextData(string name, TimeSpan fryingTime) : base(name)
+    public FryingStepContextData(string name, uint stepNumber, TimeSpan fryingTime) : base(name, stepNumber)
     {
         FryingTime = fryingTime;
     }
@@ -30,7 +30,7 @@ public record FryingStepContextData : StepContextData
 public record BoilingStepContextData : StepContextData
 {
     public TimeSpan BoilingTime { get; init; }
-    public BoilingStepContextData(string name, TimeSpan boilingTime) : base(name)
+    public BoilingStepContextData(string name, uint stepNumber, TimeSpan boilingTime) : base(name, stepNumber)
     {
         BoilingTime = boilingTime;
     }

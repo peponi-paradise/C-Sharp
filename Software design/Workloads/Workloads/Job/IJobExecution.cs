@@ -8,9 +8,15 @@ public interface IJobExecution
 
     void Start();
 
-    bool Stop();
+    bool CouldStop();
 
-    bool Pause();
+    void Stop();
+
+    bool CouldPause();
+
+    void Pause();
+
+    bool CouldResume();
 
     void Resume();
 

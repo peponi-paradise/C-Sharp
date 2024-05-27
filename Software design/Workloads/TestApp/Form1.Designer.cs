@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             _startButton = new Button();
-            _stopButton = new Button();
+            textBox1 = new TextBox();
             SuspendLayout();
             // 
             // _startButton
             // 
-            _startButton.Location = new Point(91, 129);
+            _startButton.Location = new Point(57, 63);
             _startButton.Name = "_startButton";
             _startButton.Size = new Size(240, 202);
             _startButton.TabIndex = 0;
@@ -42,31 +42,30 @@
             _startButton.UseVisualStyleBackColor = true;
             _startButton.Click += _startButton_Click;
             // 
-            // _stopButton
+            // textBox1
             // 
-            _stopButton.Location = new Point(419, 129);
-            _stopButton.Name = "_stopButton";
-            _stopButton.Size = new Size(240, 202);
-            _stopButton.TabIndex = 1;
-            _stopButton.Text = "Stop";
-            _stopButton.UseVisualStyleBackColor = true;
-            _stopButton.Click += _stopButton_Click;
+            textBox1.Location = new Point(341, 28);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(443, 405);
+            textBox1.TabIndex = 1;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(_stopButton);
+            Controls.Add(textBox1);
             Controls.Add(_startButton);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Button _startButton;
-        private Button _stopButton;
+        private TextBox textBox1;
     }
 }
