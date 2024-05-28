@@ -49,12 +49,12 @@ public abstract class StepContext : IStepContext
             return _mergedExecutionData;
     }
 
-    protected virtual void StepExecutionDataChanged(object? sender, ExecutionData e) => StepExecutionChanged?.Invoke(sender, e);
+    protected virtual void StepExecutionDataChanged(object? sender, ExecutionData data) => StepExecutionChanged?.Invoke(sender, data);
 
-    protected virtual void MappedContextsExecutionDataChanged(object? sender, ExecutionData e)
+    protected virtual void MappedContextsExecutionDataChanged(object? sender, ExecutionData data)
     {
         // Redirect mapped context's report
-        StepExecutionChanged?.Invoke(sender, e);
+        StepExecutionChanged?.Invoke(sender, data);
 
         lock (_statusLocker)
         {
