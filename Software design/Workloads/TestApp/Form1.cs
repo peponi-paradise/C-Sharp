@@ -15,11 +15,11 @@ namespace TestApp
         private readonly SynchronizationContext _syncContext;
         private IJobOperator _operator;
 
-        public Form1()
+        public Form1(IJobOperator jobOperator)
         {
             InitializeComponent();
             _syncContext = SynchronizationContext.Current!;
-            _operator = Ioc.Default.GetRequiredService<IJobOperator>();
+            _operator = jobOperator;
             _operator.JobExecutionChanged += _operator_JobExecutionChanged;
             _operator.StepExecutionChanged += _operator_StepExecutionChanged;
         }

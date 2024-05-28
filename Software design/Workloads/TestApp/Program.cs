@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.DependencyInjection;
+
 namespace TestApp
 {
     internal static class Program
@@ -14,7 +16,7 @@ namespace TestApp
 
             BootStrap.ConfigureServices();
 
-            Application.Run(new Form1());
+            Application.Run(Ioc.Default.GetRequiredService<Form1>());
         }
     }
 }

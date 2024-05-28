@@ -16,7 +16,8 @@ internal static class BootStrap
     {
         var collection = new ServiceCollection();
 
-        collection.AddSingleton<IJobOperator, CookingJobOperator>();
+        collection.AddTransient<IJobOperator, CookingJobOperator>();
+        collection.AddSingleton<Form1>();
 
         return collection.BuildServiceProvider();
     }
