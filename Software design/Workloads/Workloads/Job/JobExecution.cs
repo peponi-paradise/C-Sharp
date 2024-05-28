@@ -27,9 +27,10 @@ public abstract class JobExecution : IJobExecution
     public virtual void Start()
     {
         if (HasNextStep())
+        {
+            ProcessJobExecutionStatus(ExecutionStatus.Run);
             StartNextStep();
-
-        ProcessJobExecutionStatus(ExecutionStatus.Run);
+        }
     }
 
     public virtual bool CouldStop()
