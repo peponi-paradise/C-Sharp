@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{F848E037-141E-44AE-88C2-BFBFC5C8B9FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KakaoChatBotStudy", "KakaoChatBotStudy\KakaoChatBotStudy.csproj", "{3465B00E-37AE-4EE2-BEA8-6003D0C1A5FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F848E037-141E-44AE-88C2-BFBFC5C8B9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F848E037-141E-44AE-88C2-BFBFC5C8B9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F848E037-141E-44AE-88C2-BFBFC5C8B9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F848E037-141E-44AE-88C2-BFBFC5C8B9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3465B00E-37AE-4EE2-BEA8-6003D0C1A5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3465B00E-37AE-4EE2-BEA8-6003D0C1A5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3465B00E-37AE-4EE2-BEA8-6003D0C1A5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3465B00E-37AE-4EE2-BEA8-6003D0C1A5FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AF64EBDE-0911-448A-988F-C305668D1FCD}
+		SolutionGuid = {926D791B-C176-48DD-A2A4-47A7AA7FE349}
 	EndGlobalSection
 EndGlobal

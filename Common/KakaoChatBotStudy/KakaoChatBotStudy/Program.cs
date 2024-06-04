@@ -1,4 +1,4 @@
-namespace WebApplication1
+namespace KakaoChatBotStudy
 {
     public class Program
     {
