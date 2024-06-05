@@ -1,8 +1,8 @@
-﻿using KakaoChatBotStudy.Extension;
+﻿using KakaoChatBotStudy.Data;
 
-namespace KakaoChatBotStudy.Data;
+namespace KakaoChatBotStudy.Extension;
 
-public static class UserInputData
+public static class UserInputDataExtension
 {
     public static SimpleTextData ToSimpleTextData(this Dictionary<string, string> dic)
     {

@@ -1,7 +1,6 @@
-﻿using KakaoChatBotStudy.KakaoAPI;
-using KakaoChatBotStudy.Data;
+﻿using KakaoChatBotStudy.Extension;
+using KakaoChatBotStudy.KakaoAPI;
 using Microsoft.AspNetCore.Mvc;
-using KakaoChatBotStudy.Extension;
 
 namespace KakaoChatBotStudy.Controllers;
 

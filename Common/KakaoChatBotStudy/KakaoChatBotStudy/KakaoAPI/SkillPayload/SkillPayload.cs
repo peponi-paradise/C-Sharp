@@ -25,6 +25,7 @@ public class SkillPayload
     public List<object>? Contexts { get; set; }
 }
 
+// https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/answer_json_format#bot 에 따라 작성
 public class Bot
 {
     [JsonPropertyName("id")]
