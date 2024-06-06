@@ -277,3 +277,5 @@ public static class SkillTemplateExtension
 - [스킬 만들기](https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/make_skill)
 - [응답 타입별 JSON 포맷](https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/answer_json_format)
 - [블록에 스킬 적용하기](https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/apply_skill_to_block)
+- [KakaoChatBotStudy](https://github.com/peponi-paradise/C-Sharp/tree/main/Common/KakaoChatBotStudy)
+- [C# - 카카오톡 챗봇 스킬 (API) 구현](https://peponi-paradise.tistory.com/entry/C-%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1-%EC%B1%97%EB%B4%87-%EC%8A%A4%ED%82%AC-API)

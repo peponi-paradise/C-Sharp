@@ -362,3 +362,4 @@ public class QuickReply
 - [시나리오](https://kakaobusiness.gitbook.io/main/tool/chatbot/main_notions/scenario)
 - [스킬 만들기](https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/make_skill)
 - [응답 타입별 JSON 포맷](https://kakaobusiness.gitbook.io/main/tool/chatbot/skill_guide/answer_json_format)
+- [KakaoChatBotStudy](https://github.com/peponi-paradise/C-Sharp/tree/main/Common/KakaoChatBotStudy)
