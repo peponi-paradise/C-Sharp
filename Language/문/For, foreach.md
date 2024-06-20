@@ -90,4 +90,128 @@
 
 <br>
 
-- 
+- `foreach` 문은 컬렉션의 요소를 반복하여 실행한다.
+- [IEnumerable](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.ienumerable), [IEnumerable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.ienumerable-1), [Span\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.span-1) 등을 지원한다.
+- 구체적으로 `foreach` 문이 지원하는 형식은 아래와 같다.
+    - `GetEnumerator` 메서드 구현
+    - `GetEnumerator` 메서드의 반환 형식이 [IEnumerator](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.ienumerator?view=net-8.0)를 구현
+    - `GetEnumerator` 메서드의 반환 형식이 `public Current` 속성과 `bool`을 반환하는 `MoveNext` 메서드를 구현
+- `foreach` 문의 구성은 아래와 같다.
+    ```cs
+    foreach(T item in collection)
+    { 
+    }
+    ```
+    - `item`
+        - `collection`의 각 요소
+    - `collection`
+        - 요소를 반복하여 실행할 컬렉션
+
+<br>
+
+### 3.1. Example
+
+<br>
+
+- 간단한 `foreach` 문의 형태는 다음과 같다.
+    ```cs
+    List<char> chars = ['H', 'E', 'L', 'L', 'O'];
+
+    foreach(char item in chars)
+    {
+        Console.Write(item);
+    }
+
+    /* output:
+    HELLO
+    */
+    ```
+- 다음과 같이 `foreach` 문을 실행할 컬렉션이 비어있는 경우, 실행하지 않고 건너뛴다.
+    ```cs
+    List<char> chars = [];
+
+    foreach (char item in chars)
+    {
+        Console.Write("A");
+    }
+
+    /* output:
+
+    */
+    ```
+- `GetEnumerator` 메서드 반환 형식의 `Current` 속성이 [ref](https://peponi-paradise.tistory.com/entry/C-Language-Ref-keyword-Parameter-modifier) 형식인 경우 반복 변수에 `ref` 한정자를 사용할 수 있다.
+    ```cs
+    Span<int> ints = [1, 2, 3];
+
+    foreach (ref int item in ints)
+    {
+        item++;
+    }
+
+    Console.WriteLine(string.Join(", ", ints.ToArray()));
+
+    /* output:
+    2, 3, 4
+    */
+    ```
+- [var](https://peponi-paradise.tistory.com/entry/C-Language-implicitly-typed-local-variables-var) 키워드를 이용하여 `foreach` 문에서 반복 변수의 형식을 유추할 수도 있다.
+    ```cs
+    List<char> chars = ['H', 'E', 'L', 'L', 'O'];
+
+    foreach (var item in chars)
+    {
+        Console.Write(item);
+    }
+
+    /* output:
+    HELLO
+    */
+    ```
+
+<br>
+
+### 3.2. `await foreach`
+
+<br>
+
+- `await` 연산자를 `foreach` 문에 적용하여 컬렉션을 비동기적으로 접근할 수 있다.
+- 기본적으로 각 요소는 진입 컨텍스트에서 처리된다.
+    작업 컨텍스트를 유지하고 싶다면, [ConfigureAwait](https://learn.microsoft.com/ko-kr/dotnet/api/system.threading.tasks.taskasyncenumerableextensions.configureawait) 메서드의 `continueOnCapturedContext`를 `false`로 설정하여 진입 컨텍스트로 돌아오지 않을 수 있다.
+- `await foreach` 문이 지원하는 형식은 다음과 같다.
+    - [IAsyncEnumerable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.iasyncenumerable-1)를 구현하는 형식
+    - `GetAsyncEnumerator` 메서드를 구현한 형식
+        - 반환 형식이 `public Current` 속성 구현
+        - 반환 형식의 `MoveNextAsync` 메서드가 [Task\<bool>](), [ValueTask\<bool>]()을 반환하거나 awaiter의 `GetResult` 메서드가 `bool`을 반환
+- `await foreach` 문은 아래와 같이 사용한다.
+    ```cs
+    public async Task AwaitForeach()
+    {
+        await foreach(var response in GetResponseAsync())
+        {
+            Console.WriteLine(response);
+        }
+    }
+
+    public async IAsyncEnumerable<HttpResponseMessage> GetResponseAsync(List<HttpRequestMessage> messages)
+    {
+        foreach (var message in messages)
+        {
+            var rtn = await client.SendAsync(message);
+            yield return rtn;
+        }
+    }
+    ```
+
+<br>
+
+## 4. 참조 자료
+
+<br>
+
+- [반복 문 - for, foreach](https://learn.microsoft.com/ko-kr/dotnet/csharp/language-reference/statements/iteration-statements)
+- [IEnumerable](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.ienumerable)
+- [IEnumerable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.ienumerable-1)
+- [IEnumerator](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.ienumerator?view=net-8.0)
+- [ConfigureAwait](https://learn.microsoft.com/ko-kr/dotnet/api/system.threading.tasks.taskasyncenumerableextensions.configureawait)
+- [IAsyncEnumerable\<T>](https://learn.microsoft.com/ko-kr/dotnet/api/system.collections.generic.iasyncenumerable-1)
+- [Iterating with Async Enumerables in C# 8](https://learn.microsoft.com/en-us/archive/msdn-magazine/2019/november/csharp-iterating-with-async-enumerables-in-csharp-8)
