@@ -16,7 +16,7 @@
 <br>
 
 - 여기서 구현하는 `placeholder`는 다음과 같이 동작한다.
-    <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fboard%2FY4wrxM5T8t8oPU4F9QXgyn%2FPlaceholderTextBox%3Fnode-id%3D0-1%26t%3Dh8dTYeWdBss8Vhrd-1" allowfullscreen></iframe>
+    [![placeholderTextBoxLogic](PlaceholderTextBoxLogic.png)](https://www.figma.com/board/Y4wrxM5T8t8oPU4F9QXgyn/PlaceholderTextBox?node-id=0-1&t=h8dTYeWdBss8Vhrd-1)
 - 이를 구현하면 다음과 같은 코드로 나타낼 수 있다.
     ```cs
     using System.ComponentModel;
