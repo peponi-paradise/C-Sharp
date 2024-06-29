@@ -44,10 +44,10 @@
             // placeholderTextBox1
             // 
             this.placeholderTextBox1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.placeholderTextBox1.Location = new System.Drawing.Point(155, 149);
+            this.placeholderTextBox1.Location = new System.Drawing.Point(12, 12);
             this.placeholderTextBox1.Name = "placeholderTextBox1";
             this.placeholderTextBox1.PlaceholderText = "Input text";
-            this.placeholderTextBox1.PlaceholderTextColor = System.Drawing.Color.DarkGray;
+            this.placeholderTextBox1.PlaceholderTextColor = System.Drawing.Color.Maroon;
             this.placeholderTextBox1.Size = new System.Drawing.Size(227, 21);
             this.placeholderTextBox1.TabIndex = 2;
             this.placeholderTextBox1.Text = "Input text";
