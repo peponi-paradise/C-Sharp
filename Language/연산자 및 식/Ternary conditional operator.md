@@ -1,4 +1,4 @@
-## 삼항 연산자
+## 1. 삼항 연산자
 
 <br>
 
@@ -24,7 +24,7 @@
         bool IsOne(int x)
         {
             Console.WriteLine(nameof(IsOne));
-            return x == 0;
+            return x == 1;
         }
     }
 
@@ -63,7 +63,7 @@
 
 <br>
 
-## 조건부 참조 식
+## 2. 조건부 참조 식
 
 <br>
 
@@ -97,7 +97,7 @@
 
 <br>
 
-## 참조 자료
+## 3. 참조 자료
 
 <br>
 
