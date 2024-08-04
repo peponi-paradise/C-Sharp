@@ -39,7 +39,7 @@ private static void Main()
     string[] stringArgs = { "Hello", "World!" };
     ParamsString(stringArgs);
 
-    // Object type's behavior is depends on the type of array
+    // Object type's behavior depends on the type of array
     ParamsObject(intArgs);
     ParamsObject(stringArgs);
 }
