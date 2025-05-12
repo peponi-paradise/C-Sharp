@@ -1,4 +1,4 @@
-﻿namespace Interface_INotifyPropertyChanged
+﻿namespace INotifyPropertyChangedExample
 {
     partial class TestControl
     {

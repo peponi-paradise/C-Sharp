@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Windows.Forms;
 
-namespace Interface_INotifyPropertyChanged
+namespace INotifyPropertyChangedExample
 {
     public partial class MainFrame : Form
     {

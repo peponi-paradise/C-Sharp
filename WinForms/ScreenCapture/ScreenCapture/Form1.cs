@@ -11,9 +11,9 @@ namespace ScreenCapture
         }
 
         // Control capture
-        private void Control_Click(object sender, EventArgs e) => ScreenCapture.CaptureControl(Control);
+        private void Control_Click(object sender, EventArgs e) => ScreenCapture.Control(Control);
 
         // Monitor capture
-        private void ScreenCapture_Click(object sender, EventArgs e) => ScreenCapture.CaptureScreen();
+        private void ScreenCapture_Click(object sender, EventArgs e) => ScreenCapture.Monitor(1);
     }
 }

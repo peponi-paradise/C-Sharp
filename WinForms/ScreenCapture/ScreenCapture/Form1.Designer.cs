@@ -30,6 +30,7 @@
         {
             this.Container = new System.Windows.Forms.TableLayoutPanel();
             this.Control = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.Container.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,6 +40,7 @@
             this.Container.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.Container.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.Container.Controls.Add(this.Control, 1, 0);
+            this.Container.Controls.Add(this.button1, 1, 1);
             this.Container.Location = new System.Drawing.Point(38, 41);
             this.Container.Name = "Container";
             this.Container.RowCount = 2;
@@ -58,6 +60,16 @@
             this.Control.UseVisualStyleBackColor = true;
             this.Control.Click += new System.EventHandler(this.Control_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(362, 201);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(212, 95);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Monitor";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.ScreenCapture_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -75,6 +87,7 @@
 
         private System.Windows.Forms.TableLayoutPanel Container;
         private System.Windows.Forms.Button Control;
+        private System.Windows.Forms.Button button1;
     }
 }
 

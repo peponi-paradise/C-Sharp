@@ -5,88 +5,84 @@ namespace AlertControl
 {
     public partial class Form1 : Form
     {
-        private AlertData AlertData;
-        private DevExpress.XtraBars.Alerter.AlertControl AlertWindow;
-        private SvgImageCollection ImageCollection;
+        private readonly DevExpress.XtraBars.Alerter.AlertControl _alert;
+        private readonly SvgImageCollection _images;
 
         public Form1()
         {
             InitializeComponent();
-            InitImageCollection();
-            InitAlert();
+            _images = InitImageCollection();
+            _alert = InitAlert();
+
+            _alert.Show(this);
         }
 
-        private void button1_Click(object sender, EventArgs e) => AlertWindow.Show(this);
+        private void button1_Click(object sender, EventArgs e) => _alert.Show(this);
 
-        private void InitImageCollection()
+        private SvgImageCollection InitImageCollection()
         {
-            // Image collection 초기화
-
-            var asset = $@"{Application.StartupPath}\Assets\";
-            ImageCollection = new SvgImageCollection(components)
+            var basePath = $@"{Application.StartupPath}\Assets\";
+            return new SvgImageCollection(components)
             {
-                { "ShortDate", $@"{asset}ShortDate.svg" },
-                {"UnpinButton",$@"{asset}UnpinButton.svg" },
-                {"PinButton",$@"{asset}PinButton.svg" },
-                {"Delete",$@"{asset}Delete.svg" }
+                { "ShortDate", $@"{basePath}ShortDate.svg" },
+                { "UnpinButton", $@"{basePath}UnpinButton.svg" },
+                { "PinButton", $@"{basePath}PinButton.svg" },
+                { "Delete", $@"{basePath}Delete.svg" }
             };
         }
 
-        private void InitAlert()
+        private AlertData GetAlertData()
         {
-            // AlertData
-
-            AlertData = new AlertData()
+            return new AlertData()
             {
                 Title = "Alert Control",
-                TitleImageSource = ImageCollection["ShortDate"],
-                TitlePinImageSource = ImageCollection["UnpinButton"],
-                TitleCloseImageSource = ImageCollection["Delete"],
+                TitleImageSource = _images["ShortDate"],
+                TitlePinImageSource = _images["UnpinButton"],
+                TitleCloseImageSource = _images["Delete"],
                 Caption = "Caption",
-                DescriptionImageSource = ImageCollection["ShortDate"],
+                DescriptionImageSource = _images["ShortDate"],
                 Description1 = "Description1",
                 Description2 = "Description2",
                 FooterUrl1 = "https://github.com/peponi-paradise/",
-                FooterUrl2 = "https://peponi-paradise.tistory.com/",
+                FooterUrl2 = "https://peponi-paradise.vercel.app/",
                 Copyright = $"©Peponi, {DateTime.Now.Year}",
             };
+        }
 
-            // AlertWindow
+        private DevExpress.XtraBars.Alerter.AlertControl InitAlert()
+        {
+            var alert = new DevExpress.XtraBars.Alerter.AlertControl(components);
 
-            AlertWindow = new DevExpress.XtraBars.Alerter.AlertControl(components);
-            AlertWindow.AppearanceText.Options.UseTextOptions = true;
-            AlertWindow.AppearanceText.TextOptions.Trimming = DevExpress.Utils.Trimming.Word;
-            AlertWindow.AppearanceText.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            AlertWindow.ShowToolTips = false;
-
-            AlertWindow.BeforeFormShow += AlertWindow_BeforeFormShow;
-            AlertWindow.HtmlElementMouseClick += AlertWindow_HtmlElementMouseClick;
-            AlertWindow.FormClosing += AlertWindow_FormClosing;
+            alert.BeforeFormShow += Alert_BeforeFormShow;
+            alert.HtmlElementMouseClick += Alert_HtmlElementMouseClick;
 
             // HTML / CSS
-            AlertWindow.HtmlTemplate.Template += File.ReadAllText($@"{Application.StartupPath}\Assets\AlertWindow.html");
-            AlertWindow.HtmlTemplate.Styles += File.ReadAllText($@"{Application.StartupPath}\Assets\AlertWindow.css");
+            alert.HtmlTemplate.Template += File.ReadAllText($@"{Application.StartupPath}\Assets\AlertWindow.html");
+            alert.HtmlTemplate.Styles += File.ReadAllText($@"{Application.StartupPath}\Assets\AlertWindow.css");
+
+            return alert;
         }
 
-        private void AlertWindow_BeforeFormShow(object sender, DevExpress.XtraBars.Alerter.AlertFormEventArgs e)
+        private void Alert_BeforeFormShow(object sender, DevExpress.XtraBars.Alerter.AlertFormEventArgs e)
         {
-            e.HtmlPopup.DataContext = AlertData;
+            e.HtmlPopup.DataContext = GetAlertData();
         }
 
-        private void AlertWindow_HtmlElementMouseClick(object sender, DevExpress.XtraBars.Alerter.AlertHtmlElementMouseEventArgs e)
+        private void Alert_HtmlElementMouseClick(object sender, DevExpress.XtraBars.Alerter.AlertHtmlElementMouseEventArgs e)
         {
             if (e.ElementId == "pinButton")
             {
                 e.HtmlPopup.Pinned = !e.HtmlPopup.Pinned;
-                if (e.HtmlPopup.Pinned) AlertData.TitlePinImageSource = ImageCollection["PinButton"];
-                else AlertData.TitlePinImageSource = ImageCollection["UnpinButton"];
-            }
-            else if (e.ElementId == "closeButton") e.HtmlPopup.Close();
-        }
 
-        private void AlertWindow_FormClosing(object sender, DevExpress.XtraBars.Alerter.AlertFormClosingEventArgs e)
-        {
-            AlertData.TitlePinImageSource = ImageCollection["UnpinButton"];
+                var data = e.HtmlPopup.DataContext as AlertData;
+
+                if (e.HtmlPopup.Pinned)
+                    data!.TitlePinImageSource = _images["PinButton"];
+                else
+                    data!.TitlePinImageSource = _images["UnpinButton"];
+            }
+            else if (e.ElementId == "closeButton")
+                e.HtmlPopup.Close();
         }
     }
 }

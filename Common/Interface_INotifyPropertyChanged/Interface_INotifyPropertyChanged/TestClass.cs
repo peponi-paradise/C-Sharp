@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Interface_INotifyPropertyChanged
+namespace INotifyPropertyChangedExample
 {
     public enum TestEnum
     {
@@ -12,129 +12,88 @@ namespace Interface_INotifyPropertyChanged
 
     public class TestClass : INotifyPropertyChanged
     {
-        /*-------------------------------------------
-         *
-         *      Events
-         *
-         -------------------------------------------*/
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /*-------------------------------------------
-         *
-         *      Public members
-         *
-         -------------------------------------------*/
+        private bool _testBool = false;
 
         public bool TestBool
         {
-            get => testBool;
+            get => _testBool;
             set
             {
-                testBool = value;
-                OnPropertyChanged(nameof(TestBool));
+                _testBool = value;
+                OnPropertyChanged();
             }
         }
+
+        private int _testInt = 0;
 
         public int TestInt
         {
-            get => testInt;
+            get => _testInt;
             set
             {
-                testInt = value;
-                OnPropertyChanged(nameof(TestInt));
+                _testInt = value;
+                OnPropertyChanged();
             }
         }
+
+        private double _testDouble = 0;
 
         public double TestDouble
         {
-            get => testDouble;
+            get => _testDouble;
             set
             {
-                testDouble = value;
-                OnPropertyChanged(nameof(TestDouble));
+                _testDouble = value;
+                OnPropertyChanged();
             }
         }
+
+        private string _testString = string.Empty;
 
         public string TestString
         {
-            get => testString;
+            get => _testString;
             set
             {
-                testString = value;
-                OnPropertyChanged(nameof(TestString));
+                _testString = value;
+                OnPropertyChanged();
             }
         }
+
+        private TestEnum _testEnum = TestEnum.A;
 
         public TestEnum TestEnum
         {
-            get => testEnum;
+            get => _testEnum;
             set
             {
-                testEnum = value;
-                OnPropertyChanged(nameof(TestEnum));
+                _testEnum = value;
+                OnPropertyChanged();
             }
         }
 
-        /*-------------------------------------------
-         *
-         *      Private members
-         *
-         -------------------------------------------*/
+        private readonly SynchronizationContext _syncContext;
 
-        private bool testBool = false;
-        private int testInt = 0;
-        private double testDouble = 0;
-        private string testString = string.Empty;
-        private TestEnum testEnum = TestEnum.A;
-
-        private readonly SynchronizationContext UISyncContext;
-
-        /*-------------------------------------------
-         *
-         *      Constructor / Destructor
-         *
-         -------------------------------------------*/
-
-        public TestClass(SynchronizationContext UISyncContext = null)
+        public TestClass(SynchronizationContext syncContext = null)
         {
-            this.UISyncContext = UISyncContext == null ? SynchronizationContext.Current : UISyncContext;
+            _syncContext = syncContext ?? SynchronizationContext.Current;
         }
-
-        /*-------------------------------------------
-         *
-         *      Event functions
-         *
-         -------------------------------------------*/
-
-        /*-------------------------------------------
-         *
-         *      Public functions
-         *
-         -------------------------------------------*/
 
         // 바인딩된 컴포넌트 반환. new로 반환하여 이 클래스의 데이터를 표시하는 여러개의 컴포넌트 생성 가능
         public UserControl GetComponent() => new TestControl(this);
 
-        /*-------------------------------------------
-         *
-         *      Private functions
-         *
-         -------------------------------------------*/
-
         // 프로퍼티 변경 전파
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            UISyncContext.Post(delegate
+            if (PropertyChanged != null)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }, null);
+                _syncContext.Post(delegate
+                {
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }, null);
+            }
         }
-
-        /*-------------------------------------------
-         *
-         *      Helper functions
-         *
-         -------------------------------------------*/
     }
 }

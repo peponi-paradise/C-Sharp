@@ -1,41 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Interface_INotifyPropertyChanged
+namespace INotifyPropertyChangedExample
 {
     public partial class TestControl : UserControl
     {
-        /*-------------------------------------------
-         *
-         *      Design time properties
-         *
-         -------------------------------------------*/
-
-        /*-------------------------------------------
-         *
-         *      Events
-         *
-         -------------------------------------------*/
-
-        /*-------------------------------------------
-         *
-         *      Public members
-         *
-         -------------------------------------------*/
-
-        /*-------------------------------------------
-         *
-         *      Private members
-         *
-         -------------------------------------------*/
-
-        private TestClass TestClass { get; set; }
-
-        /*-------------------------------------------
-         *
-         *      Constructor / Destructor
-         *
-         -------------------------------------------*/
+        private TestClass _testClass { get; set; }
 
         public TestControl()
         {
@@ -45,39 +15,24 @@ namespace Interface_INotifyPropertyChanged
         public TestControl(TestClass testClass)
         {
             InitializeComponent();
-            TestClass = testClass;
             EnumSelect.Items.AddRange(Enum.GetNames(typeof(TestEnum)));
+
+            _testClass = testClass;
+
             BindData();
+
             PropertyChange.Click += new EventHandler(PropertyChange_Click);
         }
-
-        /*-------------------------------------------
-         *
-         *      Event functions
-         *
-         -------------------------------------------*/
 
         // TestClass 프로퍼티 접근만으로 UI까지 변경 확인용
         private void PropertyChange_Click(object sender, EventArgs e)
         {
-            TestClass.TestBool = !TestClass.TestBool;
-            TestClass.TestInt += 1;
-            TestClass.TestDouble += 0.1;
-            TestClass.TestString += "a";
-            TestClass.TestEnum = (TestEnum)Enum.Parse(typeof(TestEnum), EnumSelect.SelectedItem.ToString());
+            _testClass.TestBool = !_testClass.TestBool;
+            _testClass.TestInt += 1;
+            _testClass.TestDouble += 0.1;
+            _testClass.TestString += "a";
+            _testClass.TestEnum = (TestEnum)Enum.Parse(typeof(TestEnum), EnumSelect.SelectedItem.ToString());
         }
-
-        /*-------------------------------------------
-         *
-         *      Public functions
-         *
-         -------------------------------------------*/
-
-        /*-------------------------------------------
-         *
-         *      Private functions
-         *
-         -------------------------------------------*/
 
         // TestClass 바인딩 : 양방향 바인딩
         // 1. 위의 이벤트 동작처럼, 프로퍼티 값을 수정하면 UI에 자동 반영
@@ -85,26 +40,20 @@ namespace Interface_INotifyPropertyChanged
         private void BindData()
         {
             // CheckBox
-            TestBool.DataBindings.Add(new Binding(nameof(TestBool.Checked), TestClass, nameof(TestClass.TestBool)));
+            TestBool.DataBindings.Add(new Binding(nameof(TestBool.Checked), _testClass, nameof(TestClass.TestBool)));
 
             // NumericUpDown
-            TestInt.DataBindings.Add(new Binding(nameof(TestInt.Value), TestClass, nameof(TestClass.TestInt)));
+            TestInt.DataBindings.Add(new Binding(nameof(TestInt.Value), _testClass, nameof(TestClass.TestInt)));
 
             // NumericUpDown
-            TestDouble.DataBindings.Add(new Binding(nameof(TestDouble.Value), TestClass, nameof(TestClass.TestDouble)));
+            TestDouble.DataBindings.Add(new Binding(nameof(TestDouble.Value), _testClass, nameof(TestClass.TestDouble)));
 
             // TextBox
-            TestString.DataBindings.Add(new Binding(nameof(TestString.Text), TestClass, nameof(TestClass.TestString)));
+            TestString.DataBindings.Add(new Binding(nameof(TestString.Text), _testClass, nameof(TestClass.TestString)));
 
             // TextBox : Enum의 경우 TextBox에 업데이트는 가능하나 텍스트 값을 프로퍼티에 바인딩하는 것은 안된다.
-            // 양방향 바인딩을 원할 경우 ComboBox 고려하는 것이 좋다.
-            TestEnum.DataBindings.Add(new Binding(nameof(TestEnum.Text), TestClass, nameof(TestClass.TestEnum)));
+            // 양방향 바인딩을 원할 경우 ComboBox를 고려하는 것이 좋다.
+            TestEnum.DataBindings.Add(new Binding(nameof(TestEnum.Text), _testClass, nameof(TestClass.TestEnum)));
         }
-
-        /*-------------------------------------------
-         *
-         *      Helper functions
-         *
-         -------------------------------------------*/
     }
 }

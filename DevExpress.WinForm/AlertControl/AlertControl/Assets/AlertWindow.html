@@ -1,37 +1,30 @@
-﻿<div class="container">
-    <div class="popup">
-        <div class="title-container">
-            <div class="title-caption">
-                <img class="titleImageSource" src='${TitleImageSource}' />
-                <div class="titleCaption">${Title}</div>
-            </div>
-            <div class="title-buttons">
-                <img id="pinButton" class="pin-button" src='${TitlePinImageSource}' />
-                <img id="closeButton" class="close-button" src='${TitleCloseImageSource}' />
+﻿<div class="popup">
+    <div class="title">
+        <div class="caption">
+            <img src='${TitleImageSource}' />
+            <span>${Title}</span>
+        </div>
+        <div class="buttons">
+            <img id="pinButton" src='${TitlePinImageSource}' />
+            <img id="closeButton" src='${TitleCloseImageSource}' />
+        </div>
+    </div>
+    <div class="body">
+        <p class="caption">${Caption}</p>
+        <div class="description">
+            <img src='${DescriptionImageSource}' />
+            <div class="text">
+                <p>${Description1}</p>
+                <p>${Description2}</p>
             </div>
         </div>
-        <div class="body-container">
-            <div class="body-caption-container">
-                <div class="bodyCaption">${Caption}</div>
-            </div>
-            <div class="body-description-container">
-                <div class="body-description-image">
-                    <img class="bodyDescriptionImageSource" src='${DescriptionImageSource}' />
-                </div>
-                <div class="body-description-text">
-                    <div class="bodyDescription1">${Description1}</div>
-                    <div class="bodyDescription2">${Description2}</div>
-                </div>
-            </div>
+    </div>
+    <div class="footer">
+        <div class="urls">
+            <a href='${FooterUrl1}'>${FooterUrl1}</a>
+            <br />
+            <a href='${FooterUrl2}'>${FooterUrl2}</a>
         </div>
-        <div class="footer-container">
-            <div class="footer-url">
-                <a href='${FooterUrl1}'>${FooterUrl1}</a><br>
-                <a href='${FooterUrl2}'>${FooterUrl2}</a>
-            </div>
-            <div class="footer-copyright">
-                <br><div class="copyright">${Copyright}</div>
-            </div>
-        </div>
+        <p class="copyright">${Copyright}</p>
     </div>
 </div>
