@@ -1,150 +1,132 @@
-﻿using OpenCvSharp;
-using System;
-using System.Collections.Generic;
+using OpenCvSharp;
 using System.Management;
-using System.Threading;
-using System.Windows.Forms;
 
-namespace UsingWebcam
+namespace UsingWebcam;
+
+public partial class Form1 : Form
 {
-    public partial class Form1 : Form
+    private VideoCapture _videoCapture;
+    private readonly SynchronizationContext _syncContext;
+    private volatile bool _isStop = false;
+
+    public Form1()
     {
-        private VideoCapture VideoCapture;
-        private SynchronizationContext SyncContext;
-        private bool IsStop = false;
+        InitializeComponent();
+        _syncContext = SynchronizationContext.Current!;
 
-        public Form1()
+        _videoCapture = new VideoCapture();
+
+        WebcamList.Items.AddRange(GetImageDevices());
+        if (WebcamList.Items.Count > 0)
+            WebcamList.SelectedIndex = 0;
+
+        StartButton.Click += StartButton_Click;
+        StopButton.Click += StopButton_Click;
+    }
+
+    private void StartButton_Click(object? sender, EventArgs e)
+    {
+        // 카메라 열기
+        _videoCapture.Open(WebcamList.SelectedIndex);
+
+        // 프레임 크기 조절 시 카메라 다시 연결. 최초 연결할 때만 설정
+        _videoCapture.Set(VideoCaptureProperties.FrameWidth, (int)FrameWidth.Value);
+        _videoCapture.Set(VideoCaptureProperties.FrameHeight, (int)FrameHeight.Value);
+
+        var worker = new Thread(Worker)
         {
-            InitializeComponent();
-            SyncContext = SynchronizationContext.Current;
+            IsBackground = true
+        };
+        worker.Start();
+    }
 
-            DrawUI();
-            ConnectingEvents();
+    private void StopButton_Click(object? sender, EventArgs e) => _isStop = true;
+
+    private void Worker()
+    {
+        _isStop = false;
+
+        // OpenCvSharp 제공 window
+        var videoWindow = new Window("Video");
+
+        while (!_isStop)
+        {
+            SetCameraParams();
+
+            // Frame 단위 재생
+            using var frame = new Mat();
+            _videoCapture.Read(frame);
+
+            videoWindow.ShowImage(frame);
+
+            // 카메라에 설정된 Fps 값만큼 wait
+            Cv2.WaitKey((int)Math.Round(1000 / _videoCapture.Fps));
         }
 
-        private void DrawUI()
+        videoWindow.Close();
+    }
+
+    /// <summary>
+    /// PC에 있는 이미지 장치를 얻어옴 <br/>
+    /// 스캐너 등 다른 장치 또한 나타날 수 있음
+    /// </summary>
+    /// <returns>Device names</returns>
+    private string[] GetImageDevices()
+    {
+        var deviceNames = new List<string>();
+
+        // System.Management Nuget 설치 필요
+        var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE (PNPClass = 'Image' OR PNPClass = 'Camera')");
+        foreach (var device in searcher.Get())
+            deviceNames.Add(device["Caption"].ToString()!);
+
+        return [.. deviceNames];
+    }
+
+    // 카메라에 따라 적용 가능한 설정이 다를 수 있음
+    private void SetCameraParams()
+    {
+        double exposure = 0;
+        double focus = 0;
+        double brightness = 0;
+        double contrast = 0;
+        double hue = 0;
+        double saturation = 0;
+        double gain = 0;
+        double gamma = 0;
+        double sharpness = 0;
+
+        // UI 값을 읽어옴
+        _syncContext.Send(delegate
         {
-            WebcamList.Items.AddRange(GetCameras());
-            if (WebcamList.Items.Count > 0) WebcamList.SelectedIndex = 0;
-        }
+            exposure = Exposure.Value;
+            focus = Focus.Value;
+            brightness = Brightness.Value;
+            contrast = Contrast.Value;
+            hue = Hue.Value;
+            saturation = Saturation.Value;
+            gain = Gain.Value;
+            gamma = Gamma.Value;
+            sharpness = Sharpness.Value;
+        }, null);
 
-        private void ConnectingEvents()
-        {
-            StartButton.Click += StartButton_Click;
-            StopButton.Click += StopButton_Click;
-        }
-
-        private void StartButton_Click(object sender, EventArgs e)
-        {
-            int selectedCam = 0;
-            int frameWidth = 0;
-            int frameHeight = 0;
-            SyncContext.Send(delegate
-            {
-                selectedCam = WebcamList.SelectedIndex;
-                frameWidth = (int)FrameWidth.Value;
-                frameHeight = (int)FrameHeight.Value;
-            }, null);
-
-            VideoCapture = new VideoCapture();
-            VideoCapture.Open(selectedCam);
-            VideoCapture.Set(VideoCaptureProperties.FrameWidth, frameWidth);    // 프레임 크기 조절 시 카메라 다시 연결. 최초 연결할 때만 설정
-            VideoCapture.Set(VideoCaptureProperties.FrameHeight, frameHeight);
-
-            GetCameraParams();
-
-            var worker = new Thread(Worker);
-            worker.IsBackground = true;
-            worker.Start();
-        }
-
-        private void StopButton_Click(object sender, EventArgs e) => IsStop = true;
-
-        private void Worker()
-        {
-            IsStop = false;
-            var videoWindow = new Window("Video");
-
-            while (!IsStop)
-            {
-                SetCameraParams();
-
-                Mat frame = new Mat();
-                VideoCapture.Read(frame);
-
-                videoWindow.ShowImage(frame);
-                Application.DoEvents();
-                frame.Release();
-            }
-
-            videoWindow.Close();
-            GC.Collect();
-        }
-
-        /// <summary>
-        /// PC에 있는 카메라 리스트를 얻어옴
-        /// </summary>
-        /// <returns>PC List</returns>
-        private string[] GetCameras()
-        {
-            var cameraNames = new List<string>();
-            var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE (PNPClass = 'Image' OR PNPClass = 'Camera')");
-            foreach (var cam in searcher.Get()) cameraNames.Add(cam["Caption"].ToString());
-            return cameraNames.ToArray();
-        }
-
-        /// <summary>
-        /// Exposure, Focus 등 카메라에 따라 파라미터 지원 안되는 경우 있음<br/>Gain의 경우 값 범위를 찾지 못함
-        /// </summary>
-        private void GetCameraParams()
-        {
-            SyncContext.Send(delegate
-            {
-                Exposure.Value = (int)(VideoCapture.Exposure);
-                Focus.Value = (int)(VideoCapture.Focus);
-                Brightness.Value = (int)VideoCapture.Brightness;
-                Contrast.Value = (int)VideoCapture.Contrast;
-                Hue.Value = (int)VideoCapture.Hue;
-                Saturation.Value = (int)VideoCapture.Saturation;
-                Gain.Value = (int)VideoCapture.Gain;
-                Gamma.Value = (int)VideoCapture.Gamma;
-                Sharpness.Value = (int)VideoCapture.Sharpness;
-            }, null);
-        }
-
-        private void SetCameraParams()
-        {
-            double exposure = 0;
-            double focus = 0;
-            double brightness = 0;
-            double contrast = 0;
-            double hue = 0;
-            double saturation = 0;
-            double gain = 0;
-            double gamma = 0;
-            double sharpness = 0;
-            SyncContext.Send(delegate
-            {
-                exposure = Exposure.Value;
-                focus = Focus.Value;
-                brightness = Brightness.Value;
-                contrast = Contrast.Value;
-                hue = Hue.Value;
-                saturation = Saturation.Value;
-                gain = Gain.Value;
-                gamma = Gamma.Value;
-                sharpness = Sharpness.Value;
-            }, null);
-
-            VideoCapture.Exposure = exposure;
-            VideoCapture.Focus = focus;
-            VideoCapture.Brightness = brightness;
-            VideoCapture.Contrast = contrast;
-            VideoCapture.Hue = hue;
-            VideoCapture.Saturation = saturation;
-            VideoCapture.Gain = gain;
-            VideoCapture.Gamma = gamma;
-            VideoCapture.Sharpness = sharpness;
-        }
+        if (_videoCapture.Exposure != exposure)
+            _videoCapture.Exposure = exposure;
+        if (_videoCapture.Focus != focus)
+            _videoCapture.Focus = focus;
+        if (_videoCapture.Brightness != brightness)
+            _videoCapture.Brightness = brightness;
+        if (_videoCapture.Contrast != contrast)
+            _videoCapture.Contrast = contrast;
+        if (_videoCapture.Hue != hue)
+            _videoCapture.Hue = hue;
+        if (_videoCapture.Saturation != saturation)
+            _videoCapture.Saturation = saturation;
+        if (_videoCapture.Gain != gain)
+            _videoCapture.Gain = gain;
+        if (_videoCapture.Gamma != gamma)
+            _videoCapture.Gamma = gamma;
+        if (_videoCapture.Sharpness != sharpness)
+            _videoCapture.Sharpness = sharpness;
     }
 }

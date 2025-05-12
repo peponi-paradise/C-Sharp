@@ -1,665 +1,638 @@
-﻿namespace UsingWebcam
+﻿namespace UsingWebcam;
+
+partial class Form1
 {
-    partial class Form1
+    /// <summary>
+    /// 필수 디자이너 변수입니다.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
+
+    /// <summary>
+    /// 사용 중인 모든 리소스를 정리합니다.
+    /// </summary>
+    /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
+    protected override void Dispose(bool disposing)
     {
-        /// <summary>
-        /// 필수 디자이너 변수입니다.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// 사용 중인 모든 리소스를 정리합니다.
-        /// </summary>
-        /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
-        protected override void Dispose(bool disposing)
+        if (disposing && (components != null))
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            components.Dispose();
         }
-
-        #region Windows Form 디자이너에서 생성한 코드
-
-        /// <summary>
-        /// 디자이너 지원에 필요한 메서드입니다. 
-        /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.ControlPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.CamListBox = new System.Windows.Forms.GroupBox();
-            this.WebcamList = new System.Windows.Forms.ListBox();
-            this.WebcamStartStopPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.StopButton = new System.Windows.Forms.Button();
-            this.StartButton = new System.Windows.Forms.Button();
-            this.PropertyPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SharpnessPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SharpnessLabel = new System.Windows.Forms.Label();
-            this.Sharpness = new System.Windows.Forms.TrackBar();
-            this.GainGammaPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.Gamma = new System.Windows.Forms.TrackBar();
-            this.GammaLabel = new System.Windows.Forms.Label();
-            this.GainLabel = new System.Windows.Forms.Label();
-            this.Gain = new System.Windows.Forms.TrackBar();
-            this.HueSaturationPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.Saturation = new System.Windows.Forms.TrackBar();
-            this.SaturationLabel = new System.Windows.Forms.Label();
-            this.HueLabel = new System.Windows.Forms.Label();
-            this.Hue = new System.Windows.Forms.TrackBar();
-            this.ExposureFocusPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.Focus = new System.Windows.Forms.TrackBar();
-            this.FocusLabel = new System.Windows.Forms.Label();
-            this.ExposureLabel = new System.Windows.Forms.Label();
-            this.Exposure = new System.Windows.Forms.TrackBar();
-            this.BrightnessContrastPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.Contrast = new System.Windows.Forms.TrackBar();
-            this.ContrastLabel = new System.Windows.Forms.Label();
-            this.BrightnessLabel = new System.Windows.Forms.Label();
-            this.Brightness = new System.Windows.Forms.TrackBar();
-            this.FrameSizePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.FrameHeightLabel = new System.Windows.Forms.Label();
-            this.FrameHeight = new System.Windows.Forms.NumericUpDown();
-            this.FrameWidthLabel = new System.Windows.Forms.Label();
-            this.FrameWidth = new System.Windows.Forms.NumericUpDown();
-            this.ControlPanel.SuspendLayout();
-            this.CamListBox.SuspendLayout();
-            this.WebcamStartStopPanel.SuspendLayout();
-            this.PropertyPanel.SuspendLayout();
-            this.SharpnessPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Sharpness)).BeginInit();
-            this.GainGammaPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Gamma)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Gain)).BeginInit();
-            this.HueSaturationPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Saturation)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Hue)).BeginInit();
-            this.ExposureFocusPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Focus)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Exposure)).BeginInit();
-            this.BrightnessContrastPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Contrast)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Brightness)).BeginInit();
-            this.FrameSizePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FrameHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FrameWidth)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // ControlPanel
-            // 
-            this.ControlPanel.ColumnCount = 2;
-            this.ControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.ControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.ControlPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.ControlPanel.Controls.Add(this.CamListBox, 0, 0);
-            this.ControlPanel.Controls.Add(this.WebcamStartStopPanel, 0, 1);
-            this.ControlPanel.Controls.Add(this.PropertyPanel, 1, 0);
-            this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ControlPanel.Location = new System.Drawing.Point(0, 0);
-            this.ControlPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.ControlPanel.Name = "ControlPanel";
-            this.ControlPanel.RowCount = 2;
-            this.ControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ControlPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ControlPanel.Size = new System.Drawing.Size(624, 441);
-            this.ControlPanel.TabIndex = 1;
-            // 
-            // CamListBox
-            // 
-            this.CamListBox.Controls.Add(this.WebcamList);
-            this.CamListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CamListBox.Location = new System.Drawing.Point(1, 1);
-            this.CamListBox.Margin = new System.Windows.Forms.Padding(1);
-            this.CamListBox.Name = "CamListBox";
-            this.CamListBox.Padding = new System.Windows.Forms.Padding(1);
-            this.CamListBox.Size = new System.Drawing.Size(122, 218);
-            this.CamListBox.TabIndex = 4;
-            this.CamListBox.TabStop = false;
-            this.CamListBox.Text = "Webcams";
-            // 
-            // WebcamList
-            // 
-            this.WebcamList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.WebcamList.FormattingEnabled = true;
-            this.WebcamList.IntegralHeight = false;
-            this.WebcamList.ItemHeight = 12;
-            this.WebcamList.Location = new System.Drawing.Point(1, 15);
-            this.WebcamList.Name = "WebcamList";
-            this.WebcamList.Size = new System.Drawing.Size(120, 202);
-            this.WebcamList.TabIndex = 0;
-            // 
-            // WebcamStartStopPanel
-            // 
-            this.WebcamStartStopPanel.ColumnCount = 2;
-            this.WebcamStartStopPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.WebcamStartStopPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.WebcamStartStopPanel.Controls.Add(this.StopButton, 1, 0);
-            this.WebcamStartStopPanel.Controls.Add(this.StartButton, 0, 0);
-            this.WebcamStartStopPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.WebcamStartStopPanel.Location = new System.Drawing.Point(3, 223);
-            this.WebcamStartStopPanel.Name = "WebcamStartStopPanel";
-            this.WebcamStartStopPanel.RowCount = 1;
-            this.WebcamStartStopPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.WebcamStartStopPanel.Size = new System.Drawing.Size(118, 215);
-            this.WebcamStartStopPanel.TabIndex = 5;
-            // 
-            // StopButton
-            // 
-            this.StopButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StopButton.Location = new System.Drawing.Point(60, 1);
-            this.StopButton.Margin = new System.Windows.Forms.Padding(1);
-            this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(57, 213);
-            this.StopButton.TabIndex = 3;
-            this.StopButton.Text = "STOP";
-            this.StopButton.UseVisualStyleBackColor = true;
-            // 
-            // StartButton
-            // 
-            this.StartButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StartButton.Location = new System.Drawing.Point(1, 1);
-            this.StartButton.Margin = new System.Windows.Forms.Padding(1);
-            this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(57, 213);
-            this.StartButton.TabIndex = 2;
-            this.StartButton.Text = "START";
-            this.StartButton.UseVisualStyleBackColor = true;
-            // 
-            // PropertyPanel
-            // 
-            this.PropertyPanel.ColumnCount = 4;
-            this.PropertyPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.PropertyPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.PropertyPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.PropertyPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.PropertyPanel.Controls.Add(this.SharpnessPanel, 2, 2);
-            this.PropertyPanel.Controls.Add(this.GainGammaPanel, 0, 2);
-            this.PropertyPanel.Controls.Add(this.HueSaturationPanel, 2, 1);
-            this.PropertyPanel.Controls.Add(this.ExposureFocusPanel, 2, 0);
-            this.PropertyPanel.Controls.Add(this.BrightnessContrastPanel, 0, 1);
-            this.PropertyPanel.Controls.Add(this.FrameSizePanel, 0, 0);
-            this.PropertyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PropertyPanel.Location = new System.Drawing.Point(127, 3);
-            this.PropertyPanel.Name = "PropertyPanel";
-            this.PropertyPanel.RowCount = 3;
-            this.ControlPanel.SetRowSpan(this.PropertyPanel, 2);
-            this.PropertyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.PropertyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.PropertyPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.PropertyPanel.Size = new System.Drawing.Size(494, 435);
-            this.PropertyPanel.TabIndex = 6;
-            // 
-            // SharpnessPanel
-            // 
-            this.SharpnessPanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.SharpnessPanel, 2);
-            this.SharpnessPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SharpnessPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SharpnessPanel.Controls.Add(this.SharpnessLabel, 0, 0);
-            this.SharpnessPanel.Controls.Add(this.Sharpness, 1, 0);
-            this.SharpnessPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SharpnessPanel.Location = new System.Drawing.Point(249, 293);
-            this.SharpnessPanel.Name = "SharpnessPanel";
-            this.SharpnessPanel.RowCount = 2;
-            this.SharpnessPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SharpnessPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.SharpnessPanel.Size = new System.Drawing.Size(242, 139);
-            this.SharpnessPanel.TabIndex = 5;
-            // 
-            // SharpnessLabel
-            // 
-            this.SharpnessLabel.AutoSize = true;
-            this.SharpnessLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SharpnessLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SharpnessLabel.Location = new System.Drawing.Point(3, 0);
-            this.SharpnessLabel.Name = "SharpnessLabel";
-            this.SharpnessLabel.Size = new System.Drawing.Size(115, 69);
-            this.SharpnessLabel.TabIndex = 0;
-            this.SharpnessLabel.Text = "Sharpness";
-            this.SharpnessLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Sharpness
-            // 
-            this.Sharpness.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Sharpness.Location = new System.Drawing.Point(124, 3);
-            this.Sharpness.Maximum = 15;
-            this.Sharpness.Name = "Sharpness";
-            this.Sharpness.Size = new System.Drawing.Size(115, 63);
-            this.Sharpness.TabIndex = 3;
-            this.Sharpness.TickFrequency = 5;
-            this.Sharpness.Value = 1;
-            // 
-            // GainGammaPanel
-            // 
-            this.GainGammaPanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.GainGammaPanel, 2);
-            this.GainGammaPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GainGammaPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GainGammaPanel.Controls.Add(this.Gamma, 1, 1);
-            this.GainGammaPanel.Controls.Add(this.GammaLabel, 0, 1);
-            this.GainGammaPanel.Controls.Add(this.GainLabel, 0, 0);
-            this.GainGammaPanel.Controls.Add(this.Gain, 1, 0);
-            this.GainGammaPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GainGammaPanel.Location = new System.Drawing.Point(3, 293);
-            this.GainGammaPanel.Name = "GainGammaPanel";
-            this.GainGammaPanel.RowCount = 2;
-            this.GainGammaPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GainGammaPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GainGammaPanel.Size = new System.Drawing.Size(240, 139);
-            this.GainGammaPanel.TabIndex = 4;
-            // 
-            // Gamma
-            // 
-            this.Gamma.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Gamma.Location = new System.Drawing.Point(123, 72);
-            this.Gamma.Maximum = 15;
-            this.Gamma.Minimum = 1;
-            this.Gamma.Name = "Gamma";
-            this.Gamma.Size = new System.Drawing.Size(114, 64);
-            this.Gamma.TabIndex = 4;
-            this.Gamma.TickFrequency = 5;
-            this.Gamma.Value = 10;
-            // 
-            // GammaLabel
-            // 
-            this.GammaLabel.AutoSize = true;
-            this.GammaLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GammaLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GammaLabel.Location = new System.Drawing.Point(3, 69);
-            this.GammaLabel.Name = "GammaLabel";
-            this.GammaLabel.Size = new System.Drawing.Size(114, 70);
-            this.GammaLabel.TabIndex = 2;
-            this.GammaLabel.Text = "Gamma";
-            this.GammaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // GainLabel
-            // 
-            this.GainLabel.AutoSize = true;
-            this.GainLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GainLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GainLabel.Location = new System.Drawing.Point(3, 0);
-            this.GainLabel.Name = "GainLabel";
-            this.GainLabel.Size = new System.Drawing.Size(114, 69);
-            this.GainLabel.TabIndex = 0;
-            this.GainLabel.Text = "Gain";
-            this.GainLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Gain
-            // 
-            this.Gain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Gain.Location = new System.Drawing.Point(123, 3);
-            this.Gain.Maximum = 255;
-            this.Gain.Minimum = -1;
-            this.Gain.Name = "Gain";
-            this.Gain.Size = new System.Drawing.Size(114, 63);
-            this.Gain.TabIndex = 3;
-            this.Gain.TickFrequency = 5;
-            // 
-            // HueSaturationPanel
-            // 
-            this.HueSaturationPanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.HueSaturationPanel, 2);
-            this.HueSaturationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.HueSaturationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.HueSaturationPanel.Controls.Add(this.Saturation, 1, 1);
-            this.HueSaturationPanel.Controls.Add(this.SaturationLabel, 0, 1);
-            this.HueSaturationPanel.Controls.Add(this.HueLabel, 0, 0);
-            this.HueSaturationPanel.Controls.Add(this.Hue, 1, 0);
-            this.HueSaturationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HueSaturationPanel.Location = new System.Drawing.Point(249, 148);
-            this.HueSaturationPanel.Name = "HueSaturationPanel";
-            this.HueSaturationPanel.RowCount = 2;
-            this.HueSaturationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.HueSaturationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.HueSaturationPanel.Size = new System.Drawing.Size(242, 139);
-            this.HueSaturationPanel.TabIndex = 3;
-            // 
-            // Saturation
-            // 
-            this.Saturation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Saturation.Location = new System.Drawing.Point(124, 72);
-            this.Saturation.Maximum = 255;
-            this.Saturation.Name = "Saturation";
-            this.Saturation.Size = new System.Drawing.Size(115, 64);
-            this.Saturation.TabIndex = 4;
-            this.Saturation.TickFrequency = 5;
-            this.Saturation.Value = 10;
-            // 
-            // SaturationLabel
-            // 
-            this.SaturationLabel.AutoSize = true;
-            this.SaturationLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SaturationLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SaturationLabel.Location = new System.Drawing.Point(3, 69);
-            this.SaturationLabel.Name = "SaturationLabel";
-            this.SaturationLabel.Size = new System.Drawing.Size(115, 70);
-            this.SaturationLabel.TabIndex = 2;
-            this.SaturationLabel.Text = "Saturation";
-            this.SaturationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // HueLabel
-            // 
-            this.HueLabel.AutoSize = true;
-            this.HueLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.HueLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HueLabel.Location = new System.Drawing.Point(3, 0);
-            this.HueLabel.Name = "HueLabel";
-            this.HueLabel.Size = new System.Drawing.Size(115, 69);
-            this.HueLabel.TabIndex = 0;
-            this.HueLabel.Text = "Hue";
-            this.HueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Hue
-            // 
-            this.Hue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Hue.Location = new System.Drawing.Point(124, 3);
-            this.Hue.Maximum = 179;
-            this.Hue.Name = "Hue";
-            this.Hue.Size = new System.Drawing.Size(115, 63);
-            this.Hue.TabIndex = 3;
-            this.Hue.TickFrequency = 5;
-            this.Hue.Value = 10;
-            // 
-            // ExposureFocusPanel
-            // 
-            this.ExposureFocusPanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.ExposureFocusPanel, 2);
-            this.ExposureFocusPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ExposureFocusPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ExposureFocusPanel.Controls.Add(this.Focus, 1, 1);
-            this.ExposureFocusPanel.Controls.Add(this.FocusLabel, 0, 1);
-            this.ExposureFocusPanel.Controls.Add(this.ExposureLabel, 0, 0);
-            this.ExposureFocusPanel.Controls.Add(this.Exposure, 1, 0);
-            this.ExposureFocusPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExposureFocusPanel.Location = new System.Drawing.Point(249, 3);
-            this.ExposureFocusPanel.Name = "ExposureFocusPanel";
-            this.ExposureFocusPanel.RowCount = 2;
-            this.ExposureFocusPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ExposureFocusPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ExposureFocusPanel.Size = new System.Drawing.Size(242, 139);
-            this.ExposureFocusPanel.TabIndex = 2;
-            // 
-            // Focus
-            // 
-            this.Focus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Focus.Location = new System.Drawing.Point(124, 72);
-            this.Focus.Maximum = 255;
-            this.Focus.Minimum = -1;
-            this.Focus.Name = "Focus";
-            this.Focus.Size = new System.Drawing.Size(115, 64);
-            this.Focus.TabIndex = 4;
-            this.Focus.TickFrequency = 5;
-            this.Focus.Value = 1;
-            // 
-            // FocusLabel
-            // 
-            this.FocusLabel.AutoSize = true;
-            this.FocusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FocusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FocusLabel.Location = new System.Drawing.Point(3, 69);
-            this.FocusLabel.Name = "FocusLabel";
-            this.FocusLabel.Size = new System.Drawing.Size(115, 70);
-            this.FocusLabel.TabIndex = 2;
-            this.FocusLabel.Text = "Focus";
-            this.FocusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ExposureLabel
-            // 
-            this.ExposureLabel.AutoSize = true;
-            this.ExposureLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ExposureLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ExposureLabel.Location = new System.Drawing.Point(3, 0);
-            this.ExposureLabel.Name = "ExposureLabel";
-            this.ExposureLabel.Size = new System.Drawing.Size(115, 69);
-            this.ExposureLabel.TabIndex = 0;
-            this.ExposureLabel.Text = "Exposure";
-            this.ExposureLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Exposure
-            // 
-            this.Exposure.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Exposure.Location = new System.Drawing.Point(124, 3);
-            this.Exposure.Maximum = -1;
-            this.Exposure.Minimum = -13;
-            this.Exposure.Name = "Exposure";
-            this.Exposure.Size = new System.Drawing.Size(115, 63);
-            this.Exposure.TabIndex = 3;
-            this.Exposure.TickFrequency = 5;
-            this.Exposure.Value = -1;
-            // 
-            // BrightnessContrastPanel
-            // 
-            this.BrightnessContrastPanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.BrightnessContrastPanel, 2);
-            this.BrightnessContrastPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BrightnessContrastPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BrightnessContrastPanel.Controls.Add(this.Contrast, 1, 1);
-            this.BrightnessContrastPanel.Controls.Add(this.ContrastLabel, 0, 1);
-            this.BrightnessContrastPanel.Controls.Add(this.BrightnessLabel, 0, 0);
-            this.BrightnessContrastPanel.Controls.Add(this.Brightness, 1, 0);
-            this.BrightnessContrastPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BrightnessContrastPanel.Location = new System.Drawing.Point(3, 148);
-            this.BrightnessContrastPanel.Name = "BrightnessContrastPanel";
-            this.BrightnessContrastPanel.RowCount = 2;
-            this.BrightnessContrastPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BrightnessContrastPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.BrightnessContrastPanel.Size = new System.Drawing.Size(240, 139);
-            this.BrightnessContrastPanel.TabIndex = 1;
-            // 
-            // Contrast
-            // 
-            this.Contrast.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Contrast.Location = new System.Drawing.Point(123, 72);
-            this.Contrast.Maximum = 100;
-            this.Contrast.Minimum = 1;
-            this.Contrast.Name = "Contrast";
-            this.Contrast.Size = new System.Drawing.Size(114, 64);
-            this.Contrast.TabIndex = 4;
-            this.Contrast.TickFrequency = 5;
-            this.Contrast.Value = 10;
-            // 
-            // ContrastLabel
-            // 
-            this.ContrastLabel.AutoSize = true;
-            this.ContrastLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ContrastLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContrastLabel.Location = new System.Drawing.Point(3, 69);
-            this.ContrastLabel.Name = "ContrastLabel";
-            this.ContrastLabel.Size = new System.Drawing.Size(114, 70);
-            this.ContrastLabel.TabIndex = 2;
-            this.ContrastLabel.Text = "Contrast";
-            this.ContrastLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // BrightnessLabel
-            // 
-            this.BrightnessLabel.AutoSize = true;
-            this.BrightnessLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BrightnessLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BrightnessLabel.Location = new System.Drawing.Point(3, 0);
-            this.BrightnessLabel.Name = "BrightnessLabel";
-            this.BrightnessLabel.Size = new System.Drawing.Size(114, 69);
-            this.BrightnessLabel.TabIndex = 0;
-            this.BrightnessLabel.Text = "Brightness";
-            this.BrightnessLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // Brightness
-            // 
-            this.Brightness.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Brightness.Location = new System.Drawing.Point(123, 3);
-            this.Brightness.Maximum = 100;
-            this.Brightness.Minimum = 1;
-            this.Brightness.Name = "Brightness";
-            this.Brightness.Size = new System.Drawing.Size(114, 63);
-            this.Brightness.TabIndex = 3;
-            this.Brightness.TickFrequency = 5;
-            this.Brightness.Value = 10;
-            // 
-            // FrameSizePanel
-            // 
-            this.FrameSizePanel.ColumnCount = 2;
-            this.PropertyPanel.SetColumnSpan(this.FrameSizePanel, 2);
-            this.FrameSizePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.FrameSizePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.FrameSizePanel.Controls.Add(this.FrameHeightLabel, 0, 1);
-            this.FrameSizePanel.Controls.Add(this.FrameHeight, 1, 1);
-            this.FrameSizePanel.Controls.Add(this.FrameWidthLabel, 0, 0);
-            this.FrameSizePanel.Controls.Add(this.FrameWidth, 1, 0);
-            this.FrameSizePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FrameSizePanel.Location = new System.Drawing.Point(3, 3);
-            this.FrameSizePanel.Name = "FrameSizePanel";
-            this.FrameSizePanel.RowCount = 2;
-            this.FrameSizePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.FrameSizePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.FrameSizePanel.Size = new System.Drawing.Size(240, 139);
-            this.FrameSizePanel.TabIndex = 0;
-            // 
-            // FrameHeightLabel
-            // 
-            this.FrameHeightLabel.AutoSize = true;
-            this.FrameHeightLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FrameHeightLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FrameHeightLabel.Location = new System.Drawing.Point(3, 69);
-            this.FrameHeightLabel.Name = "FrameHeightLabel";
-            this.FrameHeightLabel.Size = new System.Drawing.Size(114, 70);
-            this.FrameHeightLabel.TabIndex = 2;
-            this.FrameHeightLabel.Text = "Frame Height";
-            this.FrameHeightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // FrameHeight
-            // 
-            this.FrameHeight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FrameHeight.Location = new System.Drawing.Point(123, 72);
-            this.FrameHeight.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.FrameHeight.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.FrameHeight.Name = "FrameHeight";
-            this.FrameHeight.Size = new System.Drawing.Size(114, 21);
-            this.FrameHeight.TabIndex = 3;
-            this.FrameHeight.Value = new decimal(new int[] {
-            768,
-            0,
-            0,
-            0});
-            // 
-            // FrameWidthLabel
-            // 
-            this.FrameWidthLabel.AutoSize = true;
-            this.FrameWidthLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FrameWidthLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FrameWidthLabel.Location = new System.Drawing.Point(3, 0);
-            this.FrameWidthLabel.Name = "FrameWidthLabel";
-            this.FrameWidthLabel.Size = new System.Drawing.Size(114, 69);
-            this.FrameWidthLabel.TabIndex = 0;
-            this.FrameWidthLabel.Text = "Frame Width";
-            this.FrameWidthLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // FrameWidth
-            // 
-            this.FrameWidth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FrameWidth.Location = new System.Drawing.Point(123, 3);
-            this.FrameWidth.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.FrameWidth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.FrameWidth.Name = "FrameWidth";
-            this.FrameWidth.Size = new System.Drawing.Size(114, 21);
-            this.FrameWidth.TabIndex = 1;
-            this.FrameWidth.Value = new decimal(new int[] {
-            1024,
-            0,
-            0,
-            0});
-            // 
-            // Form1
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.ControlPanel);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.ControlPanel.ResumeLayout(false);
-            this.CamListBox.ResumeLayout(false);
-            this.WebcamStartStopPanel.ResumeLayout(false);
-            this.PropertyPanel.ResumeLayout(false);
-            this.SharpnessPanel.ResumeLayout(false);
-            this.SharpnessPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Sharpness)).EndInit();
-            this.GainGammaPanel.ResumeLayout(false);
-            this.GainGammaPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Gamma)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Gain)).EndInit();
-            this.HueSaturationPanel.ResumeLayout(false);
-            this.HueSaturationPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Saturation)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Hue)).EndInit();
-            this.ExposureFocusPanel.ResumeLayout(false);
-            this.ExposureFocusPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Focus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Exposure)).EndInit();
-            this.BrightnessContrastPanel.ResumeLayout(false);
-            this.BrightnessContrastPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Contrast)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Brightness)).EndInit();
-            this.FrameSizePanel.ResumeLayout(false);
-            this.FrameSizePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FrameHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FrameWidth)).EndInit();
-            this.ResumeLayout(false);
-
-        }
-
-        #endregion
-
-        private System.Windows.Forms.TableLayoutPanel ControlPanel;
-        private System.Windows.Forms.GroupBox CamListBox;
-        private System.Windows.Forms.ListBox WebcamList;
-        private System.Windows.Forms.TableLayoutPanel WebcamStartStopPanel;
-        private System.Windows.Forms.Button StopButton;
-        private System.Windows.Forms.Button StartButton;
-        private System.Windows.Forms.TableLayoutPanel PropertyPanel;
-        private System.Windows.Forms.TableLayoutPanel FrameSizePanel;
-        private System.Windows.Forms.Label FrameHeightLabel;
-        private System.Windows.Forms.NumericUpDown FrameHeight;
-        private System.Windows.Forms.Label FrameWidthLabel;
-        private System.Windows.Forms.NumericUpDown FrameWidth;
-        private System.Windows.Forms.TableLayoutPanel BrightnessContrastPanel;
-        private System.Windows.Forms.TrackBar Contrast;
-        private System.Windows.Forms.Label ContrastLabel;
-        private System.Windows.Forms.Label BrightnessLabel;
-        private System.Windows.Forms.TrackBar Brightness;
-        private System.Windows.Forms.TableLayoutPanel ExposureFocusPanel;
-        private System.Windows.Forms.TrackBar Focus;
-        private System.Windows.Forms.Label FocusLabel;
-        private System.Windows.Forms.Label ExposureLabel;
-        private System.Windows.Forms.TrackBar Exposure;
-        private System.Windows.Forms.TableLayoutPanel HueSaturationPanel;
-        private System.Windows.Forms.TrackBar Saturation;
-        private System.Windows.Forms.Label SaturationLabel;
-        private System.Windows.Forms.Label HueLabel;
-        private System.Windows.Forms.TrackBar Hue;
-        private System.Windows.Forms.TableLayoutPanel GainGammaPanel;
-        private System.Windows.Forms.TrackBar Gamma;
-        private System.Windows.Forms.Label GammaLabel;
-        private System.Windows.Forms.Label GainLabel;
-        private System.Windows.Forms.TrackBar Gain;
-        private System.Windows.Forms.TableLayoutPanel SharpnessPanel;
-        private System.Windows.Forms.Label SharpnessLabel;
-        private System.Windows.Forms.TrackBar Sharpness;
+        base.Dispose(disposing);
     }
-}
 
+    #region Windows Form 디자이너에서 생성한 코드
+
+    /// <summary>
+    /// 디자이너 지원에 필요한 메서드입니다. 
+    /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
+    /// </summary>
+    private void InitializeComponent()
+    {
+        ControlPanel = new TableLayoutPanel();
+        CamListBox = new GroupBox();
+        WebcamList = new ListBox();
+        WebcamStartStopPanel = new TableLayoutPanel();
+        StopButton = new Button();
+        StartButton = new Button();
+        PropertyPanel = new TableLayoutPanel();
+        SharpnessPanel = new TableLayoutPanel();
+        SharpnessLabel = new Label();
+        Sharpness = new TrackBar();
+        GainGammaPanel = new TableLayoutPanel();
+        Gamma = new TrackBar();
+        GammaLabel = new Label();
+        GainLabel = new Label();
+        Gain = new TrackBar();
+        HueSaturationPanel = new TableLayoutPanel();
+        Saturation = new TrackBar();
+        SaturationLabel = new Label();
+        HueLabel = new Label();
+        Hue = new TrackBar();
+        ExposureFocusPanel = new TableLayoutPanel();
+        Focus = new TrackBar();
+        FocusLabel = new Label();
+        ExposureLabel = new Label();
+        Exposure = new TrackBar();
+        BrightnessContrastPanel = new TableLayoutPanel();
+        Contrast = new TrackBar();
+        ContrastLabel = new Label();
+        BrightnessLabel = new Label();
+        Brightness = new TrackBar();
+        FrameSizePanel = new TableLayoutPanel();
+        FrameHeightLabel = new Label();
+        FrameHeight = new NumericUpDown();
+        FrameWidthLabel = new Label();
+        FrameWidth = new NumericUpDown();
+        ControlPanel.SuspendLayout();
+        CamListBox.SuspendLayout();
+        WebcamStartStopPanel.SuspendLayout();
+        PropertyPanel.SuspendLayout();
+        SharpnessPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)Sharpness).BeginInit();
+        GainGammaPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)Gamma).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)Gain).BeginInit();
+        HueSaturationPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)Saturation).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)Hue).BeginInit();
+        ExposureFocusPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)Focus).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)Exposure).BeginInit();
+        BrightnessContrastPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)Contrast).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)Brightness).BeginInit();
+        FrameSizePanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)FrameHeight).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)FrameWidth).BeginInit();
+        SuspendLayout();
+        // 
+        // ControlPanel
+        // 
+        ControlPanel.ColumnCount = 2;
+        ControlPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        ControlPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+        ControlPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+        ControlPanel.Controls.Add(CamListBox, 0, 0);
+        ControlPanel.Controls.Add(WebcamStartStopPanel, 0, 1);
+        ControlPanel.Controls.Add(PropertyPanel, 1, 0);
+        ControlPanel.Dock = DockStyle.Fill;
+        ControlPanel.Location = new Point(0, 0);
+        ControlPanel.Margin = new Padding(0);
+        ControlPanel.Name = "ControlPanel";
+        ControlPanel.RowCount = 2;
+        ControlPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        ControlPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        ControlPanel.Size = new Size(624, 441);
+        ControlPanel.TabIndex = 1;
+        // 
+        // CamListBox
+        // 
+        CamListBox.Controls.Add(WebcamList);
+        CamListBox.Dock = DockStyle.Fill;
+        CamListBox.Location = new Point(1, 1);
+        CamListBox.Margin = new Padding(1);
+        CamListBox.Name = "CamListBox";
+        CamListBox.Padding = new Padding(1);
+        CamListBox.Size = new Size(122, 218);
+        CamListBox.TabIndex = 4;
+        CamListBox.TabStop = false;
+        CamListBox.Text = "Webcams";
+        // 
+        // WebcamList
+        // 
+        WebcamList.Dock = DockStyle.Fill;
+        WebcamList.FormattingEnabled = true;
+        WebcamList.IntegralHeight = false;
+        WebcamList.ItemHeight = 15;
+        WebcamList.Location = new Point(1, 17);
+        WebcamList.Name = "WebcamList";
+        WebcamList.Size = new Size(120, 200);
+        WebcamList.TabIndex = 0;
+        // 
+        // WebcamStartStopPanel
+        // 
+        WebcamStartStopPanel.ColumnCount = 2;
+        WebcamStartStopPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        WebcamStartStopPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        WebcamStartStopPanel.Controls.Add(StopButton, 1, 0);
+        WebcamStartStopPanel.Controls.Add(StartButton, 0, 0);
+        WebcamStartStopPanel.Dock = DockStyle.Fill;
+        WebcamStartStopPanel.Location = new Point(3, 223);
+        WebcamStartStopPanel.Name = "WebcamStartStopPanel";
+        WebcamStartStopPanel.RowCount = 1;
+        WebcamStartStopPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        WebcamStartStopPanel.Size = new Size(118, 215);
+        WebcamStartStopPanel.TabIndex = 5;
+        // 
+        // StopButton
+        // 
+        StopButton.Dock = DockStyle.Fill;
+        StopButton.Location = new Point(60, 1);
+        StopButton.Margin = new Padding(1);
+        StopButton.Name = "StopButton";
+        StopButton.Size = new Size(57, 213);
+        StopButton.TabIndex = 3;
+        StopButton.Text = "STOP";
+        StopButton.UseVisualStyleBackColor = true;
+        // 
+        // StartButton
+        // 
+        StartButton.Dock = DockStyle.Fill;
+        StartButton.Location = new Point(1, 1);
+        StartButton.Margin = new Padding(1);
+        StartButton.Name = "StartButton";
+        StartButton.Size = new Size(57, 213);
+        StartButton.TabIndex = 2;
+        StartButton.Text = "START";
+        StartButton.UseVisualStyleBackColor = true;
+        // 
+        // PropertyPanel
+        // 
+        PropertyPanel.ColumnCount = 4;
+        PropertyPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+        PropertyPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+        PropertyPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+        PropertyPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+        PropertyPanel.Controls.Add(SharpnessPanel, 2, 2);
+        PropertyPanel.Controls.Add(GainGammaPanel, 0, 2);
+        PropertyPanel.Controls.Add(HueSaturationPanel, 2, 1);
+        PropertyPanel.Controls.Add(ExposureFocusPanel, 2, 0);
+        PropertyPanel.Controls.Add(BrightnessContrastPanel, 0, 1);
+        PropertyPanel.Controls.Add(FrameSizePanel, 0, 0);
+        PropertyPanel.Dock = DockStyle.Fill;
+        PropertyPanel.Location = new Point(127, 3);
+        PropertyPanel.Name = "PropertyPanel";
+        PropertyPanel.RowCount = 3;
+        ControlPanel.SetRowSpan(PropertyPanel, 2);
+        PropertyPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+        PropertyPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+        PropertyPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+        PropertyPanel.Size = new Size(494, 435);
+        PropertyPanel.TabIndex = 6;
+        // 
+        // SharpnessPanel
+        // 
+        SharpnessPanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(SharpnessPanel, 2);
+        SharpnessPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        SharpnessPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        SharpnessPanel.Controls.Add(SharpnessLabel, 0, 0);
+        SharpnessPanel.Controls.Add(Sharpness, 1, 0);
+        SharpnessPanel.Dock = DockStyle.Fill;
+        SharpnessPanel.Location = new Point(249, 293);
+        SharpnessPanel.Name = "SharpnessPanel";
+        SharpnessPanel.RowCount = 2;
+        SharpnessPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        SharpnessPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        SharpnessPanel.Size = new Size(242, 139);
+        SharpnessPanel.TabIndex = 5;
+        // 
+        // SharpnessLabel
+        // 
+        SharpnessLabel.AutoSize = true;
+        SharpnessLabel.BorderStyle = BorderStyle.FixedSingle;
+        SharpnessLabel.Dock = DockStyle.Fill;
+        SharpnessLabel.Location = new Point(3, 0);
+        SharpnessLabel.Name = "SharpnessLabel";
+        SharpnessLabel.Size = new Size(115, 69);
+        SharpnessLabel.TabIndex = 0;
+        SharpnessLabel.Text = "Sharpness";
+        SharpnessLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // Sharpness
+        // 
+        Sharpness.Dock = DockStyle.Fill;
+        Sharpness.Location = new Point(124, 3);
+        Sharpness.Maximum = 15;
+        Sharpness.Name = "Sharpness";
+        Sharpness.Size = new Size(115, 63);
+        Sharpness.TabIndex = 3;
+        Sharpness.TickFrequency = 5;
+        Sharpness.Value = 1;
+        // 
+        // GainGammaPanel
+        // 
+        GainGammaPanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(GainGammaPanel, 2);
+        GainGammaPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        GainGammaPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        GainGammaPanel.Controls.Add(Gamma, 1, 1);
+        GainGammaPanel.Controls.Add(GammaLabel, 0, 1);
+        GainGammaPanel.Controls.Add(GainLabel, 0, 0);
+        GainGammaPanel.Controls.Add(Gain, 1, 0);
+        GainGammaPanel.Dock = DockStyle.Fill;
+        GainGammaPanel.Location = new Point(3, 293);
+        GainGammaPanel.Name = "GainGammaPanel";
+        GainGammaPanel.RowCount = 2;
+        GainGammaPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        GainGammaPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        GainGammaPanel.Size = new Size(240, 139);
+        GainGammaPanel.TabIndex = 4;
+        // 
+        // Gamma
+        // 
+        Gamma.Dock = DockStyle.Fill;
+        Gamma.Location = new Point(123, 72);
+        Gamma.Maximum = 15;
+        Gamma.Minimum = 1;
+        Gamma.Name = "Gamma";
+        Gamma.Size = new Size(114, 64);
+        Gamma.TabIndex = 4;
+        Gamma.TickFrequency = 5;
+        Gamma.Value = 10;
+        // 
+        // GammaLabel
+        // 
+        GammaLabel.AutoSize = true;
+        GammaLabel.BorderStyle = BorderStyle.FixedSingle;
+        GammaLabel.Dock = DockStyle.Fill;
+        GammaLabel.Location = new Point(3, 69);
+        GammaLabel.Name = "GammaLabel";
+        GammaLabel.Size = new Size(114, 70);
+        GammaLabel.TabIndex = 2;
+        GammaLabel.Text = "Gamma";
+        GammaLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // GainLabel
+        // 
+        GainLabel.AutoSize = true;
+        GainLabel.BorderStyle = BorderStyle.FixedSingle;
+        GainLabel.Dock = DockStyle.Fill;
+        GainLabel.Location = new Point(3, 0);
+        GainLabel.Name = "GainLabel";
+        GainLabel.Size = new Size(114, 69);
+        GainLabel.TabIndex = 0;
+        GainLabel.Text = "Gain";
+        GainLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // Gain
+        // 
+        Gain.Dock = DockStyle.Fill;
+        Gain.Location = new Point(123, 3);
+        Gain.Maximum = 255;
+        Gain.Minimum = -1;
+        Gain.Name = "Gain";
+        Gain.Size = new Size(114, 63);
+        Gain.TabIndex = 3;
+        Gain.TickFrequency = 5;
+        // 
+        // HueSaturationPanel
+        // 
+        HueSaturationPanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(HueSaturationPanel, 2);
+        HueSaturationPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        HueSaturationPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        HueSaturationPanel.Controls.Add(Saturation, 1, 1);
+        HueSaturationPanel.Controls.Add(SaturationLabel, 0, 1);
+        HueSaturationPanel.Controls.Add(HueLabel, 0, 0);
+        HueSaturationPanel.Controls.Add(Hue, 1, 0);
+        HueSaturationPanel.Dock = DockStyle.Fill;
+        HueSaturationPanel.Location = new Point(249, 148);
+        HueSaturationPanel.Name = "HueSaturationPanel";
+        HueSaturationPanel.RowCount = 2;
+        HueSaturationPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        HueSaturationPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        HueSaturationPanel.Size = new Size(242, 139);
+        HueSaturationPanel.TabIndex = 3;
+        // 
+        // Saturation
+        // 
+        Saturation.Dock = DockStyle.Fill;
+        Saturation.Location = new Point(124, 72);
+        Saturation.Maximum = 255;
+        Saturation.Name = "Saturation";
+        Saturation.Size = new Size(115, 64);
+        Saturation.TabIndex = 4;
+        Saturation.TickFrequency = 5;
+        Saturation.Value = 10;
+        // 
+        // SaturationLabel
+        // 
+        SaturationLabel.AutoSize = true;
+        SaturationLabel.BorderStyle = BorderStyle.FixedSingle;
+        SaturationLabel.Dock = DockStyle.Fill;
+        SaturationLabel.Location = new Point(3, 69);
+        SaturationLabel.Name = "SaturationLabel";
+        SaturationLabel.Size = new Size(115, 70);
+        SaturationLabel.TabIndex = 2;
+        SaturationLabel.Text = "Saturation";
+        SaturationLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // HueLabel
+        // 
+        HueLabel.AutoSize = true;
+        HueLabel.BorderStyle = BorderStyle.FixedSingle;
+        HueLabel.Dock = DockStyle.Fill;
+        HueLabel.Location = new Point(3, 0);
+        HueLabel.Name = "HueLabel";
+        HueLabel.Size = new Size(115, 69);
+        HueLabel.TabIndex = 0;
+        HueLabel.Text = "Hue";
+        HueLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // Hue
+        // 
+        Hue.Dock = DockStyle.Fill;
+        Hue.Location = new Point(124, 3);
+        Hue.Maximum = 179;
+        Hue.Name = "Hue";
+        Hue.Size = new Size(115, 63);
+        Hue.TabIndex = 3;
+        Hue.TickFrequency = 5;
+        Hue.Value = 10;
+        // 
+        // ExposureFocusPanel
+        // 
+        ExposureFocusPanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(ExposureFocusPanel, 2);
+        ExposureFocusPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        ExposureFocusPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        ExposureFocusPanel.Controls.Add(Focus, 1, 1);
+        ExposureFocusPanel.Controls.Add(FocusLabel, 0, 1);
+        ExposureFocusPanel.Controls.Add(ExposureLabel, 0, 0);
+        ExposureFocusPanel.Controls.Add(Exposure, 1, 0);
+        ExposureFocusPanel.Dock = DockStyle.Fill;
+        ExposureFocusPanel.Location = new Point(249, 3);
+        ExposureFocusPanel.Name = "ExposureFocusPanel";
+        ExposureFocusPanel.RowCount = 2;
+        ExposureFocusPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        ExposureFocusPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        ExposureFocusPanel.Size = new Size(242, 139);
+        ExposureFocusPanel.TabIndex = 2;
+        // 
+        // Focus
+        // 
+        Focus.Dock = DockStyle.Fill;
+        Focus.Location = new Point(124, 72);
+        Focus.Maximum = 255;
+        Focus.Minimum = -1;
+        Focus.Name = "Focus";
+        Focus.Size = new Size(115, 64);
+        Focus.TabIndex = 4;
+        Focus.TickFrequency = 5;
+        Focus.Value = 1;
+        // 
+        // FocusLabel
+        // 
+        FocusLabel.AutoSize = true;
+        FocusLabel.BorderStyle = BorderStyle.FixedSingle;
+        FocusLabel.Dock = DockStyle.Fill;
+        FocusLabel.Location = new Point(3, 69);
+        FocusLabel.Name = "FocusLabel";
+        FocusLabel.Size = new Size(115, 70);
+        FocusLabel.TabIndex = 2;
+        FocusLabel.Text = "Focus";
+        FocusLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // ExposureLabel
+        // 
+        ExposureLabel.AutoSize = true;
+        ExposureLabel.BorderStyle = BorderStyle.FixedSingle;
+        ExposureLabel.Dock = DockStyle.Fill;
+        ExposureLabel.Location = new Point(3, 0);
+        ExposureLabel.Name = "ExposureLabel";
+        ExposureLabel.Size = new Size(115, 69);
+        ExposureLabel.TabIndex = 0;
+        ExposureLabel.Text = "Exposure";
+        ExposureLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // Exposure
+        // 
+        Exposure.Dock = DockStyle.Fill;
+        Exposure.Location = new Point(124, 3);
+        Exposure.Maximum = -1;
+        Exposure.Minimum = -13;
+        Exposure.Name = "Exposure";
+        Exposure.Size = new Size(115, 63);
+        Exposure.TabIndex = 3;
+        Exposure.TickFrequency = 5;
+        Exposure.Value = -1;
+        // 
+        // BrightnessContrastPanel
+        // 
+        BrightnessContrastPanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(BrightnessContrastPanel, 2);
+        BrightnessContrastPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        BrightnessContrastPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        BrightnessContrastPanel.Controls.Add(Contrast, 1, 1);
+        BrightnessContrastPanel.Controls.Add(ContrastLabel, 0, 1);
+        BrightnessContrastPanel.Controls.Add(BrightnessLabel, 0, 0);
+        BrightnessContrastPanel.Controls.Add(Brightness, 1, 0);
+        BrightnessContrastPanel.Dock = DockStyle.Fill;
+        BrightnessContrastPanel.Location = new Point(3, 148);
+        BrightnessContrastPanel.Name = "BrightnessContrastPanel";
+        BrightnessContrastPanel.RowCount = 2;
+        BrightnessContrastPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        BrightnessContrastPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        BrightnessContrastPanel.Size = new Size(240, 139);
+        BrightnessContrastPanel.TabIndex = 1;
+        // 
+        // Contrast
+        // 
+        Contrast.Dock = DockStyle.Fill;
+        Contrast.Location = new Point(123, 72);
+        Contrast.Maximum = 100;
+        Contrast.Minimum = 1;
+        Contrast.Name = "Contrast";
+        Contrast.Size = new Size(114, 64);
+        Contrast.TabIndex = 4;
+        Contrast.TickFrequency = 5;
+        Contrast.Value = 10;
+        // 
+        // ContrastLabel
+        // 
+        ContrastLabel.AutoSize = true;
+        ContrastLabel.BorderStyle = BorderStyle.FixedSingle;
+        ContrastLabel.Dock = DockStyle.Fill;
+        ContrastLabel.Location = new Point(3, 69);
+        ContrastLabel.Name = "ContrastLabel";
+        ContrastLabel.Size = new Size(114, 70);
+        ContrastLabel.TabIndex = 2;
+        ContrastLabel.Text = "Contrast";
+        ContrastLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // BrightnessLabel
+        // 
+        BrightnessLabel.AutoSize = true;
+        BrightnessLabel.BorderStyle = BorderStyle.FixedSingle;
+        BrightnessLabel.Dock = DockStyle.Fill;
+        BrightnessLabel.Location = new Point(3, 0);
+        BrightnessLabel.Name = "BrightnessLabel";
+        BrightnessLabel.Size = new Size(114, 69);
+        BrightnessLabel.TabIndex = 0;
+        BrightnessLabel.Text = "Brightness";
+        BrightnessLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // Brightness
+        // 
+        Brightness.Dock = DockStyle.Fill;
+        Brightness.Location = new Point(123, 3);
+        Brightness.Maximum = 100;
+        Brightness.Minimum = 1;
+        Brightness.Name = "Brightness";
+        Brightness.Size = new Size(114, 63);
+        Brightness.TabIndex = 3;
+        Brightness.TickFrequency = 5;
+        Brightness.Value = 10;
+        // 
+        // FrameSizePanel
+        // 
+        FrameSizePanel.ColumnCount = 2;
+        PropertyPanel.SetColumnSpan(FrameSizePanel, 2);
+        FrameSizePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        FrameSizePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        FrameSizePanel.Controls.Add(FrameHeightLabel, 0, 1);
+        FrameSizePanel.Controls.Add(FrameHeight, 1, 1);
+        FrameSizePanel.Controls.Add(FrameWidthLabel, 0, 0);
+        FrameSizePanel.Controls.Add(FrameWidth, 1, 0);
+        FrameSizePanel.Dock = DockStyle.Fill;
+        FrameSizePanel.Location = new Point(3, 3);
+        FrameSizePanel.Name = "FrameSizePanel";
+        FrameSizePanel.RowCount = 2;
+        FrameSizePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        FrameSizePanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        FrameSizePanel.Size = new Size(240, 139);
+        FrameSizePanel.TabIndex = 0;
+        // 
+        // FrameHeightLabel
+        // 
+        FrameHeightLabel.AutoSize = true;
+        FrameHeightLabel.BorderStyle = BorderStyle.FixedSingle;
+        FrameHeightLabel.Dock = DockStyle.Fill;
+        FrameHeightLabel.Location = new Point(3, 69);
+        FrameHeightLabel.Name = "FrameHeightLabel";
+        FrameHeightLabel.Size = new Size(114, 70);
+        FrameHeightLabel.TabIndex = 2;
+        FrameHeightLabel.Text = "Frame Height";
+        FrameHeightLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // FrameHeight
+        // 
+        FrameHeight.Dock = DockStyle.Fill;
+        FrameHeight.Location = new Point(123, 72);
+        FrameHeight.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+        FrameHeight.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        FrameHeight.Name = "FrameHeight";
+        FrameHeight.Size = new Size(114, 23);
+        FrameHeight.TabIndex = 3;
+        FrameHeight.Value = new decimal(new int[] { 768, 0, 0, 0 });
+        // 
+        // FrameWidthLabel
+        // 
+        FrameWidthLabel.AutoSize = true;
+        FrameWidthLabel.BorderStyle = BorderStyle.FixedSingle;
+        FrameWidthLabel.Dock = DockStyle.Fill;
+        FrameWidthLabel.Location = new Point(3, 0);
+        FrameWidthLabel.Name = "FrameWidthLabel";
+        FrameWidthLabel.Size = new Size(114, 69);
+        FrameWidthLabel.TabIndex = 0;
+        FrameWidthLabel.Text = "Frame Width";
+        FrameWidthLabel.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // FrameWidth
+        // 
+        FrameWidth.Dock = DockStyle.Fill;
+        FrameWidth.Location = new Point(123, 3);
+        FrameWidth.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
+        FrameWidth.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        FrameWidth.Name = "FrameWidth";
+        FrameWidth.Size = new Size(114, 23);
+        FrameWidth.TabIndex = 1;
+        FrameWidth.Value = new decimal(new int[] { 1024, 0, 0, 0 });
+        // 
+        // Form1
+        // 
+        AutoScaleDimensions = new SizeF(96F, 96F);
+        AutoScaleMode = AutoScaleMode.Dpi;
+        ClientSize = new Size(624, 441);
+        Controls.Add(ControlPanel);
+        Name = "Form1";
+        Text = "Form1";
+        ControlPanel.ResumeLayout(false);
+        CamListBox.ResumeLayout(false);
+        WebcamStartStopPanel.ResumeLayout(false);
+        PropertyPanel.ResumeLayout(false);
+        SharpnessPanel.ResumeLayout(false);
+        SharpnessPanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)Sharpness).EndInit();
+        GainGammaPanel.ResumeLayout(false);
+        GainGammaPanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)Gamma).EndInit();
+        ((System.ComponentModel.ISupportInitialize)Gain).EndInit();
+        HueSaturationPanel.ResumeLayout(false);
+        HueSaturationPanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)Saturation).EndInit();
+        ((System.ComponentModel.ISupportInitialize)Hue).EndInit();
+        ExposureFocusPanel.ResumeLayout(false);
+        ExposureFocusPanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)Focus).EndInit();
+        ((System.ComponentModel.ISupportInitialize)Exposure).EndInit();
+        BrightnessContrastPanel.ResumeLayout(false);
+        BrightnessContrastPanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)Contrast).EndInit();
+        ((System.ComponentModel.ISupportInitialize)Brightness).EndInit();
+        FrameSizePanel.ResumeLayout(false);
+        FrameSizePanel.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)FrameHeight).EndInit();
+        ((System.ComponentModel.ISupportInitialize)FrameWidth).EndInit();
+        ResumeLayout(false);
+    }
+
+    #endregion
+
+    private System.Windows.Forms.TableLayoutPanel ControlPanel;
+    private System.Windows.Forms.GroupBox CamListBox;
+    private System.Windows.Forms.ListBox WebcamList;
+    private System.Windows.Forms.TableLayoutPanel WebcamStartStopPanel;
+    private System.Windows.Forms.Button StopButton;
+    private System.Windows.Forms.Button StartButton;
+    private System.Windows.Forms.TableLayoutPanel PropertyPanel;
+    private System.Windows.Forms.TableLayoutPanel FrameSizePanel;
+    private System.Windows.Forms.Label FrameHeightLabel;
+    private System.Windows.Forms.NumericUpDown FrameHeight;
+    private System.Windows.Forms.Label FrameWidthLabel;
+    private System.Windows.Forms.NumericUpDown FrameWidth;
+    private System.Windows.Forms.TableLayoutPanel BrightnessContrastPanel;
+    private System.Windows.Forms.TrackBar Contrast;
+    private System.Windows.Forms.Label ContrastLabel;
+    private System.Windows.Forms.Label BrightnessLabel;
+    private System.Windows.Forms.TrackBar Brightness;
+    private System.Windows.Forms.TableLayoutPanel ExposureFocusPanel;
+    private System.Windows.Forms.TrackBar Focus;
+    private System.Windows.Forms.Label FocusLabel;
+    private System.Windows.Forms.Label ExposureLabel;
+    private System.Windows.Forms.TrackBar Exposure;
+    private System.Windows.Forms.TableLayoutPanel HueSaturationPanel;
+    private System.Windows.Forms.TrackBar Saturation;
+    private System.Windows.Forms.Label SaturationLabel;
+    private System.Windows.Forms.Label HueLabel;
+    private System.Windows.Forms.TrackBar Hue;
+    private System.Windows.Forms.TableLayoutPanel GainGammaPanel;
+    private System.Windows.Forms.TrackBar Gamma;
+    private System.Windows.Forms.Label GammaLabel;
+    private System.Windows.Forms.Label GainLabel;
+    private System.Windows.Forms.TrackBar Gain;
+    private System.Windows.Forms.TableLayoutPanel SharpnessPanel;
+    private System.Windows.Forms.Label SharpnessLabel;
+    private System.Windows.Forms.TrackBar Sharpness;
+}

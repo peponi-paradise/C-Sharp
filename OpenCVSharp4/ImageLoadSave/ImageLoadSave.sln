@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.4.33205.214
+VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageLoadSave", "ImageLoadSave\ImageLoadSave.csproj", "{65771753-0ED1-44A4-8598-05B20185A23D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageLoadSave", "ImageLoadSave\ImageLoadSave.csproj", "{251AFCDC-1A3F-4B3C-817F-D49E01B72EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{65771753-0ED1-44A4-8598-05B20185A23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65771753-0ED1-44A4-8598-05B20185A23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65771753-0ED1-44A4-8598-05B20185A23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65771753-0ED1-44A4-8598-05B20185A23D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{251AFCDC-1A3F-4B3C-817F-D49E01B72EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{251AFCDC-1A3F-4B3C-817F-D49E01B72EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{251AFCDC-1A3F-4B3C-817F-D49E01B72EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{251AFCDC-1A3F-4B3C-817F-D49E01B72EB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F6E778DB-4A5A-46AA-9A99-8FA0D81548F4}
 	EndGlobalSection
 EndGlobal

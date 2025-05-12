@@ -1,56 +1,106 @@
-﻿using System;
-using System.Windows.Forms;
 using OpenCvSharp;
 
-namespace ImageLoadSave
+namespace ImageLoadSave;
+
+public partial class Form1 : Form
 {
-    public partial class MainFrame : Form
+    private Mat _currentImage = new();
+
+    public Form1()
     {
-        Mat LoadImage = new Mat();  // OpenCVSharp 객체
+        InitializeComponent();
+        InitializeViewArea();
+    }
 
-        public MainFrame()
+    private void Load_Click(object? sender, EventArgs e)
+    {
+        OpenFileDialog dialog = new()
         {
-            InitializeComponent();
-            LoadButton.Click += LoadButton_Click;
-            SaveButton.Click += SaveButton_Click;
-            ImageMode.Items.AddRange(Enum.GetNames(typeof(ImreadModes)));
-            ImageMode.SelectedIndex = 0;
-        }
-
-        private void LoadButton_Click(object sender, EventArgs e)
+            Filter = "All files|*.*",
+            InitialDirectory = $@"C:\",
+            CheckPathExists = true,
+            CheckFileExists = true
+        };
+        if (dialog.ShowDialog() == DialogResult.OK)
         {
-            LoadImage.Release();    // 메모리 누수 발생으로 명시적 초기화 권장
-            GC.Collect();
-            GC.WaitForPendingFinalizers();  // 메모리 사용량이 대용량인 경우 즉시 GC에서 메모리 수거하도록
+            // 이전 이미지 할당 해제
+            _currentImage.Release();
 
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "All files|*.*";
-            dialog.InitialDirectory = $@"C:\";
-            dialog.CheckPathExists = true;
-            dialog.CheckFileExists = true;
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // 이미지 로드
-                LoadImage = Cv2.ImRead(dialog.FileName, (ImreadModes)Enum.Parse(typeof(ImreadModes), ImageMode.SelectedItem.ToString()));
-                ImagePath.Text = dialog.FileName;
+            // 이미지 로드
+            _currentImage = Cv2.ImRead(dialog.FileName, (ImreadModes)Enum.Parse(typeof(ImreadModes), (Controls.Find("ImageModes", true)[0] as ListBox)!.SelectedItem!.ToString()!));
 
-                // PictureBox에 이미지 할당. OpenCvSharp4.Extensions 설치 필요
-                PictureView.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(LoadImage);
-            }
+            // PictureBox에 이미지 할당. OpenCvSharp4.Extensions 설치 필요
+            (Controls.Find("ImageView", true)[0] as PictureBox)!.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(_currentImage);
         }
+    }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+    private void Save_Click(object? sender, EventArgs e)
+    {
+        SaveFileDialog dialog = new()
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Bitmap file|*.bmp";
-            dialog.InitialDirectory = $@"C:\";
-            dialog.CheckPathExists = true;
-            dialog.AddExtension = true;
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // 이미지 저장
-                Cv2.ImWrite(dialog.FileName, LoadImage);
-            }
+            Filter = "Bitmap file|*.bmp",
+            InitialDirectory = $@"C:\",
+            CheckPathExists = true,
+            AddExtension = true
+        };
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+            // 이미지 저장
+            Cv2.ImWrite(dialog.FileName, _currentImage);
         }
+    }
+
+    private void InitializeViewArea()
+    {
+        PictureBox picture = new()
+        {
+            Name = "ImageView",
+            Dock = DockStyle.Fill,
+            SizeMode = PictureBoxSizeMode.StretchImage
+        };
+
+        // OpenCvSharp4 이미지 로드 옵션
+        ListBox imageModes = new()
+        {
+            Name = "ImageModes",
+            Dock = DockStyle.Fill
+        };
+        imageModes.Items.AddRange(Enum.GetNames(typeof(ImreadModes)));
+        imageModes.SelectedIndex = 0;
+
+        Button load = new()
+        {
+            Text = "LOAD",
+            Dock = DockStyle.Fill
+        };
+        load.Click += Load_Click;
+
+        Button save = new()
+        {
+            Text = "SAVE",
+            Dock = DockStyle.Fill
+        };
+        save.Click += Save_Click;
+
+        TableLayoutPanel panel = new()
+        {
+            ColumnCount = 3,
+            RowCount = 2,
+            Dock = DockStyle.Fill
+        };
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34F));
+        panel.RowStyles.Add(new RowStyle(SizeType.Percent, 80));
+        panel.RowStyles.Add(new RowStyle(SizeType.Percent, 20));
+
+        panel.Controls.Add(picture, 0, 0);
+        panel.SetColumnSpan(picture, 3);
+
+        panel.Controls.Add(imageModes, 0, 1);
+        panel.Controls.Add(load, 1, 1);
+        panel.Controls.Add(save, 2, 1);
+
+        this.Controls.Add(panel);
     }
 }

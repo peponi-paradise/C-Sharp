@@ -1,137 +1,120 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
 using OpenCvSharp;
 
-namespace VideoLoadSave
+namespace VideoLoadSave;
+
+public partial class Form1 : Form
 {
-    public partial class MainFrame : Form
+    private VideoCapture _video = new();
+
+    public Form1()
     {
-        VideoCapture Video = new VideoCapture();
-        SynchronizationContext SyncContext;
+        InitializeComponent();
+        InitializeViewArea();
+    }
 
-        public MainFrame()
+    private void Load_Click(object? sender, EventArgs e)
+    {
+        OpenFileDialog dialog = new()
         {
-            InitializeComponent();
-            SyncContext = SynchronizationContext.Current;
-            LoadButton.Click += LoadButton_Click;
-            SaveButton.Click += SaveButton_Click;
-        }
-
-        private void LoadButton_Click(object sender, EventArgs e)
+            Filter = "All files|*.*",
+            InitialDirectory = $@"C:\",
+            CheckPathExists = true,
+            CheckFileExists = true
+        };
+        if (dialog.ShowDialog() == DialogResult.OK)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "All files|*.*";
-            dialog.InitialDirectory = $@"C:\";
-            dialog.CheckPathExists = true;
-            dialog.CheckFileExists = false;
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                Video.Release();
+            // 이전 리소스 할당 해제
+            _video.Release();
 
-                // 동영상 로드
-                Video = new VideoCapture(dialog.FileName);
-                VideoPath.Text = dialog.FileName;
+            // 동영상 로드
+            _video = new(dialog.FileName);
 
-                // 동영상 재생
-                var videoThread = new Thread(PlayMethod_PictureBox);
-                videoThread.IsBackground = true;
-                videoThread.Start();
-            }
-        }
+            // 프레임 간격
+            var frameInterval_ms = (int)Math.Round(1000 / _video.Fps);
 
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "All files|*.*";
-            dialog.InitialDirectory = $@"C:\";
-            dialog.CheckPathExists = true;
-            dialog.AddExtension = true;
-            if (dialog.ShowDialog() == DialogResult.OK && Video.IsOpened()) WriteMethod(dialog.FileName);   // Save last load video
-            else MessageBox.Show("Could not save");
-        }
-
-        void PlayMethod_PictureBox()
-        {
-            double frameIntervalBase = 1000 / Video.Fps - 15.6;  // 15.6 : 윈도우 타이머 해상도. 초당 프레임 수 최대한 맞춰주기 위한 꼼수
-            int frameInterval_ms = frameIntervalBase > 0 ? (int)frameIntervalBase : 0;
-            int GCCallCount = 0;
-
-            var image = new Mat();
-
-            // Frame position 증가시키면서 while loop를 돌리는 방법은 좋지 않아 보임.
-            // Video.PosFrames를 증가시킬 때, array 재배열이 일어나는 것 같다. 굉장히 느리게 화면이 갱신됨
-            //while (Video.PosFrames++!=Video.FrameCount)
-            while (true)
-            {
-                Video.Read(image);
-                if (image.Empty()) break;   // 마지막 프레임까지 읽은 경우 여기서 break 걸림
-                var frame = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);     // OpenCvSharp4.Extensions 설치 필요. Bitmap 변환 과정에서 메모리 누수 발생. GC 호출 필요
-
-                // Post로 화면 갱신을 하는 경우, 프레임이 잘릴 수 있다 (화면에 그리기 전 다음 프레임 로드될 수 있음)
-                SyncContext.Post(delegate { PictureView.Image = frame; }, null);
-
-                Thread.Sleep(frameInterval_ms);
-
-                if (GCCallCount++ > 60)
-                {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();      // 컬렉팅 끝날 때까지 대기
-                    GCCallCount = 0;
-                }
-            }
-
-            GC.Collect();
-        }
-
-        /// <summary>
-        /// OpenCV 제공 UI 사용시 CPU 사용량도 낮고, 로직도 단순해짐.
-        /// 가능하면 OpenCV UI 사용 권장
-        /// </summary>
-        void PlayMethod_OpenCVUI()
-        {
-            double frameIntervalBase = 1000 / Video.Fps - 15.6;
-            int frameInterval_ms = frameIntervalBase > 0 ? (int)frameIntervalBase : 0;
-
-            Window window = new Window("Video");    // 비디오 띄울 OpenCV 윈도우
+            // OpenCvSharp 제공 window
+            Window videoWindow = new(dialog.FileName);
 
             while (true)
             {
-                var image = new Mat();
-                Video.Read(image);
-                if (image.Empty()) break;
+                using var frame = new Mat();
+                _video.Read(frame);
+                // 동영상이 끝나면 frame.Empty 가 true로 바뀜
+                if (frame.Empty())
+                    break;
 
-                window.ShowImage(image);
+                // frame 단위로 불러오기 때문에 PictureBox 같은 컨트롤 이용하여 동영상 재생도 가능함
+                videoWindow.ShowImage(frame);
 
-                Cv2.WaitKey((int)frameInterval_ms);
-                image.Release();    // 리소스 명시적 해제. 안해주면 메모리 사용량 지속 증가
+                Cv2.WaitKey(frameInterval_ms);
             }
+        }
+    }
 
-            window.Close();
-            GC.Collect();
+    private void Save_Click(object? sender, EventArgs e)
+    {
+        if (!_video.IsOpened())
+        {
+            MessageBox.Show("Load the video first");
+            return;
         }
 
-        void WriteMethod(string fileName)
+        // 먼저 Load를 통해 재생한 영상을 처음으로 돌리기 위함
+        _video.PosFrames = 0;
+
+        SaveFileDialog dialog = new()
         {
-            // 동영상 쓰기 객체. 비디오 형식에 따라 코덱 필요
-            VideoWriter writer = new VideoWriter(fileName, VideoWriter.FourCC(Video.FourCC), Video.Fps, new OpenCvSharp.Size(Video.FrameWidth, Video.FrameHeight));
+            // 적절한 동영상 형식 설정 필요
+            Filter = "mp4|*.mp4",
+            InitialDirectory = $@"C:\",
+            CheckPathExists = true,
+            AddExtension = true
+        };
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+            // using 키워드에 유의한다. writer의 모든 쓰기 작업 완료 후 Release()가 호출되어야 정상적으로 저장된다.
+            using VideoWriter writer = new(dialog.FileName, VideoWriter.FourCC(_video.FourCC), _video.Fps, new(_video.FrameWidth, _video.FrameHeight));
 
-            var image = new Mat();
-
-            // 한 프레임씩 순차 쓰기
             while (true)
             {
-                Video.Read(image);
-                if (image.Empty()) break;
+                using var frame = new Mat();
+                _video.Read(frame);
+                // 동영상이 끝나면 frame.Empty 가 true로 바뀜
+                if (frame.Empty())
+                    break;
 
-                writer.Write(image);
-                image.Release();
+                writer.Write(frame);
             }
-
-            MessageBox.Show("Save done");
-
-            writer.Release();
-            GC.Collect();
         }
+    }
+
+    private void InitializeViewArea()
+    {
+        Button load = new()
+        {
+            Text = "LOAD",
+            Dock = DockStyle.Fill
+        };
+        load.Click += Load_Click;
+
+        Button save = new()
+        {
+            Text = "SAVE",
+            Dock = DockStyle.Fill
+        };
+        save.Click += Save_Click;
+
+        TableLayoutPanel panel = new()
+        {
+            ColumnCount = 2,
+            Dock = DockStyle.Fill
+        };
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+        panel.Controls.Add(load, 0, 0);
+        panel.Controls.Add(save, 1, 0);
+
+        this.Controls.Add(panel);
     }
 }
