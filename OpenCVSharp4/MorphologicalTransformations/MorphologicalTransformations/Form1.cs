@@ -59,10 +59,10 @@ public partial class Form1 : Form
     {
         using var kernel = Mat.Ones(3, 3, MatType.CV_8UC1);
 
-        using var transformated = image.MorphologyEx(type, kernel, iterations: 2);
+        using var transformed = image.MorphologyEx(type, kernel, iterations: 2);
 
-        Cv2.ImShow($"{type}", transformated);
-        Cv2.ImWrite($"opencvsharp-morphological-transformation-{type.ToString().ToLower()}.jpg", transformated);
+        Cv2.ImShow($"{type}", transformed);
+        Cv2.ImWrite($"opencvsharp-morphological-transformation-{type.ToString().ToLower()}.jpg", transformed);
     }
 
     private Mat LoadImage()
