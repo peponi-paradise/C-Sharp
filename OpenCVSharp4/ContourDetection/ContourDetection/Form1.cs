@@ -23,7 +23,7 @@ public partial class Form1 : Form
     private void FindContours(Mat image)
     {
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
-        using var threshold = grayscale.Threshold(-1, 255, ThresholdTypes.Otsu);
+        using var threshold = grayscale.Threshold(-1, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
 
         // Contour detection
         threshold.FindContours(out var contours, out var hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxTC89KCOS);
