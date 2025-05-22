@@ -18,7 +18,7 @@ public partial class Form1 : Form
 
         Harris(image);
         ShiTomasi(image);
-        ShiTomasiWithHarris(image);
+        GoodFeaturesToTrackWithHarris(image);
         FAST(image);
         FindContoursWithApproxPolyDP(image);
         ShiTomasiWithSubPixelCorrection(image);
@@ -65,6 +65,7 @@ public partial class Form1 : Form
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
 
         // Corner detection (최대 코너의 수, 코너 품질 최소값 (0~1), 코너 사이의 최소 거리 (픽셀), ROI mask, 이웃 픽셀 크기, harris options...)
+        // Harris detector를 false로 설정하는 경우 Shi-Tomasi algorithm 적용
         var corners = grayscale.GoodFeaturesToTrack(500, 0.02, 10, null!, 3, false, 0);
 
         using var detected = image.Clone();
@@ -78,7 +79,7 @@ public partial class Form1 : Form
         Cv2.ImWrite($"{_fileNamePrefix}shi-tomasi-detected.jpg", detected);
     }
 
-    private void ShiTomasiWithHarris(Mat image)
+    private void GoodFeaturesToTrackWithHarris(Mat image)
     {
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
 
@@ -93,15 +94,15 @@ public partial class Form1 : Form
             detected.Circle(new OpenCvSharp.Point(corner.X, corner.Y), 3, Scalar.LightGreen);
         }
 
-        Cv2.ImShow("Shi-Tomasi with harris corner detected", detected);
-        Cv2.ImWrite($"{_fileNamePrefix}shi-tomasi-harris-detected.jpg", detected);
+        Cv2.ImShow("GoodFeaturesToTrack with harris corner detected", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}goodfeaturestotrack-harris-detected.jpg", detected);
     }
 
     private void FAST(Mat image)
     {
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
 
-        // FAST 코너 검출 : 대상 픽셀을 기준으로 주변과 threshold 값을 비교하여 코너 판정
+        // FAST 코너 검출 : 검출 픽셀과 주변 픽셀의 밝기, threshold 값을 이용하여 코너 판정
         var corners = Cv2.FAST(grayscale, 75);
 
         using var detected = new Mat();
@@ -130,7 +131,7 @@ public partial class Form1 : Form
             if (Cv2.ContourArea(contour) < contourThreshold)
                 continue;
 
-            // 다각형 계산 : epsilon 값은 보통 외곽선 길이의 5% 이하로 설정
+            // 다각형 계산 : epsilon 값은 보통 외곽선 길이의 5% 이하로 설정 (허용 오차)
             var corners = Cv2.ApproxPolyDP(contour, 0.03 * Cv2.ArcLength(contour, true), true);
 
             foreach (var corner in corners)
