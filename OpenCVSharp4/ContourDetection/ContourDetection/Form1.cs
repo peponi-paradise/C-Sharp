@@ -42,7 +42,7 @@ public partial class Form1 : Form
     private void FindContoursWithCanny(Mat image)
     {
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
-        using var canny = grayscale.Canny(100, 200);
+        using var canny = grayscale.Canny(250, 500);
 
         // Contour detection
         canny.FindContours(out var contours, out var hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxTC89KCOS);
