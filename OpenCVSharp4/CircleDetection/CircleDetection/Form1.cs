@@ -29,6 +29,7 @@ public partial class Form1 : Form
 
         if (circles is null)
         {
+            MessageBox.Show("Not found");
             return;
         }
 
