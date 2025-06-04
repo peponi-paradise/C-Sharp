@@ -25,9 +25,10 @@ public partial class Form1 : Form
     {
         using var grayscale = image.CvtColor(ColorConversionCodes.BGR2GRAY);
 
+        // Mat.HoughCircles(method, quantization interval, distance, ...)
         var circles = grayscale.HoughCircles(HoughModes.Gradient, 1, 20, 60, 30, 10, 20);
 
-        if (circles is null)
+        if (circles is null || circles.Length == 0)
         {
             MessageBox.Show("Not found");
             return;
@@ -54,6 +55,12 @@ public partial class Form1 : Form
 
         blur.FindContours(out var contours, out var hierarchy, RetrievalModes.External, ContourApproximationModes.ApproxTC89KCOS);
 
+        if (contours is null || contours.Length == 0)
+        {
+            MessageBox.Show("Not found");
+            return;
+        }
+
         using var detected = image.Clone();
 
         foreach (var contour in contours)
@@ -68,10 +75,12 @@ public partial class Form1 : Form
             if (area < 50)
                 continue;
 
+            Cv2.MinEnclosingCircle(contour, out var center, out var radius);
+
+            // 검출된 원에 대해 필터링이 필요한 경우 다음과 같이 구성할 수 있다.
             // 원형 지표 계산
             double circularity = 4 * Math.PI * area / Math.Pow(length, 2);
 
-            Cv2.MinEnclosingCircle(contour, out var center, out var radius);
             double minCircleArea = Math.PI * Math.Pow(radius, 2);
 
             // 원형 지표와 contour/minCircleArea 비율이 60% 이상인 경우 원으로 취급
@@ -83,10 +92,10 @@ public partial class Form1 : Form
         }
 
         Cv2.ImShow("Blur", blur);
-        Cv2.ImShow("FindContours detected", detected);
+        Cv2.ImShow("MinEnclosingCircle detected", detected);
 
         Cv2.ImWrite($"{_fileNamePrefix}blur.jpg", blur);
-        Cv2.ImWrite($"{_fileNamePrefix}findcontours.jpg", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}minenclosingcircle.jpg", detected);
     }
 
     private void Blob(Mat image)
@@ -112,7 +121,7 @@ public partial class Form1 : Form
         using var detector = SimpleBlobDetector.Create(blobParams);
         var blobs = detector.Detect(blur);
 
-        if (blobs is null)
+        if (blobs is null || blobs.Length == 0)
         {
             MessageBox.Show("Not found");
             return;
