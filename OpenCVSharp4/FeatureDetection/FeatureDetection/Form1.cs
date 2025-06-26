@@ -42,6 +42,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("SIFT", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}sift.jpg", detected);
     }
 
     private void SURFDetection(Mat image)
@@ -61,6 +62,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("SURF", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}surf.jpg", detected);
     }
 
     private void ORBDetection(Mat image)
@@ -84,6 +86,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("ORB", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}orb.jpg", detected);
     }
 
     private void KAZEDetection(Mat image)
@@ -104,6 +107,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("KAZE", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}kaze.jpg", detected);
     }
 
     private void AKAZEDetection(Mat image)
@@ -125,6 +129,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("AKAZE", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}akaze.jpg", detected);
     }
 
     private void BRISKDetection(Mat image)
@@ -142,6 +147,7 @@ public partial class Form1 : Form
         Cv2.DrawKeypoints(image, keyPoints, detected, Scalar.DeepSkyBlue);
 
         Cv2.ImShow("BRISK", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}brisk.jpg", detected);
     }
 
     private Mat LoadImage()
