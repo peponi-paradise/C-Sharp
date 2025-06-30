@@ -7,6 +7,8 @@ namespace FeatureMatching;
 
 public partial class Form1 : Form
 {
+    private string _fileNamePrefix = "opencvsharp-feature-matching-";
+
     public Form1()
     {
         InitializeComponent();
@@ -16,9 +18,81 @@ public partial class Form1 : Form
 
         BFMatching(image1, image2);
         FLANNMatching(image1, image2);
+        BFKnnMatching(image1, image2);
+        FLANNKnnMatching(image1, image2);
     }
 
     private void BFMatching(Mat image1, Mat image2)
+    {
+        using var kaze = KAZE.Create();
+        using var descriptor1 = new Mat();
+        using var descriptor2 = new Mat();
+
+        // 특징점 검출 및 디스크립터 생성
+        kaze.DetectAndCompute(image1, null, out var keyPoints1, descriptor1);
+        kaze.DetectAndCompute(image2, null, out var keyPoints2, descriptor2);
+
+        // Brute-Force Matcher 생성
+        // normType : 디스크립터 간의 거리를 측정하는 방법을 지정. 실수 디스크립터는 L2를, 이진 디스크립터는 Hamming을 주로 사용
+        // crossCheck : true인 경우 양쪽 매칭 결과가 일치하는 것만 남김. KnnMatch()와는 같이 사용할 수 없음
+        using var matcher = new BFMatcher(crossCheck: true);
+
+        // BFMatcher는 전수 조사 방식으로 매칭 수행
+        // 각 디스크립터에 대해 가장 유사한 디스크립터를 찾아 매칭
+        var matches = matcher.Match(descriptor1, descriptor2);
+
+        using var detected = new Mat();
+
+        // DrawMatchesFlags.NotDrawSinglePoints 를 설정하여 매칭된 포인트만 그림
+        Cv2.DrawMatches(image1, keyPoints1, image2, keyPoints2, matches, detected, Scalar.All(-1), Scalar.All(-1), null, DrawMatchesFlags.NotDrawSinglePoints);
+
+        Cv2.ImShow("BFMatching", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}bfmatching.jpg", detected);
+    }
+
+    private void FLANNMatching(Mat image1, Mat image2)
+    {
+        using var kaze = KAZE.Create();
+        using var descriptor1 = new Mat();
+        using var descriptor2 = new Mat();
+
+        // 특징점 검출 및 디스크립터 생성
+        kaze.DetectAndCompute(image1, null, out var keyPoints1, descriptor1);
+        kaze.DetectAndCompute(image2, null, out var keyPoints2, descriptor2);
+
+        // 실수형 디스크립터에 사용
+        // trees : K-D 트리의 수를 지정. 값이 클수록 정확도 높아짐
+        var indexParams = new OpenCvSharp.Flann.KDTreeIndexParams(5);
+
+        // 이진 디스크립터에 사용
+        // tableNumber : 해시 테이블의 수. 클수록 정확도 높아짐
+        // keySize : 해시 함수의 길이. 값이 클수록 정확도 높아짐
+        // multiProbeLevel : Multi-probing 수준 지정. 클수록 정확도 높아짐
+        // var binaryIndexParams = new OpenCvSharp.Flann.LshIndexParams(20, 15, 2);
+
+        // 이웃 검색 시 사용할 사용할 파라미터
+        // checks : 확인할 인덱스 노드의 수. 클수록 정확도 높아짐
+        // eps : 근사 검색 설정값 (0 ~ 1). 값이 작을수록 더 정확한 검색을 수행
+        // sorted : 결과를 정렬 후 반환
+        var searchParams = new OpenCvSharp.Flann.SearchParams(50);
+
+        // Fast Library for Approximate Nearest Neighbors Matcher생성
+        using var matcher = new FlannBasedMatcher(indexParams, searchParams);
+
+        // FlannBasedMatcher는 근사 최근접 이웃 탐색 알고리즘 사용
+        // 각 디스크립터에 대해 가장 유사한 디스크립터를 찾아 매칭
+        var matches = matcher.Match(descriptor1, descriptor2);
+
+        using var detected = new Mat();
+
+        // DrawMatchesFlags.NotDrawSinglePoints 를 설정하여 매칭된 포인트만 그림
+        Cv2.DrawMatches(image1, keyPoints1, image2, keyPoints2, matches, detected, Scalar.All(-1), Scalar.All(-1), null, DrawMatchesFlags.NotDrawSinglePoints);
+
+        Cv2.ImShow("FLANNMatching", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}knnmatching.jpg", detected);
+    }
+
+    private void BFKnnMatching(Mat image1, Mat image2)
     {
         using var kaze = KAZE.Create();
         using var descriptor1 = new Mat();
@@ -43,10 +117,11 @@ public partial class Form1 : Form
 
         Cv2.DrawMatches(image1, keyPoints1, image2, keyPoints2, matched, detected, Scalar.All(-1), Scalar.All(-1), null, DrawMatchesFlags.NotDrawSinglePoints);
 
-        Cv2.ImShow("BFMatching", detected);
+        Cv2.ImShow("BFKnnMatching", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}bfknnmatching.jpg", detected);
     }
 
-    private void FLANNMatching(Mat image1, Mat image2)
+    private void FLANNKnnMatching(Mat image1, Mat image2)
     {
         using var kaze = KAZE.Create();
         using var descriptor1 = new Mat();
@@ -74,7 +149,8 @@ public partial class Form1 : Form
 
         Cv2.DrawMatches(image1, keyPoints1, image2, keyPoints2, matched, detected, Scalar.All(-1), Scalar.All(-1), null, DrawMatchesFlags.NotDrawSinglePoints);
 
-        Cv2.ImShow("FLANNMatching", detected);
+        Cv2.ImShow("FLANNKnnMatching", detected);
+        Cv2.ImWrite($"{_fileNamePrefix}flannknnmatching.jpg", detected);
     }
 
     private Mat LoadImage()
