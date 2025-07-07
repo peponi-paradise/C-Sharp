@@ -15,8 +15,10 @@ public partial class Form1 : Form
         var original = LoadImage();
         var rotated = LoadImage();
         var template = LoadImage();
+        var template2 = LoadImage();
 
         Match(original, template);
+        MultipleMatch(original, template2);
         MatchWithTemplateRotation(rotated, template);
         ExecuteAlignment(rotated, template);
     }
@@ -26,6 +28,7 @@ public partial class Form1 : Form
         using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
         using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
 
+        // Template match 수행
         using var result = thresholdImage.MatchTemplate(thresholdTemplate, TemplateMatchModes.CCoeffNormed);
 
         // maxValue, maxLocation에 가장 잘 매칭된 경우의 값과 지점이 저장됨
@@ -37,6 +40,34 @@ public partial class Form1 : Form
 
         Cv2.ImShow("Matched", matched);
         Cv2.ImWrite($"{_imagePrefix}matched.jpg", matched);
+    }
+
+    private void MultipleMatch(Mat image, Mat template)
+    {
+        using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
+        using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
+
+        // Template match 수행
+        using var result = thresholdImage.MatchTemplate(thresholdTemplate, TemplateMatchModes.CCoeffNormed);
+        var resultIndexer = result.GetGenericIndexer<float>();
+
+        using var matched = image.Clone();
+
+        // 결과를 순회하며 thresholding 수행
+        for (int i = 0; i < result.Cols; i++)
+        {
+            for (int j = 0; j < result.Rows; j++)
+            {
+                // 0.7 이상의 값을 가진 경우 매칭된 것으로 판정
+                if (resultIndexer[j, i] > 0.7)
+                {
+                    matched.Rectangle(new OpenCvSharp.Point(i, j), new OpenCvSharp.Point(i + template.Width, j + template.Height), Scalar.Crimson, 2);
+                }
+            }
+        }
+
+        Cv2.ImShow("Multiple matched", matched);
+        Cv2.ImWrite($"{_imagePrefix}multiple-matched.jpg", matched);
     }
 
     private void MatchWithTemplateRotation(Mat image, Mat template)
@@ -56,7 +87,7 @@ public partial class Form1 : Form
             // maxValue를 이용해 얼마나 잘 매칭되었는지 확인
             result.MinMaxLoc(out var minValue, out var maxValue, out var minLocation, out var maxLocation);
 
-            // 0.7 이상의 정확도를 가질 때 매칭된 것으로 판정
+            // 0.7 이상의 값을 가질 때 매칭된 것으로 판정
             if (maxValue > 0.7 && maxValue < 1)
             {
                 using var matched = image.Clone();
@@ -88,6 +119,7 @@ public partial class Form1 : Form
         }
     }
 
+    // 임의의 영역에 비스듬하게 찍혀있는 총알을 찾아 좌우 정렬, 화면 중앙으로 가져오는 예
     private void ExecuteAlignment(Mat image, Mat template)
     {
         int rotateAngle = 0;
@@ -105,7 +137,7 @@ public partial class Form1 : Form
             // maxValue를 이용해 얼마나 잘 매칭되었는지 확인
             result.MinMaxLoc(out var minValue, out var maxValue, out var minLocation, out var maxLocation);
 
-            // 0.7 이상의 정확도를 가질 때 매칭된 것으로 판정
+            // 0.7 이상의 값을 가질 때 매칭된 것으로 판정
             if (maxValue > 0.7 && maxValue < 1)
             {
                 // 찾은 총알 표시

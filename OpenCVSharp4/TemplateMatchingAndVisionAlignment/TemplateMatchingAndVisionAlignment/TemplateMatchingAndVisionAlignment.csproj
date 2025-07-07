@@ -17,6 +17,9 @@
     <None Update="Cropped.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Cropped2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Original.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
