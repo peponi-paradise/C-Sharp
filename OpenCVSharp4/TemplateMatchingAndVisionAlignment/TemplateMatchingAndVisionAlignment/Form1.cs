@@ -25,6 +25,7 @@ public partial class Form1 : Form
 
     private void Match(Mat image, Mat template)
     {
+        // 전처리 (여기서는 간단하게 thresholding만 수행)
         using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
         using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
 
@@ -44,12 +45,12 @@ public partial class Form1 : Form
 
     private void MultipleMatch(Mat image, Mat template)
     {
+        // 전처리 (여기서는 간단하게 thresholding만 수행)
         using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
         using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
 
         // Template match 수행
         using var result = thresholdImage.MatchTemplate(thresholdTemplate, TemplateMatchModes.CCoeffNormed);
-        var resultIndexer = result.GetGenericIndexer<float>();
 
         using var matched = image.Clone();
 
@@ -59,7 +60,7 @@ public partial class Form1 : Form
             for (int j = 0; j < result.Rows; j++)
             {
                 // 0.7 이상의 값을 가진 경우 매칭된 것으로 판정
-                if (resultIndexer[j, i] > 0.7)
+                if (result.Get<float>(j, i) > 0.7)
                 {
                     matched.Rectangle(new OpenCvSharp.Point(i, j), new OpenCvSharp.Point(i + template.Width, j + template.Height), Scalar.Crimson, 2);
                 }
@@ -74,6 +75,7 @@ public partial class Form1 : Form
     {
         int rotateAngle = 0;
 
+        // 전처리 (여기서는 간단하게 thresholding만 수행)
         using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
         using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
 
@@ -88,7 +90,7 @@ public partial class Form1 : Form
             result.MinMaxLoc(out var minValue, out var maxValue, out var minLocation, out var maxLocation);
 
             // 0.7 이상의 값을 가질 때 매칭된 것으로 판정
-            if (maxValue > 0.7 && maxValue < 1)
+            if (maxValue > 0.7)
             {
                 using var matched = image.Clone();
 
@@ -119,11 +121,12 @@ public partial class Form1 : Form
         }
     }
 
-    // 임의의 영역에 비스듬하게 찍혀있는 총알을 찾아 좌우 정렬, 화면 중앙으로 가져오는 예
+    // 임의의 영역에 비스듬하게 찍혀있는 총알을 찾아 각도 정렬, 화면 중앙으로 가져오는 예
     private void ExecuteAlignment(Mat image, Mat template)
     {
         int rotateAngle = 0;
 
+        // 전처리 (여기서는 간단하게 thresholding만 수행)
         using var thresholdImage = image.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
         using var thresholdTemplate = template.CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(170, 255, ThresholdTypes.BinaryInv);
 
@@ -138,7 +141,7 @@ public partial class Form1 : Form
             result.MinMaxLoc(out var minValue, out var maxValue, out var minLocation, out var maxLocation);
 
             // 0.7 이상의 값을 가질 때 매칭된 것으로 판정
-            if (maxValue > 0.7 && maxValue < 1)
+            if (maxValue > 0.7)
             {
                 // 찾은 총알 표시
                 using var matched = Rotate(image, rotateAngle * Math.PI / 180);
