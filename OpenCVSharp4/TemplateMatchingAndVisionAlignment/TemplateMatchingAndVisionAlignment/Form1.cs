@@ -109,9 +109,9 @@ public partial class Form1 : Form
                 // 매칭이 잘 되지 않는 구간은 회전을 크게 돌려 탐색 속도를 빠르게 함
                 rotateAngle += maxValue switch
                 {
-                    >= 30 and < 50 => 3,
-                    >= 50 and < 60 => 2,
-                    >= 60 => 1,
+                    >= 0.3 and < 0.5 => 3,
+                    >= 0.5 and < 0.6 => 2,
+                    >= 0.6 => 1,
                     _ => 5
                 };
 
@@ -171,9 +171,9 @@ public partial class Form1 : Form
                 // 매칭이 잘 되지 않는 구간은 회전을 크게 돌려 탐색 속도를 빠르게 함
                 rotateAngle += maxValue switch
                 {
-                    >= 30 and < 50 => 3,
-                    >= 50 and < 60 => 2,
-                    >= 60 => 1,
+                    >= 0.3 and < 0.5 => 3,
+                    >= 0.5 and < 0.6 => 2,
+                    >= 0.6 => 1,
                     _ => 5
                 };
 
