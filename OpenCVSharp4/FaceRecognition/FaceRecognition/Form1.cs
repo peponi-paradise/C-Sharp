@@ -17,15 +17,17 @@ public partial class Form1 : Form
 
         if (video != null)
         {
-            //Perform(video, "haarcascade_frontalface_alt2.xml");
-            Perform(video, "haarcascade_frontalcatface.xml");
+            Perform(video, "haarcascade_frontalface_alt2.xml");
+            //Perform(video, "haarcascade_frontalcatface.xml");
         }
     }
 
     private void Perform(VideoCapture video, string trainFileName)
     {
-        // OpenCv 제공 window
+        // OpenCV 제공 window
         Window videoWindow = new("Viewer");
+
+        // CascadeClassifier 초기화. Harr 또는 LBP 모델 로드
         using var classifier = new CascadeClassifier(trainFileName);
 
         while (true)
@@ -41,6 +43,11 @@ public partial class Form1 : Form
             using var grayscale = frame.CvtColor(ColorConversionCodes.BGR2GRAY);
 
             // 객체 찾기
+            // scaleFactor : 피라미드 각 단계의 스케일 지정. 값이 작을수록 더 많은 스케일 검사
+            // minNeighbors : 객체 판정을 위한 이웃 수 지정. 값이 클수록 검출 정확도는 올라가지만 검출률 떨어짐
+            // flags : 검색 방법 제어
+            // minSize : 객체 판정 최소 크기
+            // maxSize : 객체 판정 최대 크기
             var detected = classifier.DetectMultiScale(grayscale);
 
             // 찾은 객체 표시
