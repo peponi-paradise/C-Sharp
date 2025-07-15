@@ -18,31 +18,9 @@ public partial class Form1 : Form
 
         using var image = LoadImage();
 
-        Perform(image, "eng");
-        Perform(image, "kor");
-        Perform(image, "kor+eng");
+        PerformWithVisualize(image, "eng");
+        PerformWithVisualize(image, "kor");
         PerformWithVisualize(image, "kor+eng");
-    }
-
-    private void Perform(Mat image, string languageCode)
-    {
-        // Preprocessing
-        using var blur = image.CvtColor(ColorConversionCodes.BGR2GRAY)
-                                    .Threshold(100, 255, ThresholdTypes.Binary)
-                                    .GaussianBlur(new OpenCvSharp.Size(3, 3), -1);
-
-        // _tesseractPath 폴더의 languageCode.traineddata 불러와 Tesseract OCR 엔진 초기화
-        using var engine = new TesseractEngine(_tesseractPath, languageCode);
-
-        // OCR 수행
-        using var data = engine.Process(Pix.LoadFromMemory(blur.ToBytes()));
-
-        // 결과 출력
-        Debug.WriteLine("Start writing text");
-        Debug.WriteLine($"Text :{Environment.NewLine} {data.GetText()}");
-        Debug.WriteLine($"Confidence : {data.GetMeanConfidence()}");
-
-        Cv2.ImShow("Blur", blur);
     }
 
     private void PerformWithVisualize(Mat image, string languageCode)
@@ -56,7 +34,14 @@ public partial class Form1 : Form
         using var engine = new TesseractEngine(_tesseractPath, languageCode);
 
         // OCR 수행
+        // region : OCR을 수행할 영역
+        // pageSegMode : 사용할 분할 알고리즘 설정
         using var data = engine.Process(Pix.LoadFromMemory(blur.ToBytes()));
+
+        // 결과 출력
+        Debug.WriteLine($"Start writing text - Language code : {languageCode}");
+        Debug.WriteLine($"Text :{Environment.NewLine} {data.GetText()}");
+        Debug.WriteLine($"Mean confidence : {data.GetMeanConfidence()}");
 
         // 결과 표시
         var result = blur.CvtColor(ColorConversionCodes.GRAY2BGR);
@@ -86,7 +71,7 @@ public partial class Form1 : Form
         }
         while (iterator.Next(PageIteratorLevel.Word));
 
-        Cv2.ImShow("Result", result);
+        Cv2.ImShow($"{languageCode} result", result);
     }
 
     private Mat LoadImage()
