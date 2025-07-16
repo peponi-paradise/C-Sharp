@@ -1,4 +1,4 @@
-namespace OCRWithTesseract
+namespace OCRWithOpenCVSharp4
 {
     internal static class Program
     {

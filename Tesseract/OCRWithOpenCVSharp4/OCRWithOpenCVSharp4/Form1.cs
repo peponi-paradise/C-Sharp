@@ -6,7 +6,7 @@ using Tesseract;
 // Tesseract 설치 : https://github.com/UB-Mannheim/tesseract/wiki
 // kor.traineddata (설치 경로\tessdata\ 에 모아둠) : https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata
 
-namespace OCRWithTesseract;
+namespace OCRWithOpenCVSharp4;
 
 public partial class Form1 : Form
 {
@@ -21,6 +21,7 @@ public partial class Form1 : Form
         PerformWithVisualize(image, "eng");
         PerformWithVisualize(image, "kor");
         PerformWithVisualize(image, "kor+eng");
+        PerformWithVisualize(image, "eng+kor");
     }
 
     private void PerformWithVisualize(Mat image, string languageCode)
@@ -72,6 +73,7 @@ public partial class Form1 : Form
         while (iterator.Next(PageIteratorLevel.Word));
 
         Cv2.ImShow($"{languageCode} result", result);
+        Cv2.ImWrite($"tesseract-ocr-with-opencvsharp4-{languageCode.Replace('+', '-')}.jpg", result);
     }
 
     private Mat LoadImage()
